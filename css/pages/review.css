@@ -229,10 +229,3 @@ textarea {
     background-color: var(--accent-bg);
     color: var(--text-color-white);
 }
-
-.review-wrapper {
-    display: flex;
-    justify-content: center;
-    /* 헤더 높이(64px)만큼 위쪽에 여백 */
-    padding: 100px 20px 40px 20px; 
-}
