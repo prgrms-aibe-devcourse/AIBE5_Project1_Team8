@@ -194,7 +194,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         searchBtn.addEventListener('click', () => {
-            alert("검색 페이지로 이동합니다. (데모 기능)");
+            // 검색창으로 부드럽게 스크롤
+            const searchContainer = document.querySelector('.search-container');
+            if (searchContainer) {
+                searchContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // 스크롤 후 검색 입력창에 포커스
+                setTimeout(() => {
+                    const searchInput = document.getElementById('keyword');
+                    if (searchInput) {
+                        searchInput.focus();
+                    }
+                }, 500);
+            }
         });
     }
 
