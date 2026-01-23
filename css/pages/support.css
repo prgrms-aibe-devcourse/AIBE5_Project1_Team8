@@ -152,7 +152,13 @@ body {
 
 /* [6] 상태 프레임 */
 .status-frame { 
-    background: #FFFFFF; border: 1px solid #DDD; padding: 5px 15px; 
-    border-radius: 12px; font-size: 11px; display: flex; 
-    align-items: center; min-width: 90px; justify-content: center; 
+    background: #FFFFFF; 
+    border: 1px solid #DDD; 
+    padding: 5px 15px; 
+    border-radius: 12px; 
+    font-size: 11px; 
+    display: flex; 
+    align-items: center; 
+    min-width: 90px;
+    justify-content: center; 
 }
