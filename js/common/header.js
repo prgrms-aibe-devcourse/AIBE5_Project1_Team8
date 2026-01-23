@@ -149,6 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* 로그인 상태에 따른 버튼 노출 제어 */
     if (isLoggedIn) {
+        loginBtn.style.display = 'block';
+        logoutBtn.style.display = 'none';
+    } else {
         loginBtn.style.display = 'none';
         logoutBtn.style.display = 'block';
     }
