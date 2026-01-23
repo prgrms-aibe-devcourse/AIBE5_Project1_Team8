@@ -151,9 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isLoggedIn) {
         loginBtn.style.display = 'none';
         logoutBtn.style.display = 'block';
-    } else {
-        loginBtn.style.display = 'block';
-        logoutBtn.style.display = 'none';
     }
 
 
