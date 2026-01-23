@@ -1,0 +1,66 @@
+/* [1] 기본 초기화 */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
+body { background-color: #F0FAFA; padding: 30px; }
+.wrapper { max-width: 850px; margin: 0 auto; }
+
+/* [2] 상단 요소 */
+/* .site-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 30px; }
+.nav-menu { display: flex; gap: 12px; font-size: 11px; color: #999; }
+.auth-btn { background: #D9D9D9; border: none; padding: 6px 15px; border-radius: 15px; cursor: pointer; }
+
+.main-title-box { 
+    background-color: #BDBDBD; color: white; text-align: center; 
+    padding: 40px; border-radius: 20px; font-size: 26px; font-weight: bold; margin-bottom: 45px; 
+} */
+
+/* [3] 섹션 및 그레이 박스 */
+.section-wrap { margin-bottom: 45px; }
+.label { font-size: 14px; font-weight: bold; color: #444; margin-bottom: 12px; display: block; padding-left: 5px; }
+.gray-box { background-color: #E5E5E5; border-radius: 25px; padding: 35px; position: relative; }
+
+/* [4] 카드 공통 스타일 */
+.card { 
+    background: white; border-radius: 12px; border: none; 
+    margin-bottom: 12px; display: flex; align-items: center; width: 100%; 
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); cursor: pointer; transition: 0.1s;
+}
+.card:active { transform: scale(0.98); background-color: #F9F9F9; }
+
+/* [수정 포인트] 박스는 왼쪽 고정, 내부 텍스트만 가운데 정렬 */
+.card-info { 
+    width: 250px;           /* 이미지와 비슷한 적당한 너비 */
+    height: 50px;           /* 이미지와 비슷한 높이 */
+    justify-content: center; /* 텍스트 가로 가운데 정렬 */
+    font-size: 14px; 
+    /* margin-left: 0;      <- 박스를 왼쪽에 붙임 */
+}
+
+.flex-between { justify-content: space-between; padding: 18px 25px; font-size: 14px; }
+
+.btn-absolute { 
+    position: absolute; bottom: 30px; right: 35px; background: white; 
+    border: none; border-radius: 8px; padding: 8px 18px; font-size: 12px; cursor: pointer; 
+}
+
+/* [5] FAQ 및 탭 디자인 (이미지 완벽 반영) */
+.faq-container { flex-direction: column; padding: 0; overflow: hidden; cursor: default; }
+.faq-question { width: 100%; padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.faq-answer { 
+    width: 100%; padding: 20px 25px; background-color: #FBFBFB; 
+    border-top: 1px solid #F0F0F0; color: #666; font-size: 13px; line-height: 1.6; 
+}
+
+.tabs-row { display: flex; gap: 10px; margin-bottom: 25px; }
+.tab { background: white; border: none; padding: 10px 25px; border-radius: 8px; font-size: 13px; cursor: pointer; }
+.tab.active { background-color: #BDBDBD; color: white; font-weight: bold; }
+
+.underlines { border-bottom: 1px solid #CCC; }
+.tab-under { background: none; border: none; padding: 10px 15px; font-size: 13px; cursor: pointer; color: #999; }
+.tab-under.active { color: #333; font-weight: bold; border-bottom: 2px solid #333; margin-bottom: -1px; }
+
+/* [6] 상태 프레임 */
+.status-frame { 
+    background: #FFFFFF; border: 1px solid #DDD; padding: 5px 15px; 
+    border-radius: 12px; font-size: 11px; display: flex; 
+    align-items: center; min-width: 90px; justify-content: center; 
+}
