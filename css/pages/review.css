@@ -1,0 +1,238 @@
+/* 기본 설정 */
+:root {
+    --bg-color: #FFFFFA;
+    --box-bg: #E0E0E0;
+    --accent-bg: #2f4157;
+    --text-color: #222222;
+    --text-color-white: #f5f5f5;
+    --border-radius: 3px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+    line-height: 1.5;
+}
+
+.review-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 50px 20px;
+}
+
+.review-container {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.main-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* 섹션 공통 */
+.review-section {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.section-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.section-desc {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 15px;
+}
+
+/* 1. 상단 서비스 정보 파트 */
+.service-header {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.service-info-flex {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.service-pic-box {
+    width: 100px;
+    height: 100px;
+    background-color: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: italic;
+    color: #adb5bd;
+    border-radius: 4px;
+}
+
+.service-name {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.service-date {
+    font-size: 14px;
+    color: #888;
+}
+
+.divider {
+    border: 0;
+    border-top: 1px solid #eee;
+}
+
+.rating-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rating-label {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.stars {
+    font-size: 28px;
+    color: #ddd;
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.star.filled {
+    color: #ffc107; 
+    content: "★";
+}
+
+/* 2. 여행자 타입 태그 */
+.tag-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.type-tag {
+    padding: 8px 16px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 20px; 
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* 선택된 상태의 스타일 */
+.type-tag.active {
+    background-color: var(--accent-bg); /* 강조색  */
+    color: #fff;            /* 글자색 반전 */
+    border-color: #333;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transform: translateY(-2px); /* 살짝 떠오르는 효과 */
+}
+
+.type-tag:hover {
+    background-color: #e9ecef;
+}
+
+/* 3. 리뷰 작성 영역 */
+.textarea-container {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    padding: 15px;
+    border: none;
+    resize: none;
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+}
+
+.char-count {
+    text-align: right;
+    padding: 8px 15px;
+    font-size: 12px;
+    color: #999;
+    background-color: #fafafa;
+    border-top: 1px solid #eee;
+}
+
+/* 4. 사진 업로드 영역 */
+.upload-box {
+    width: 80px;
+    height: 80px;
+    border: 1px dashed #adb5bd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.icon-camera {
+    font-size: 20px;
+}
+
+.upload-count {
+    font-size: 11px;
+    color: #888;
+}
+
+/* 제출 버튼 */
+
+.submit-btn {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 300px;
+    padding: 15px;
+    background-color: #ffffff;
+    color: var(--text-color);
+    border: 1px solid;
+    border-radius: 4px;
+    border-color: var(--accent-bg);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.submit-btn:hover {
+    background-color: var(--accent-bg);
+    color: var(--text-color-white);
+}
+
+.review-wrapper {
+    display: flex;
+    justify-content: center;
+    /* 헤더 높이(64px)만큼 위쪽에 여백 */
+    padding: 100px 20px 40px 20px; 
+}

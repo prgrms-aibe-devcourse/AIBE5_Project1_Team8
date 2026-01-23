@@ -1,0 +1,35 @@
+/* 토스트 컨테이너 기본 상태 */
+.toast-container {
+    position: fixed;
+    bottom: 30px;
+    right: -400px; /* 화면 오른쪽 밖으로 완전히 밀어냄 */
+    color: #fff;
+    padding: 16px 24px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    z-index: 10000;
+
+    /* 토스트 메세지 튕기는 효과 */
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    opacity: 0;
+    box-shadow: -4px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 토스트가 표시될 때 상태 */
+.toast-container.show {
+    right: 20px; /* 화면 안으로 들어옴ㅁ정도 조절 */
+    opacity: 1;
+}
+
+/* 타입별 색상 */
+.toast-info {
+    background-color: #333;
+}
+/* 성공, 실패 토스트 메세지백그라운드 컬러 */
+.toast-success {
+    background-color: #00ae38;
+}
+.toast-error {
+    background-color: #fa5c5c;
+}
