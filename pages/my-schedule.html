@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="나의 여행 일정을 관리하세요">
+  <title>나의 일정 | TravelKorea</title>
+
+  <!-- AIBE5 Styles -->
+  <link rel="stylesheet" href="../AIBE5_Project1_Team8/css/common/style.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <!-- Page Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/my-schedule.css">
+</head>
+
+<body>
+
+  <!-- Header (Dynamic from AIBE5) -->
+  <header>
+  </header>
+
+  <main>
+    <!-- Page Header -->
+    <div class="page-header" style="padding-top: 0;">
+      <div class="header-banner">
+        <h1 class="page-title">나의 여행 일정</h1>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Calendar Section -->
+      <section class="calendar-section">
+        <div class="calendar-header">
+          <button class="calendar-nav-btn" id="prevMonth">&lt;</button>
+          <div class="calendar-title">
+            <select class="calendar-year-select" id="yearSelect"></select>
+            <select class="calendar-month-select" id="monthSelect"></select>
+          </div>
+          <button class="calendar-nav-btn" id="nextMonth">&gt;</button>
+        </div>
+
+        <div class="calendar-weekdays">
+          <div class="weekday sun">일</div>
+          <div class="weekday">월</div>
+          <div class="weekday">화</div>
+          <div class="weekday">수</div>
+          <div class="weekday">목</div>
+          <div class="weekday">금</div>
+          <div class="weekday sat">토</div>
+        </div>
+
+        <div class="calendar-grid" id="calendarGrid">
+          <!-- Calendar days will be rendered here -->
+        </div>
+      </section>
+
+      <!-- Schedule List Section -->
+      <section class="schedule-section">
+        <div class="schedule-header">
+          <h2 class="schedule-title">일정 목록</h2>
+          <span class="schedule-count" id="scheduleCount">0개의 일정</span>
+        </div>
+
+        <div class="schedule-list" id="scheduleList">
+          <!-- Schedule items will be rendered here -->
+        </div>
+
+        <div class="empty-state" id="emptyState" style="display: none;">
+          <div class="empty-icon">📅</div>
+          <h3>저장된 일정이 없습니다</h3>
+          <p>관광 명소나 숙소를 둘러보고 일정에 추가해보세요</p>
+          <a href="hotel.html" class="btn-explore">명소 둘러보기</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Schedule Detail Modal -->
+  <div class="modal-overlay" id="scheduleDetailModal" style="display: none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>일정 상세</h3>
+      </div>
+      <div class="modal-body">
+        <div class="detail-item">
+          <span class="detail-label">장소</span>
+          <span class="detail-value" id="detailName"></span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">기간</span>
+          <span class="detail-value" id="detailPeriod"></span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">위치</span>
+          <span class="detail-value" id="detailLocation"></span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="closeDetailBtn">닫기</button>
+        <button class="btn-danger" id="deleteScheduleBtn">삭제</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div class="modal-overlay" id="deleteModal" style="display: none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>일정 삭제</h3>
+      </div>
+      <div class="modal-body">
+        <p>이 여행 일정을 삭제하시겠습니까?</p>
+        <p class="modal-place-name" id="deletePlaceName"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="cancelDeleteBtn">취소</button>
+        <button class="btn-danger" id="confirmDeleteBtn">삭제</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AIBE5 Scripts -->
+  <script src="../AIBE5_Project1_Team8/js/common/header.js"></script>
+  <script src="../AIBE5_Project1_Team8/js/common/script.js"></script>
+
+  <!-- Page Scripts -->
+  <script src="js/my-schedule.js"></script>
+</body>
+
+</html>

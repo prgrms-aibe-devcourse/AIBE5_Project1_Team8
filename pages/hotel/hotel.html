@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Meta from hotel.html -->
+  <meta name="description" content="전국 관광지 - 숙박, 문화, 식당, 자연, 레져, 쇼핑">
+  <title>관광지 조회 | TravelKorea</title>
+
+  <!-- AIBE5 Styles (Corrected Paths) -->
+  <link rel="stylesheet" href="../css/common/style.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <!-- Hotel Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/pages/hotel/hotel.css">
+  <link rel="stylesheet" href="../../css/common/calendar-modal.css">
+</head>
+
+<body>
+  <!-- Header (Dynamic from AIBE5) -->
+  <header>
+  </header>
+
+  <main>
+    <!-- Hotel Content -->
+
+    <!-- Header Banner (Adapted from hotel.html) -->
+    <div class="page-header" style="padding-top: 0;">
+      <div class="header-banner">
+        <h1 class="page-title">관광지 조회</h1>
+      </div>
+    </div>
+
+    <!-- Category Tabs -->
+    <section class="category-tabs-section">
+      <div class="container">
+        <div class="category-tabs">
+          <button class="category-tab active" data-category="accommodation">숙박</button>
+          <button class="category-tab" data-category="culture">문화</button>
+          <button class="category-tab" data-category="restaurant">식당</button>
+          <button class="category-tab" data-category="nature">자연</button>
+          <button class="category-tab" data-category="leisure">레져</button>
+          <button class="category-tab" data-category="shopping">쇼핑</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <!-- Spot List -->
+      <section class="spot-list" id="spotList">
+        <!-- Cards will be rendered here -->
+      </section>
+
+      <!-- No Results -->
+      <div class="no-results" id="noResults" style="display: none;">
+        <div class="no-results-icon">🔍</div>
+        <h3>검색 결과가 없습니다</h3>
+        <p>다른 카테고리를 선택해보세요</p>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" id="pagination">
+        <button class="page-btn prev" id="prevBtn">&lt;</button>
+        <span class="page-info" id="pageInfo">페이지</span>
+        <button class="page-btn next" id="nextBtn">&gt;</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- AIBE5 Scripts -->
+  <script src="../../js/common/header.js"></script>
+  <script src="../../js/common/script.js"></script>
+
+  <!-- Hotel Scripts -->
+  <script src="../../js/common/calendar-modal.js"></script>
+  <script src="../../js/hotel/hotel.js"></script>
+</body>
+
+</html>

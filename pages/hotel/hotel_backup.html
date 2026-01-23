@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="전국 관광지 조회 - 숙박, 문화, 식당, 자연, 레져, 쇼핑">
+  <title>관광지 조회 | TravelKorea</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/hotel.css">
+  <link rel="stylesheet" href="css/calendar-modal.css">
+</head>
+
+<body>
+
+
+  <!-- 로고 -->
+  <div class="logo">LOGO</div>
+
+  <!-- 메뉴 -->
+  <nav class="nav">
+    <a href="./html/index.html">홈</a>
+    <a href="./html/search.html?tab=place">지역/명소</a>
+    <a href="./html/search.html?tab=hotel">호텔/숙소</a>
+    <a href="./html/support.html">고객센터</a>
+    <a href="./html/schedule.html">나의 일정</a>
+    <a href="./html/mypage.html">마이 페이지</a>
+  </nav>
+
+  <!-- 로그인 / 로그아웃 -->
+  <div class="auth">
+    <!-- 로그아웃 상태일 때(기본값) -->
+    <button class="login-btn">Sign in / Register</button>
+
+    <!-- 로그인 상태일 때 -->
+    <button class="logout-btn">Logout</button>
+  </div>
+
+  </div>
+
+  <!-- Header -->
+  <header class="page-header">
+    <div class="header-banner">
+      <h1 class="page-title">관광지 조회</h1>
+    </div>
+  </header>
+
+  <!-- Category Tabs -->
+  <section class="category-tabs-section">
+    <div class="container">
+      <div class="category-tabs">
+        <button class="category-tab active" data-category="accommodation">숙박</button>
+        <button class="category-tab" data-category="culture">문화</button>
+        <button class="category-tab" data-category="restaurant">식당</button>
+        <button class="category-tab" data-category="nature">자연</button>
+        <button class="category-tab" data-category="leisure">레져</button>
+        <button class="category-tab" data-category="shopping">쇼핑</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Area -->
+  <main class="container">
+    <!-- Spot List -->
+    <section class="spot-list" id="spotList">
+      <!-- Cards will be rendered here -->
+    </section>
+
+    <!-- No Results -->
+    <div class="no-results" id="noResults" style="display: none;">
+      <div class="no-results-icon">🔍</div>
+      <h3>검색 결과가 없습니다</h3>
+      <p>다른 카테고리를 선택해보세요</p>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination">
+      <button class="page-btn prev" id="prevBtn">&lt;</button>
+      <span class="page-info" id="pageInfo">페이지</span>
+      <button class="page-btn next" id="nextBtn">&gt;</button>
+    </div>
+  </main>
+
+
+  <script src="js/calendar-modal.js"></script>
+  <script src="js/hotel.js"></script>
+</body>
+
+</html>
