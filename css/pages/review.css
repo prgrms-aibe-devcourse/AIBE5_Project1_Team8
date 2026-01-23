@@ -1,7 +1,7 @@
 /* 기본 설정 */
 :root {
-    --bg-color: #FFFFFA;
-    --box-bg: #E0E0E0;
+    --bg-color: #fffffa;
+    --box-bg: #e0e0e0;
     --accent-bg: #2f4157;
     --text-color: #222222;
     --text-color-white: #f5f5f5;
@@ -47,7 +47,7 @@ body {
     background: #ffffff;
     padding: 25px;
     border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .section-title {
@@ -123,8 +123,8 @@ body {
 }
 
 .star.filled {
-    color: #ffc107; 
-    content: "★";
+    color: #ffc107;
+    content: '★';
 }
 
 /* 2. 여행자 타입 태그 */
@@ -138,7 +138,7 @@ body {
     padding: 8px 16px;
     background-color: #f8f9fa;
     border: 1px solid #dee2e6;
-    border-radius: 20px; 
+    border-radius: 20px;
     font-size: 14px;
     cursor: pointer;
     transition: 0.2s;
@@ -147,10 +147,10 @@ body {
 /* 선택된 상태의 스타일 */
 .type-tag.active {
     background-color: var(--accent-bg); /* 강조색  */
-    color: #fff;            /* 글자색 반전 */
+    color: #fff; /* 글자색 반전 */
     border-color: #333;
     font-weight: 700;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     transform: translateY(-2px); /* 살짝 떠오르는 효과 */
 }
 
@@ -185,18 +185,97 @@ textarea {
 }
 
 /* 4. 사진 업로드 영역 */
-.upload-box {
+/* 업로드 영역 전체를 감싸는 컨테이너 */
+.upload-area-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end; /* 모든 요소를 바닥 라인에 맞춤 */
+    gap: 0px; /* 구분선 마진으로 조절하기 위해 0으로 설정 */
+    padding: 10px 0;
+    width: 100%;
+    overflow-x: auto; /* 사진이 많아지면 가로 스크롤 생성 */
+    white-space: nowrap; /* 내부 요소들이 줄바꿈되지 않도록 설정 */
+}
+
+/* 업로드 버튼 영역 */
+.upload-button-area {
+    flex-shrink: 0; /* 크기가 줄어들지 않도록 고정 */
+}
+
+/* 세로 구분선 */
+.vertical-divider {
+    width: 1px;
+    height: 80px; /* 업로드 버튼 높이와 일치 */
+    background-color: #dee2e6;
+    margin: 0 20px; /* 버튼과 사진들 사이의 간격 */
+    flex-shrink: 0;
+}
+
+/* 미리보기 컨테이너 수정 */
+.preview-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap; /* 절대 줄바꿈 되지 않고 옆으로 나열됨 */
+    gap: 15px; /* 사진들 사이의 간격 */
+    align-items: flex-end; /* 썸네일들도 바닥에 정렬 */
+}
+
+/* 개별 썸네일 아이템 기본 상태 */
+.preview-item {
+    position: relative;
     width: 80px;
     height: 80px;
-    border: 1px dashed #adb5bd;
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-end;
+    /* 애니메이션 속성 추가: 0.3초 동안 부드럽게 변함 */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+/* 삭제 시 적용될 애니메이션 상태 */
+.preview-item.fade-out {
+    opacity: 0;             /* 투명해짐 */
+    transform: scale(0.7);  /* 크기가 70%로 작아짐 */
+}
+.preview-thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    display: block; /* 하단 여백 제거 */
+}
+
+/* 삭제 버튼 위치 최적화 */
+.delete-btn {
+    position: absolute;
+    top: -10px; /* 썸네일 위로 살짝 띄움 */
+    right: -10px; /* 썸네일 오른쪽으로 살짝 띄움 */
+    width: 22px;
+    height: 22px;
+    background: #333;
+    color: #fff;
+    border-radius: 50%;
+    border: 2px solid #fff; /* 사진과 구분되도록 흰색 테두리 추가 */
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-box {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
+    width: 80px;
+    height: 80px;
+    border: 1px dashed #adb5bd;
+    background-color: #f8f9fa;
     border-radius: 4px;
+    cursor: pointer;
 }
-
 .icon-camera {
     font-size: 20px;
 }
