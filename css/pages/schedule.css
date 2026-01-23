@@ -22,7 +22,7 @@ body {
 
 /* ================= 카드 공통 ================= */
 .card {
-  background: #ffffff;
+  background: #f4efeb;
   border-radius: 15px;
   padding: 30px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
@@ -215,6 +215,6 @@ body {
 }
 
 .btn-confirm {
-  background: #ef4444;
+  background: #B93920;
   color: #fff;
 }
