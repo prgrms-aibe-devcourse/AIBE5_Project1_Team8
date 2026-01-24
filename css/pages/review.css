@@ -184,6 +184,22 @@ textarea {
     border-top: 1px solid #eee;
 }
 
+/* 기본 상태 */
+#current-count {
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+/* 30자 미만일 때 적용될 클래스 */
+#current-count.warning {
+    color: #fa5c5c; /* 토스트창 포인트 컬러 사용 */
+}
+
+/* 30자 이상일 때 적용될 클래스 */
+#current-count.success {
+    color: #00ae38;
+}
+
 /* 4. 사진 업로드 영역 */
 /* 업로드 영역 전체를 감싸는 컨테이너 */
 .upload-area-wrapper {

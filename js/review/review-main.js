@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 30자 이상 작성 검사
         if (reviewData.content.length < 30) {
-            showToast(`⚠️ 리뷰를 30자 이상 작성해주세요. (현재 ${reviewData.content.length}자)`, 'error');
+            showToast(`⚠️ 리뷰를 30자 이상 작성해주세요.`, 'error');
             return;
         }
 

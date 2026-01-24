@@ -2,7 +2,7 @@
 let selectedFiles = []; 
 
 /**
- * 이미지 미리보기 및 삭제 기능 초기화
+ * @description 이미지 미리보기 및 삭제 기능 초기화
  */
 export function initImagePreview(inputId, containerId, countId, maxFiles = 9) {
     const fileInput = document.getElementById(inputId);
@@ -34,7 +34,7 @@ export function initImagePreview(inputId, containerId, countId, maxFiles = 9) {
 }
 
 /**
- * 화면에 썸네일과 삭제 버튼을 그리는 함수
+ * @description 화면에 썸네일과 삭제 버튼을 그리는 함수
  */
 function renderPreviews(container, countDisplay, maxFiles) {
     // 기존 화면을 비우고 새로 그림
