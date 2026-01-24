@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!currentThemeData) return;
         const place = currentThemeData.places[index];
 
-        const imagePath = `images/${currentThemeData.id}_${index + 1}.jpg`;
+        const imagePath = `images/color/${currentThemeData.id}_${index + 1}.jpg`;
 
         if (withFade) {
             contentWrapper.style.opacity = '0';
@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const searchContainer = document.querySelector('.search-container');
             if (searchContainer) {
                 searchContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                
+
                 // 스크롤 후 검색 입력창에 포커스
                 setTimeout(() => {
                     const searchInput = document.getElementById('keyword');
@@ -210,4 +210,104 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    });
+    // ------------------------------------------------
+    // 3. Interactive Map Logic (New)
+    // ------------------------------------------------
+
+    // Only run if map element exists to prevent errors
+    if (document.getElementById('map')) {
+
+        // 1. Locations Data
+        const locations = [
+            { id: 1, name: "1. 서울: 경복궁 (Gyeongbokgung Palace)", lat: 37.5796, lng: 126.9770, img: "spot_1.jpg", desc: "서울의 대표적인 랜드마크이자 한국적인 미가 집약된 곳입니다. 특히 경회루 연못에 비친 반영이나, 근정전의 웅장한 처마 곡선은 사계절 내내 최고의 피사체입니다." },
+            { id: 2, name: "2. 강원도 인제: 원대리 자작나무 숲", lat: 38.0093, lng: 128.1943, img: "spot_2.jpg", desc: "마치 북유럽에 온 듯한 이국적인 풍경을 자랑합니다. 빽빽하게 솟은 하얀 자작나무들이 군락을 이루고 있어 신비로운 분위기가 연출됩니다." },
+            { id: 3, name: "3. 경주: 동궁과 월지", lat: 35.8346, lng: 129.2271, img: "spot_3.jpg", desc: "대한민국 최고의 야경 명소입니다. 밤이 되면 궁궐이 연못에 거울처럼 비쳐 황금빛으로 빛나는 환상적인 사진을 얻을 수 있습니다." },
+            { id: 4, name: "4. 순천: 순천만 습지", lat: 34.8427, lng: 127.5061, img: "spot_4.jpg", desc: "끝없이 펼쳐진 갈대밭과 S자 물길이 장관입니다. 해 질 녘 용산 전망대에서 바라보는 붉은 노을은 숨 막히는 풍경을 선사합니다." },
+            { id: 5, name: "5. 제주: 성산일출봉", lat: 33.4589, lng: 126.9408, img: "spot_5.jpg", desc: "바다 위 거대한 화산 분화구의 웅장함. 유채꽃밭과 함께 담거나 광치기 해변에서 바라보는 뷰가 사진이 정말 잘 나옵니다." },
+            { id: 6, name: "6. 부산: 감천문화마을", lat: 35.0975, lng: 129.0106, img: "spot_6.jpg", desc: "산자락을 따라 늘어선 알록달록한 파스텔톤 집들이 마치 레고 블록 같습니다. '한국의 마추픽추'로 불리는 필수 포토존입니다." },
+            { id: 7, name: "7. 단양: 도담삼봉", lat: 36.9942, lng: 128.3615, img: "spot_7.jpg", desc: "남한강 한가운데 우뚝 솟은 세 개의 기암괴석. 물안개가 피어오를 때나 액자 조형물을 활용해 찍으면 한 폭의 그림 같습니다." },
+            { id: 8, name: "8. 태안: 꽃지해수욕장", lat: 36.4965, lng: 126.3361, img: "spot_8.jpg", desc: "서해안 최고의 낙조 명소. 할미바위와 할아비바위 사이로 해가 떨어지는 순간은 사진작가들이 꼽는 최고의 명장면입니다." },
+            { id: 9, name: "9. 진안: 마이산 탑사", lat: 35.7613, lng: 127.4208, img: "spot_9.jpg", desc: "말의 귀를 닮은 산 아래, 사람이 쌓아 올린 80여 개의 돌탑들이 신비롭고 미스터리한 분위기를 자아냅니다." },
+            { id: 10, name: "10. 양평: 두물머리", lat: 37.5316, lng: 127.3142, img: "spot_10.jpg", desc: "북한강과 남한강이 만나는 곳. 400년 된 느티나무와 황포돛배, 그리고 새벽 물안개가 어우러져 서정적인 풍경을 자랑합니다." },
+            { id: 11, name: "11. 포항: 스페이스 워크", lat: 36.0627, lng: 129.3973, img: "spot_11.jpg", desc: "하늘 위에 떠 있는 롤러코스터 트랙 같은 철제 조형물. 곡선 트랙과 영일만 바다가 어우러져 미래지향적인 사진을 남길 수 있습니다." },
+            { id: 12, name: "12. 보성: 대한다원 녹차밭", lat: 34.7167, lng: 127.0813, img: "spot_12.jpg", desc: "굽이굽이 펼쳐진 초록빛 녹차 밭의 곡선미가 예술입니다. 안개 낀 새벽이나 삼나무 숲길의 빛내림은 몽환적인 분위기를 연출합니다." },
+            { id: 13, name: "13. 거제: 바람의 언덕", lat: 34.7602, lng: 128.6732, img: "spot_13.jpg", desc: "푸른 남해 바다를 배경으로 서 있는 거대한 풍차와 언덕. 이국적이고 청량감 넘치는 인생샷을 남길 수 있는 곳입니다." },
+            { id: 14, name: "14. 인천: 송도 센트럴파크", lat: 37.3932, lng: 126.6392, img: "spot_14.jpg", desc: "수로를 따라 늘어선 마천루들이 물 위에 비치는 야경은 홍콩 못지않게 화려합니다. 모던한 도시 감성의 사진을 찍기 좋습니다." },
+            { id: 15, name: "15. 춘천: 남이섬", lat: 37.7913, lng: 127.5255, img: "spot_15.jpg", desc: "메타세쿼이아 길의 곧게 뻗은 나무들이 만드는 소실점 구도는 사진의 정석. 가을 단풍과 겨울 설경이 특히 아름답습니다." },
+            { id: 16, name: "16. 창녕: 우포늪", lat: 35.5569, lng: 128.4228, img: "spot_16.jpg", desc: "1억 4천만 년 태고의 신비를 간직한 국내 최대 습지. 새벽 물안개 속 나룻배 타는 모습은 몽환적인 사진의 끝판왕입니다." },
+            { id: 17, name: "17. 서귀포: 용머리 해안", lat: 33.2320, lng: 126.3146, img: "spot_17.jpg", desc: "한국의 그랜드 캐니언. 층층이 쌓인 사암층의 기묘한 곡선과 파도가 어우러져 압도적인 대자연의 배경을 선사합니다." },
+            { id: 18, name: "18. 부여: 궁남지", lat: 36.2745, lng: 126.9152, img: "spot_18.jpg", desc: "우리나라에서 가장 오래된 인공 연못. 연꽃 축제 기간 만개한 연꽃과 정자(포룡정)의 조화는 한국의 고전미를 보여줍니다." },
+            { id: 19, name: "19. 속초: 설악산 울산바위", lat: 38.1969, lng: 128.4682, img: "spot_19.jpg", desc: "병풍처럼 펼쳐진 거대한 화강암 봉우리. 인근 카페 옥상 등에서 망원 렌즈로 담으면 비현실적으로 웅장한 인생샷이 나옵니다." },
+            { id: 20, name: "20. 담양: 죽녹원", lat: 35.3275, lng: 126.9917, img: "spot_20.jpg", desc: "하늘을 찌를 듯한 대나무 숲. 대나무 사이로 쏟아지는 햇살과 짙은 초록 배경이 인물을 더욱 화사하게 만들어 줍니다." }
+        ];
+
+        // 2. Initialize Map
+        const INITIAL_CENTER = [35.9, 127.8];
+        const INITIAL_ZOOM = 7;
+        const INITIAL_TITLE = "이번 주의 추천 여행지";
+        const INITIAL_DESC = "지도에 있는 핀을 클릭하셔서 더 자세히 알아보세요.";
+
+        const map = L.map('map').setView(INITIAL_CENTER, INITIAL_ZOOM);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // 3. UI Elements
+        const resetBtn = document.getElementById('reset-map-btn');
+        const titleEl = document.getElementById('title-text');
+        const descEl = document.getElementById('desc-text');
+
+        // Prevent click on reset button from bubbling to map
+        L.DomEvent.disableClickPropagation(resetBtn);
+
+        // Reset Button Logic
+        resetBtn.addEventListener('click', function () {
+            map.flyTo(INITIAL_CENTER, INITIAL_ZOOM, { duration: 0.5 });
+            map.closePopup();
+            titleEl.innerText = INITIAL_TITLE;
+            descEl.innerText = INITIAL_DESC;
+        });
+
+        // Show/Hide Reset Button based on map movement
+        map.on('move', function () {
+            const currentCenter = map.getCenter();
+            const currentZoom = map.getZoom();
+            const distance = map.distance(currentCenter, INITIAL_CENTER);
+
+            if (currentZoom !== INITIAL_ZOOM || distance > 10000) {
+                resetBtn.style.display = 'block';
+            } else {
+                resetBtn.style.display = 'none';
+            }
+        });
+
+        // 4. Create Markers
+        locations.forEach(loc => {
+            const marker = L.marker([loc.lat, loc.lng]).addTo(map);
+
+            // [FIXED] Removed the wrapping <div> to prevent layout gaps
+            const popupContent = `<img src="images/map/${loc.img}" class="popup-img" alt="${loc.name}" onerror="this.style.display='none';">`;
+
+            marker.bindPopup(popupContent);
+
+            marker.on('click', function () {
+                // Update text description
+                titleEl.innerText = loc.name;
+                descEl.innerText = loc.desc;
+
+                // Fly to location with offset (so pin is not covered by popup)
+                const targetZoom = 13;
+                const mapHeight = map.getSize().y;
+                // Calculate logic to center the marker slightly lower so popup is visible
+                const targetPoint = map.project([loc.lat, loc.lng], targetZoom);
+                const offset = mapHeight * 0.1; // Shift map down slightly
+                const newCenterPoint = L.point(targetPoint.x, targetPoint.y - offset);
+                const newCenterLatLng = map.unproject(newCenterPoint, targetZoom);
+
+                map.flyTo(newCenterLatLng, targetZoom, { duration: 1.1 });
+            });
+        });
+    }
+
+});
