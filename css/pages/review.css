@@ -192,7 +192,7 @@ textarea {
 
 /* 30자 미만일 때 적용될 클래스 */
 #current-count.warning {
-    color: #fa5c5c; /* 토스트창 포인트 컬러 사용 */
+    color: #fa5c5c; 
 }
 
 /* 30자 이상일 때 적용될 클래스 */
