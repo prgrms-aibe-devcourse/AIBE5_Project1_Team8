@@ -741,7 +741,7 @@ spotList.addEventListener("click", (e) => {
     if (category === "accommodation") {
       window.location.href = `hotel-detail.html?id=${detailId}`;
     } else if (detailId && detailId !== "0") {
-      window.location.href = `place-detail.html?id=${detailId}`;
+      window.location.href = `../place/place-detail.html?id=${detailId}`;
     } else {
       alert("상세 페이지가 준비 중입니다.");
     }

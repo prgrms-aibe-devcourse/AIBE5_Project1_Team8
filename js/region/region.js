@@ -327,7 +327,7 @@ function addToPlan(regionId) {
 
 // 해당 지역 호텔로 이동
 function goToHotels(regionId) {
-  window.location.href = `hotel.html?region=${regionId}`;
+  window.location.href = `hotel/hotel.html?region=${regionId}`;
 }
 
 // Scroll to top 버튼
