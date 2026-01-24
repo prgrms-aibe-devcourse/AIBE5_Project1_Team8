@@ -229,12 +229,12 @@ textarea {
     display: flex;
     align-items: flex-end;
     /* 애니메이션 속성 추가: 0.3초 동안 부드럽게 변함 */
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: transform 0.15s ease, opacity 0.15s ease;
 }
 /* 삭제 시 적용될 애니메이션 상태 */
 .preview-item.fade-out {
-    opacity: 0;             /* 투명해짐 */
-    transform: scale(0.7);  /* 크기가 70%로 작아짐 */
+    opacity: 0;            /* 투명해짐 */
+    transform: scale(0.9);  /* 크기가 70%로 작아짐 */
 }
 .preview-thumbnail {
     width: 80px;

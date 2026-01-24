@@ -1,5 +1,3 @@
-// js/review/preview.js
-
 // 현재 선택된 파일들을 담는 전역 배열 (페이지가 열려있는 동안 유지됨)
 let selectedFiles = []; 
 
@@ -58,10 +56,10 @@ function renderPreviews(container, countDisplay, maxFiles) {
 
             // 삭제 버튼 이벤트 연결
             item.querySelector('.delete-btn').addEventListener('click', () => {
-                // 삭제 애니메이션 실행
-                item.classList.add('fade-out');
+                // // 삭제 애니메이션 실행
+                item.classList.add('fade-out'); // classList.add() 요소에 클래스 값을 추가한다.
 
-                // 애니메이션이 끝나면(0.3초 후) 실제 데이터 삭제 및 재랜더링
+                // 애니메이션이 끝나면 실제 데이터 삭제 및 재랜더링
                 item.addEventListener('transitionend', () => {
                     selectedFiles.splice(index, 1);
                     renderPreviews(container, countDisplay, maxFiles);
