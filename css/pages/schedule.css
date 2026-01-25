@@ -1,3 +1,11 @@
+:root {
+    --bg-color: #fffffa;
+    --beige-bg: #F4EFEB;
+    --primary-text: #333333;
+    --navy-blue: #2f4157;
+    --border-radius-lg: 30px;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,13 +13,15 @@
 }
 
 body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background-color: #f4f6f8;
+    font-family: 'Noto Sans', 'Noto Sans KR', sans-serif;
+    /* 폰트 통합 */
+    background-color: var(--bg-color);
+    color: var(--primary-text);
     color: #333;
     line-height: 1.5;
 }
 
-/* ================= 메인 레이아웃 ================= */
+/* ================= 메인 레이아웃 & 배너 공통 ================= */
 .schedule-container {
   max-width: 900px;
   margin: 20px auto 40px; /*헤더 높이 고려*/
@@ -20,15 +30,6 @@ body {
   gap: 24px;
 }
 
-/* ================= 카드 공통 ================= */
-.card {
-  background: #f4efeb;
-  border-radius: 15px;
-  padding: 30px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-/* ================= 배너 ================= */
 .schedule-banner {
   width: 100%;
   margin-bottom: 16px;
@@ -47,8 +48,17 @@ body {
 }
 
 .schedule-banner .nickname {
-  font-weight: 400; /* 닉네임만 살짝 강조 */
+  font-weight: 400; 
 }
+
+/* ================= 카드 공통 ================= */
+.card {
+  background: var(--beige-bg);
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
 
 /* ================= 캘린더 ================= */
 .calendar-header {
@@ -83,7 +93,7 @@ body {
 }
 
 .calendar-day.active {
-  background: #2F4157;
+  background: var(--navy-blue);
   color: #fff;
 }
 
@@ -94,7 +104,7 @@ body {
 }
 
 .calendar-day.active.has-schedule {
-  background: #2F4157;
+  background: var(--navy-blue);
   color: #fff;
 }
 
@@ -122,6 +132,12 @@ body {
 
 
 /* ================= 일정 리스트 ================= */
+.schedule-divider {
+  border: none;
+  border-top: 1px solid #4b5563;
+  margin: 12px 0 16px;
+}
+
 .schedule-list {
   margin-top: 12px;
   list-style: none;
