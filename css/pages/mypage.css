@@ -1,0 +1,331 @@
+:root {
+    --bg-color: #fffffa; /*body 배경색*/
+    --beige-bg: #F4EFEB; /*카드 배경색*/
+    --primary-text: #333333;
+    --navy-blue: #2f4157; 
+    --btn-red: #b93920;
+    --border-radius-lg: 30px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans', 'Noto Sans KR', sans-serif;
+    /* 폰트 통합 */
+    background-color: var(--bg-color);
+    color: var(--primary-text);
+}
+
+
+
+/* =========================
+   마이페이지 컨테이너 & 배너
+   ========================= */
+.mypage-container {
+    max-width: 900px;
+    margin: 20px auto 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+
+.mypage-banner {
+    width: 100%;
+    padding: 24px 0;
+    border-radius: 20px;
+    background: rgba(17, 24, 39, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    text-align: center;
+    font-size: 26px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}
+
+.mypage-nickname {
+    font-weight: 400;
+}
+
+
+/* =========================
+   카드 공통
+   ========================= */
+.card {
+    background: var(--beige-bg);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: var(--navy-blue);
+}
+
+/* =========================
+   프로필 카드 영역
+   ========================= */
+.mypage-profile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-align: left;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.profile-img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-name {
+  font-weight: 600;
+}
+
+.profile-email,
+.profile-phone {
+  font-size: 14px;
+  color: #666;
+}
+
+.profile-right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-btn {
+  padding: 10px 16px;
+  border-radius: 15px;
+  border: none;
+  background: var(--navy-blue);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.profile-btn.danger {
+  background: var(--btn-red);
+}
+
+.profile-btn:hover {
+  background: #243549; /* navy 살짝 진하게 */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+.profile-btn.danger:hover {
+  background: #8f2d1a;
+}
+
+.profile-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================
+   예약 내역 영역
+   ========================= */
+.reservation-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.reservation-tab {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--navy-blue);
+  background: transparent;
+  cursor: pointer;
+}
+
+.reservation-tab.active {
+  background: var(--navy-blue);
+  color: #fff;
+}
+
+
+.mypage-reservation-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mypage-reservation-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid rgba(47, 65, 87, 0.25);
+}
+
+
+/*좌측 영역*/
+.reservation-left {
+  width: 1200px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.reservation-img {
+  width: 200px;
+  height: 120px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.reservation-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reservation-date {
+    font-size: 12px;
+    color: #333333;
+}
+
+/*우측 영역*/
+.reservation-right {
+  position: relative;        /* 기준 */
+  width: 500px;              /* 우측 영역 고정 */
+  min-height: 90px;          /* d-day + 버튼 공존 */
+}
+
+
+/* 버튼 공통 디자인*/
+.reservation-btn {
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease,
+              transform 0.15s ease,
+              box-shadow 0.15s ease;
+}
+
+.detail-btn {
+  background: var(--navy-blue);
+  color: #fff;
+}
+
+.detail-btn:hover {
+  background: #243549;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.detail-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+.reservation-actions {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  gap: 8px;
+}
+
+/* 예정 */
+.mypage-reservation-item.upcoming .d-day {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--navy-blue);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.reservation-status.upcoming {
+  color: var(--navy-blue);
+}
+
+
+
+
+/* 완료 */
+.mypage-reservation-item.completed .reservation-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.reservation-status.completed {
+  color: #777;
+}
+
+.review-btn {
+  background: transparent;
+  color: var(--navy-blue);
+  border: 1px solid var(--navy-blue);
+}
+
+.review-btn:hover {
+  background: rgba(47, 65, 87, 0.08);
+}
+
+
+
+/* =========================
+   후기 영역
+   ========================= */
+.review-filter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.mypage-review-list {
+  list-style: none;
+}
+
+.mypage-review-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px;
+  background: #fff;
+  border-radius: 10px;
+}
+
+.mypage-write-btn {
+  color: var(--navy-blue);
+  text-decoration: none;
+  font-weight: 500;
+}
+.section-title {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
