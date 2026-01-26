@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="전국 관광 명소 탐험">
+  <title>명소 | TravelKorea</title>
+
+  <!-- AIBE5 Styles -->
+  <link rel="stylesheet" href="../../css/common/style.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <!-- Page Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/place/place.css">
+</head>
+
+<body>
+  <!-- Header (Dynamic from AIBE5) -->
+  <header>
+  </header>
+
+  <main>
+    <!-- Hero Section (Adapted) -->
+    <div class="page-header" style="background-image: none; height: auto;">
+      <div class="hero-content"
+        style="text-align: center; padding: 3rem 0; background: #c4c4c4; border-radius: 24px; color: #333;">
+        <h1 class="hero-title" id="regionTitle"
+          style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; color: #333; text-shadow: none;">전국 관광 명소</h1>
+        <p class="hero-subtitle" id="regionSubtitle" style="font-size: 1.1rem; opacity: 0.9; color: #666;">대한민국의 아름다운
+          명소를 탐험하세요</p>
+      </div>
+    </div>
+
+    <div class="content-wrapper" style="max-width: 1200px; margin: 0 auto; padding: 2rem; display: flex; gap: 2rem;">
+
+      <!-- Left Sidebar: Region Filter -->
+      <aside class="region-sidebar">
+        <div class="sidebar-header">
+          <h3>지역 선택</h3>
+        </div>
+        <ul class="region-filter-list" id="regionFilterList">
+          <li class="region-filter-item active" data-region="all">
+            <span class="region-icon">🗺️</span>
+            <span class="region-name">전체</span>
+            <span class="region-count" id="countAll">0</span>
+          </li>
+          <li class="region-filter-item" data-region="seoul">
+            <span class="region-icon">🏙️</span>
+            <span class="region-name">서울</span>
+            <span class="region-count" id="countSeoul">0</span>
+          </li>
+          <li class="region-filter-item" data-region="incheon">
+            <span class="region-icon">🛳️</span>
+            <span class="region-name">인천</span>
+            <span class="region-count" id="countIncheon">0</span>
+          </li>
+          <li class="region-filter-item" data-region="gangneung">
+            <span class="region-icon">🏖️</span>
+            <span class="region-name">강릉</span>
+            <span class="region-count" id="countGangneung">0</span>
+          </li>
+          <li class="region-filter-item" data-region="sokcho">
+            <span class="region-icon">⛰️</span>
+            <span class="region-name">속초</span>
+            <span class="region-count" id="countSokcho">0</span>
+          </li>
+          <li class="region-filter-item" data-region="busan">
+            <span class="region-icon">🌊</span>
+            <span class="region-name">부산</span>
+            <span class="region-count" id="countBusan">0</span>
+          </li>
+          <li class="region-filter-item" data-region="jeju">
+            <span class="region-icon">🍊</span>
+            <span class="region-name">제주</span>
+            <span class="region-count" id="countJeju">0</span>
+          </li>
+          <li class="region-filter-item" data-region="gyeongju">
+            <span class="region-icon">🏛️</span>
+            <span class="region-name">경주</span>
+            <span class="region-count" id="countGyeongju">0</span>
+          </li>
+          <li class="region-filter-item" data-region="jeonju">
+            <span class="region-icon">🏘️</span>
+            <span class="region-name">전주</span>
+            <span class="region-count" id="countJeonju">0</span>
+          </li>
+          <li class="region-filter-item" data-region="yeosu">
+            <span class="region-icon">🌃</span>
+            <span class="region-name">여수</span>
+            <span class="region-count" id="countYeosu">0</span>
+          </li>
+          <li class="region-filter-item" data-region="daejeon">
+            <span class="region-icon">🔬</span>
+            <span class="region-name">대전</span>
+            <span class="region-count" id="countDaejeon">0</span>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Right Content: Places List -->
+      <section class="places-content" style="flex: 1;">
+        <div class="places-header">
+          <h2 id="placesTitle">전체 명소</h2>
+          <span class="places-count" id="placesCount">0개의 명소</span>
+        </div>
+
+        <div class="place-list" id="placeList">
+          <!-- Loading skeleton -->
+          <div class="skeleton-place"></div>
+          <div class="skeleton-place"></div>
+          <div class="skeleton-place"></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Scroll to Top -->
+  <button class="scroll-top" id="scrollTop">↑</button>
+
+  <!-- Add to Schedule Modal (명소용) -->
+  <div class="modal-overlay" id="scheduleModal" style="display: none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>일정에 추가</h3>
+      </div>
+      <div class="modal-body">
+        <p>이 명소를 일정에 추가하시겠습니까?</p>
+        <p class="modal-place-name" id="modalPlaceName"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="cancelScheduleBtn">취소</button>
+        <button class="btn-primary-action" id="confirmScheduleBtn">추가</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AIBE5 Scripts -->
+  <script src="../AIBE5_Project1_Team8/js/common/header.js"></script>
+  <script src="../AIBE5_Project1_Team8/js/common/script.js"></script>
+
+  <!-- Page Scripts -->
+  <script src="../../js/place/place.js"></script>
+</body>
+
+</html>

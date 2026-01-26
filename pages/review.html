@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>리뷰 작성</title>
+
+        <link rel="stylesheet" href="../css/common/header.css" />
+        <link rel="stylesheet" href="../css/common/toast.css" />
+        <link rel="stylesheet" href="../css/common/style.css"/>
+        <link rel="stylesheet" href="../css/pages/review.css" />
+        <!-- 폰트 불러오기 -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <!-- 헤더 파트 -->
+        <header></header>
+
+        <main class="review-wrapper">
+            <div class="review-container">
+                <h1 class="main-title">리뷰 작성</h1>
+
+                <section class="review-section service-header">
+                    <div class="service-info-flex">
+                        <div class="service-pic-box">
+                            <span>pic</span>
+                        </div>
+                        <div class="service-text-box">
+                            <p class="service-name">서비스 이름</p>
+                            <p class="service-date">이용일자: 2026.01.23</p>
+                        </div>
+                    </div>
+
+                    <hr class="divider" />
+
+                    <div class="rating-flex">
+                        <span class="rating-label">서비스 별점</span>
+                        <div class="stars" id="star-rating">
+                            <span class="star" data-value="1">☆</span>
+                            <span class="star" data-value="2">☆</span>
+                            <span class="star" data-value="3">☆</span>
+                            <span class="star" data-value="4">☆</span>
+                            <span class="star" data-value="5">☆</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="review-section">
+                    <h2 class="section-title">여행자 타입</h2>
+                    <div class="tag-group" id="traveler-type-group">
+                        <button
+                            type="button"
+                            class="type-tag"
+                            data-value="친구"
+                        >
+                            친구
+                        </button>
+                        <button
+                            type="button"
+                            class="type-tag"
+                            data-value="연인"
+                        >
+                            연인
+                        </button>
+                        <button
+                            type="button"
+                            class="type-tag"
+                            data-value="가족"
+                        >
+                            가족
+                        </button>
+                        <button
+                            type="button"
+                            class="type-tag"
+                            data-value="유아 동반"
+                        >
+                            유아 동반
+                        </button>
+                        <button
+                            type="button"
+                            class="type-tag"
+                            data-value="개인"
+                        >
+                            개인
+                        </button>
+                        <button
+                            type="button"
+                            class="type-tag"
+                            data-value="기타"
+                        >
+                            기타
+                        </button>
+                    </div>
+                </section>
+
+                <section class="review-section">
+                    <h2 class="section-title">리뷰 작성</h2>
+                    <div class="textarea-container">
+                        <textarea
+                            id="review-textarea"
+                            placeholder="다녀오신 여행지의 만족도, 추천 볼거리 등 나만의 여행 이야기를 공유해 주세요!"
+                            maxlength="500" 
+                        ></textarea>
+                        <div class="char-count">
+                            최소 30자 <span id="current-count">0</span>/500
+                        </div>
+                    </div>
+                </section>
+
+                <section class="review-section">
+                    <h2 class="section-title">사진 업로드하기</h2>
+                    <p class="section-desc">
+                        사진을 업로드해보세요. (최대 9장)
+                    </p>
+
+                    <div class="upload-area-wrapper">
+                        <div class="upload-button-area">
+                            <label for="file-input" class="upload-box">
+                                <div class="icon-camera">📷</div>
+                                <span class="upload-count" id="image-count"
+                                    >0/9</span
+                                >
+                                <input
+                                    type="file"
+                                    id="file-input"
+                                    hidden
+                                    multiple
+                                    accept="image/*"
+                                />
+                            </label>
+                        </div>
+
+                        <div class="vertical-divider"></div>
+
+                        <div
+                            id="preview-container"
+                            class="preview-container"
+                        ></div>
+                    </div>
+                </section>
+
+                <div class="action-area">
+                    <button type="submit" class="submit-btn">작성 완료</button>
+                </div>
+            </div>
+        </main>
+        <script src="../js/common/header.js"></script>
+        <script type="module" src="../js/review/review-main.js"></script>
+    </body>
+</html>

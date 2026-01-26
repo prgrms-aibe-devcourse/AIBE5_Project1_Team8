@@ -1,0 +1,240 @@
+/* 색상 변수는 style.css의 :root에서 상속됨 */
+:root {
+  --bg-color: #fffffa; /* 흰색 배경 */
+  --beige-bg: #F4EFEB; /* 박스 배경 */
+  --primary-text: #333333; /* 글씨 색상*/
+  --secondary-text: #666666; /* 글씨 색상 */
+  --navy-blue: #2f4157; /* 버튼 색상 등등 */
+  --btn-red: #b93920; /* 로그인 버튼, 삭제 버튼 등 색상상 */
+  --border-radius-lg: 30px; /* 모서리 둥글기 값값 */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--primary-text);
+    line-height: 1.5;
+}
+
+/* ================= 메인 레이아웃 & 배너 공통 ================= */
+.schedule-container {
+  max-width: 900px;
+  margin: 20px auto 40px; /*헤더 높이 고려*/
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.schedule-banner {
+  width: 100%;
+  margin-bottom: 16px;
+
+  padding: 24px 0;
+  border-radius: 20px;
+
+  background: rgba(17, 24, 39, 0.3);;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+
+  color:white;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 300; /* 얇게 */
+  letter-spacing: 0.5px;
+}
+
+.schedule-banner .nickname {
+  font-weight: 400; 
+}
+
+/* ================= 카드 공통 ================= */
+.card {
+  color: var(--primary-text);
+  background: var(--beige-bg);
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+
+/* ================= 캘린더 ================= */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.calendar-header button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.calendar-day {
+  padding: 12px 0;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.calendar-day:hover {
+  background: #7e94a3;
+}
+
+.calendar-day.active {
+  background: #2F4157;
+  background: var(--navy-blue);
+  color: #fff;
+}
+
+.calendar-day.has-schedule {
+  background: #D4DBE0;
+  color: #4A5A6A;
+  font-weight: 600;
+}
+
+.calendar-day.active.has-schedule {
+  background: #2F4157;
+  background: var(--navy-blue);
+  color: #fff;
+}
+
+.calendar-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+}
+
+.calendar-week div {
+  padding: 6px 0;
+}
+
+.calendar-week div:first-child {
+  color: #ff4d4f; /* 일요일 */
+}
+
+.calendar-week div:last-child {
+  color: #2f5bea; /* 토요일 */
+}
+
+
+/* ================= 일정 리스트 ================= */
+.schedule-divider {
+  border: none;
+  border-top: 1px solid #4b5563;
+  margin: 12px 0 16px;
+}
+
+.schedule-list {
+  margin-top: 12px;
+  list-style: none;
+}
+
+.schedule-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+/* 일정 타입 */
+.schedule-type {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.schedule-type.stay {
+  background: #ffe8d9;
+  color: #ff6b00;
+}
+
+.schedule-type.tour {
+  background: #e7f0ff;
+  color: #2f5bea;
+}
+
+/* 삭제 버튼 */
+.delete-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #ff4d4f;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+
+
+/* ================= 일정 삭제 확인 모달 ================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 2000;
+}
+
+.modal {
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  width: 400px;
+  height: 200px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-title {
+  font-size: 16px;
+  margin: auto 0;
+}
+
+.modal-actions {
+  width: 300px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: auto auto 0;
+}
+
+.btn-cancel,
+.btn-confirm {
+  flex: 1;
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-confirm {
+  background: var(--btn-red);
+  color: #fff;
+}

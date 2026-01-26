@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>여기에 제목 입력</title>
+    <link rel="stylesheet" href="./css/common/style.css">
+    <link rel="stylesheet" href="./css/common/index.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="./css/common/calendar-modal.css">
+</head>
+
+<body>
+
+    <header>
+
+    </header>
+
+    <main>
+        <section class="search-container">
+            <div class="search-tabs">
+                <button class="tab active">전체</button>
+                <button class="tab">지역</button>
+                <button class="tab">즐길거리</button>
+                <button class="tab">숙소</button>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="keyword" placeholder="검색어를 입력하세요">
+                <button class="btn-search" id="btnSearch">검색</button>
+            </div>
+        </section>
+
+        <section class="featured-grid">
+            <div class="card large-card"
+                style="background-image: url('https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?q=80&w=1000&auto=format&fit=crop');">
+                <div class="overlay">
+                    <h2>추천 여행지</h2>
+                    <div class="content-center">
+                        <h3>사진 슬라이드 쇼 - 3개 ~5개 추천</h3>
+                        <p>A wonderful serenity has taken possession of my entire soul.</p>
+                        <a href="#" class="details-link">자세히</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card small-card"
+                style="background-image: url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?q=80&w=1000&auto=format&fit=crop');">
+                <div class="overlay">
+                    <h2>즐길거리</h2>
+                    <div class="content-bottom">
+                        <p>I throw myself down among the tall grass.</p>
+                        <a href="#" class="details-link">자세히</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card small-card"
+                style="background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1000&auto=format&fit=crop');">
+                <div class="overlay">
+                    <h2>숙소 검색</h2>
+                    <div class="content-bottom">
+                        <p>A small river named Duden flows by their place.</p>
+                        <a href="#" class="details-link">자세히</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="color-theme-section">
+            <div class="interactive-card" id="mainCard">
+                <div class="title fade-element" id="mainTitle">랜덤 색상 테마 여행</div>
+                <div class="circle-container fade-element" id="circleWrapper">
+                    <div class="interactive-circle"></div>
+                    <div class="interactive-circle"></div>
+                    <div class="interactive-circle"></div>
+                    <div class="interactive-circle"></div>
+                    <div class="interactive-circle"></div>
+                </div>
+                <div class="description fade-element" id="descText">랜덤 색상으로 여행지 정하기.</div>
+                <div class="explore-btn fade-element" id="exploreBtn">EXPLORE</div>
+
+                <div class="title-bookmark" id="titleBookmark">
+                    <div class="result-title" id="resultTitle"></div>
+                </div>
+
+                <div class="result-container" id="resultContainer">
+                    <div class="slider-wrapper">
+                        <button class="nav-btn prev-btn" id="prevBtn">&lt;</button>
+
+                        <div class="small-box">
+                            <div class="content-wrapper" id="contentWrapper">
+                                <div class="image-placeholder">
+                                    IMAGE AREA
+                                </div>
+                                <div class="text-content" id="textContentArea">
+                                    <h3 id="placeName">여행지 이름</h3>
+                                    <p id="placeDesc">여행지 설명이 여기에 들어갑니다.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="nav-btn next-btn" id="nextBtn">&gt;</button>
+                    </div>
+                </div>
+
+                <div class="refresh-btn" id="refreshBtn">
+                    다른 랜덤 색상 받기 ↻
+                </div>
+
+                <div class="search-btn" id="searchBtn">
+                    여행지 검색하기
+                </div>
+            </div>
+        </section>
+
+        <section class="map-detail-section">
+            <div class="map-wrapper">
+                <div id="map">
+                    <button id="reset-map-btn">처음 위치로</button>
+                </div>
+
+                <div class="info-card">
+                    <h2 class="location-title" id="title-text">이번 주의 추천 여행지</h2>
+                    <div class="description-box">
+                        <span class="quote-mark">“</span>
+                        <p class="description-text" id="desc-text">
+                            지도에 있는 핀을 클릭하셔서 더 자세히 알아보세요.
+                        </p>
+                    </div>
+                    <button class="add-btn">일정에 추가</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="./js/common/header.js"></script>
+    <script src="./js/common/indexscript.js"></script>
+    <script src="./js/common/recommendSite.js"></script>
+    <script src="./js/search/searchbar.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="./js/common/calendar-modal.js"></script>
+</body>
+
+</html>
