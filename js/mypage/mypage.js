@@ -1,6 +1,8 @@
 import { reservations, reviews, userData } from "./data.js";
+import { getAllReviews, deleteReview } from '../review/db.js'; // firebase 연동
 
-document.addEventListener("DOMContentLoaded", () => {
+
+document.addEventListener("DOMContentLoaded", async () => {   
     /* =====================
         사용자 프로필 렌더링
     ===================== */
