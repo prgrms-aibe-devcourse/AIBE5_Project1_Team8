@@ -1,41 +1,16 @@
-/* ===== CSS Variables ===== */
-:root {
-  --bg-main: #f5f5f5;
-  --bg-card: #ffffff;
-  --bg-header: #c4c4c4;
-  --bg-item: #f0f0f0;
-  --text-primary: #333333;
-  --text-secondary: #666666;
-  --text-light: #999999;
-  --border-color: #e0e0e0;
-  --success: #4caf50;
-  --danger: #f44336;
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --transition: all 0.3s ease;
-}
-
-/* ===== Reset & Base ===== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ===== Hotel Detail Page Styles ===== */
+/* 변수는 common/style.css의 :root를 사용 */
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--bg-main);
-  color: var(--text-primary);
+  background: #f5f5f5;
+  color: var(--primary-text);
   line-height: 1.6;
   min-height: 100vh;
 }
 
 /* ===== Navigation ===== */
 .navbar {
-  background: var(--bg-header);
+  background: var(--beige-bg);
   padding: 1rem 0;
 }
 
@@ -51,7 +26,7 @@ body {
 .nav-logo {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--primary-text);
 }
 
 .nav-menu {
@@ -62,15 +37,15 @@ body {
 
 .nav-menu a {
   text-decoration: none;
-  color: var(--text-secondary);
+  color: var(--secondary-text);
   font-size: 0.9rem;
   font-weight: 500;
-  transition: var(--transition);
+  transition: all 0.3s ease;
 }
 
 .nav-menu a:hover,
 .nav-menu a.active {
-  color: var(--text-primary);
+  color: var(--primary-text);
 }
 
 .nav-auth {
@@ -80,17 +55,17 @@ body {
 
 .auth-link {
   text-decoration: none;
-  color: var(--text-secondary);
+  color: var(--secondary-text);
   font-size: 0.85rem;
   font-weight: 500;
   padding: 0.5rem 1rem;
-  border: 1px solid var(--text-secondary);
-  border-radius: var(--radius-sm);
-  transition: var(--transition);
+  border: 1px solid var(--secondary-text);
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 .auth-link:hover {
-  background: var(--text-secondary);
+  background: var(--secondary-text);
   color: white;
 }
 
@@ -102,8 +77,8 @@ body {
 .header-banner {
   max-width: 800px;
   margin: 0 auto;
-  background: var(--bg-header);
-  border-radius: var(--radius-lg);
+  background: var(--beige-bg);
+  border-radius: var(--border-radius-lg);
   padding: 3rem 2rem;
   text-align: center;
 }
@@ -111,7 +86,7 @@ body {
 .page-title {
   font-size: 1.8rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--primary-text);
 }
 
 /* ===== Container ===== */
@@ -123,9 +98,9 @@ body {
 
 /* ===== Hotel Detail Card ===== */
 .hotel-detail-card {
-  background: var(--bg-card);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   padding: 2rem;
   display: flex;
   gap: 2rem;
@@ -136,8 +111,8 @@ body {
 .hotel-image-section {
   flex: 0 0 320px;
   height: 280px;
-  background: var(--bg-item);
-  border-radius: var(--radius-md);
+  background: #f0f0f0;
+  border-radius: 16px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -166,11 +141,11 @@ body {
 }
 
 .info-item {
-  background: var(--bg-item);
+  background: #f0f0f0;
   padding: 0.6rem 1rem;
-  border-radius: var(--radius-sm);
+  border-radius: 8px;
   font-size: 0.9rem;
-  color: var(--text-primary);
+  color: var(--primary-text);
 }
 
 .info-row .info-item {
@@ -187,14 +162,14 @@ body {
 /* Buttons */
 .btn-schedule {
   padding: 0.6rem 1.2rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--secondary-text);
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.3s ease;
   white-space: nowrap;
 }
 
@@ -206,48 +181,48 @@ body {
 
 .btn-booking {
   padding: 0.6rem 1.2rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--secondary-text);
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.3s ease;
   white-space: nowrap;
 }
 
 .btn-booking:hover {
-  background: var(--text-primary);
+  background: var(--primary-text);
   color: white;
-  border-color: var(--text-primary);
+  border-color: var(--primary-text);
 }
 
 .btn-detail {
   margin-top: auto;
   padding: 0.75rem 1.5rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--secondary-text);
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.3s ease;
   align-self: flex-start;
 }
 
 .btn-detail:hover {
-  background: var(--text-primary);
+  background: var(--primary-text);
   color: white;
-  border-color: var(--text-primary);
+  border-color: var(--primary-text);
 }
 
 /* ===== Pictogram Section ===== */
 .pictogram-section {
-  background: var(--bg-card);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   padding: 2rem;
   margin-bottom: 2rem;
   animation: slideDown 0.3s ease;
@@ -277,9 +252,9 @@ body {
   align-items: center;
   text-align: center;
   padding: 1.5rem 1rem;
-  background: var(--bg-item);
-  border-radius: var(--radius-md);
-  transition: var(--transition);
+  background: #f0f0f0;
+  border-radius: 16px;
+  transition: all 0.3s ease;
 }
 
 .pictogram-item.available {
@@ -294,15 +269,15 @@ body {
   width: 48px;
   height: 48px;
   margin-bottom: 0.75rem;
-  color: var(--text-secondary);
+  color: var(--secondary-text);
 }
 
 .pictogram-item.available .pictogram-icon {
-  color: var(--success);
+  color: #4caf50;
 }
 
 .pictogram-item.unavailable .pictogram-icon {
-  color: var(--danger);
+  color: #f44336;
 }
 
 .pictogram-icon svg {
@@ -312,22 +287,22 @@ body {
 
 .pictogram-label {
   font-size: 0.85rem;
-  color: var(--text-secondary);
+  color: var(--secondary-text);
   margin-bottom: 0.25rem;
 }
 
 .pictogram-status {
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--primary-text);
 }
 
 .pictogram-item.available .pictogram-status {
-  color: var(--success);
+  color: #4caf50;
 }
 
 .pictogram-item.unavailable .pictogram-status {
-  color: var(--danger);
+  color: #f44336;
 }
 
 /* ===== Description Section ===== */
@@ -336,34 +311,34 @@ body {
 }
 
 .description-box {
-  background: var(--bg-card);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   padding: 2rem;
 }
 
 .description-title {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--secondary-text);
   margin-bottom: 1.5rem;
   text-align: center;
 }
 
 .description-box p {
-  color: var(--text-secondary);
+  color: var(--secondary-text);
   font-size: 0.95rem;
   line-height: 1.8;
-  background: var(--bg-item);
+  background: #f0f0f0;
   padding: 1.5rem;
-  border-radius: var(--radius-sm);
+  border-radius: 8px;
 }
 
 /* ===== Review Section ===== */
 .review-section {
-  background: var(--bg-card);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   padding: 2rem;
 }
 
@@ -373,18 +348,18 @@ body {
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .review-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--primary-text);
 }
 
 .review-count {
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: var(--secondary-text);
 }
 
 .review-list {
@@ -394,8 +369,8 @@ body {
 }
 
 .review-card {
-  background: var(--bg-item);
-  border-radius: var(--radius-md);
+  background: #f0f0f0;
+  border-radius: 16px;
   padding: 1.5rem;
 }
 
@@ -409,7 +384,7 @@ body {
 .review-avatar {
   width: 48px;
   height: 48px;
-  background: var(--bg-header);
+  background: var(--beige-bg);
   border-radius: 50%;
   overflow: hidden;
   display: flex;
@@ -425,7 +400,7 @@ body {
 
 .review-avatar-placeholder {
   font-size: 1.5rem;
-  color: var(--text-secondary);
+  color: var(--secondary-text);
 }
 
 .review-user-info {
@@ -434,13 +409,13 @@ body {
 
 .review-nickname {
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--primary-text);
   font-size: 0.95rem;
 }
 
 .review-date {
   font-size: 0.8rem;
-  color: var(--text-light);
+  color: #999999;
 }
 
 .review-rating {
@@ -454,11 +429,11 @@ body {
 }
 
 .review-rating .star.empty {
-  color: var(--border-color);
+  color: #e0e0e0;
 }
 
 .review-content {
-  color: var(--text-secondary);
+  color: var(--secondary-text);
   font-size: 0.9rem;
   line-height: 1.7;
   margin-bottom: 1rem;
@@ -467,7 +442,7 @@ body {
 .review-image {
   max-width: 200px;
   height: 150px;
-  border-radius: var(--radius-sm);
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -491,25 +466,25 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-item);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  background: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: var(--secondary-text);
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.3s ease;
 }
 
 .page-btn:hover {
-  background: var(--text-primary);
+  background: var(--primary-text);
   color: white;
-  border-color: var(--text-primary);
+  border-color: var(--primary-text);
 }
 
 .page-btn.active {
-  background: var(--text-primary);
+  background: var(--primary-text);
   color: white;
-  border-color: var(--text-primary);
+  border-color: var(--primary-text);
 }
 
 .page-btn:disabled {
@@ -532,9 +507,9 @@ body {
 }
 
 .modal {
-  background: var(--bg-card);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   max-width: 400px;
   width: 90%;
   animation: modalIn 0.3s ease;
@@ -554,13 +529,13 @@ body {
 
 .modal-header {
   padding: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .modal-header h3 {
   font-size: 1.2rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--primary-text);
 }
 
 .modal-body {
@@ -569,18 +544,18 @@ body {
 
 .modal-body p {
   margin-bottom: 0.75rem;
-  color: var(--text-secondary);
+  color: var(--secondary-text);
 }
 
 .modal-hotel-name {
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--primary-text);
   font-size: 1.1rem;
 }
 
 .modal-footer {
   padding: 1.5rem;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid #e0e0e0;
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
@@ -588,28 +563,28 @@ body {
 
 .btn-cancel {
   padding: 0.75rem 1.5rem;
-  background: var(--bg-main);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  background: #f5f5f5;
+  color: var(--primary-text);
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.3s ease;
 }
 
 .btn-cancel:hover {
-  background: var(--border-color);
+  background: #e0e0e0;
 }
 
 .btn-confirm {
   padding: 0.75rem 1.5rem;
-  background: var(--text-primary);
+  background: var(--primary-text);
   color: white;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.3s ease;
 }
 
 .btn-confirm:hover {

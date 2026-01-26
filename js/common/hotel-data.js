@@ -1,4 +1,6 @@
 // ===== 지역별 숙소 데이터 =====
+// 이 파일은 순수 데이터만 포함합니다.
+// 다른 페이지에서 사용하기 위해 전역 변수로 노출됩니다.
 
 // 서울 (Seoul) - 수도권 주요 관광지
 const seoulHotels = [
@@ -782,3 +784,8 @@ function getHotelById(id) {
   }
   return null;
 }
+
+// 전역 변수로 노출 (다른 페이지에서 사용하기 위함)
+window.allHotelData = allHotelData;
+window.regionNames = regionNames;
+window.getHotelById = getHotelById;
