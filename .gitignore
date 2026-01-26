@@ -11,3 +11,16 @@
 
 # firebase api
 js/common/firebase-config.js
+
+# Firebase cache
+.firebase/
+firebase-debug.log*
+
+# Python / Cloud Functions
+functions/venv/
+functions/__pycache__/
+*.pyc
+
+# OS generated files
+.DS_Store
+Thumbs.db
