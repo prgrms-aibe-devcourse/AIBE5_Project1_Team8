@@ -1,0 +1,276 @@
+/* css/common/chatbot.css */
+
+/* --- 1. Chatbot Trigger Button --- */
+.chat-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 90px;
+    height: 90px;
+    background-color: #2F4157;
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    transition: transform 0.2s;
+    z-index: 9999;
+    /* High Z-index to stay on top */
+}
+
+.chat-btn:hover {
+    transform: scale(1.1);
+}
+
+.chat-btn .material-icons {
+    font-size: 42px;
+}
+
+/* --- 2. Chat Window --- */
+.chat-window {
+    position: fixed;
+    bottom: 150px;
+    right: 30px;
+    width: 400px;
+    height: 600px;
+    max-height: 80vh;
+    background-color: #D9D9D9;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 10000;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    box-sizing: border-box;
+}
+
+.chat-window * {
+    box-sizing: border-box;
+}
+
+.chat-window.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    visibility: hidden;
+}
+
+/* --- Header --- */
+.chat-header {
+    background-color: #2F4157;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.chat-profile-area {
+    /* Renamed */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chat-avatar-circle {
+    /* Renamed */
+    width: 35px;
+    height: 35px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+}
+
+.chat-bot-name {
+    /* Renamed */
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.chat-close-btn {
+    /* Renamed */
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-close-btn:hover {
+    opacity: 1;
+}
+
+/* --- Chat Body --- */
+.chat-body {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* --- Animation --- */
+@keyframes chatFadeIn {
+
+    /* Renamed Animation */
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Messages */
+.chat-message {
+    /* Renamed */
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 15px;
+    font-size: 15px;
+    line-height: 1.5;
+    word-break: break-word;
+    position: relative;
+    animation: chatFadeIn 0.3s ease;
+}
+
+.chat-message.ai {
+    background-color: #F4EFEB;
+    color: #333;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+}
+
+.chat-message.user {
+    background-color: #2F4157;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+}
+
+/* --- Place Card Styles (RENAMED TO PREVENT CONFLICT) --- */
+.ai-place-card {
+    /* Renamed from .place-card */
+    max-width: 95% !important;
+    width: 95% !important;
+    margin: 10px auto !important;
+    align-self: center !important;
+
+    background-color: white !important;
+    border-radius: 15px !important;
+    border: 1px solid #eee;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+    animation: chatFadeIn 0.3s ease;
+}
+
+.ai-card-image {
+    /* Renamed from .card-image (THIS WAS THE CULPRIT) */
+    width: 100%;
+    height: 200px;
+    background-color: #ddd;
+    overflow: hidden;
+    position: relative;
+}
+
+.ai-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.ai-card-content {
+    /* Renamed from .card-content */
+    padding: 15px;
+    text-align: left;
+}
+
+.ai-place-title {
+    /* Renamed */
+    margin: 0 0 8px 0;
+    font-size: 17px;
+    font-weight: bold;
+    color: #2F4157;
+    word-break: keep-all;
+}
+
+.ai-place-desc {
+    /* Renamed */
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+/* --- Footer --- */
+.chat-footer {
+    padding: 15px;
+    background-color: #D9D9D9;
+    flex-shrink: 0;
+}
+
+.chat-input-container {
+    /* Renamed */
+    background-color: white;
+    border-radius: 30px;
+    padding: 5px 5px 5px 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+#chat-user-input {
+    /* ID changed just in case */
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    padding: 10px 0;
+    background: transparent;
+    min-width: 0;
+}
+
+#chat-send-btn {
+    /* ID changed */
+    background-color: #2F4157;
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.material-icons {
+    font-size: 20px;
+}
+
+.chat-btn .material-icons {
+    font-size: 42px;
+}
