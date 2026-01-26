@@ -8,3 +8,6 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
+
+# firebase api
+js/common/firebase-config.js
