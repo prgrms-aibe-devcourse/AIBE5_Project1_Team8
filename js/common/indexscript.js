@@ -283,6 +283,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // 4. Create Markers
+        let currentLocation = null; // 현재 선택된 장소 저장
+        
         locations.forEach(loc => {
             const marker = L.marker([loc.lat, loc.lng]).addTo(map);
 
@@ -295,6 +297,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Update text description
                 titleEl.innerText = loc.name;
                 descEl.innerText = loc.desc;
+                
+                // 현재 선택된 장소 저장
+                currentLocation = loc;
 
                 // Fly to location with offset (so pin is not covered by popup)
                 const targetZoom = 13;
@@ -308,6 +313,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 map.flyTo(newCenterLatLng, targetZoom, { duration: 1.1 });
             });
         });
+        
+        // 5. 일정에 추가 버튼 클릭 이벤트
+        const addScheduleBtn = document.querySelector('.add-btn');
+        if (addScheduleBtn) {
+            addScheduleBtn.addEventListener('click', function() {
+                if (!currentLocation) {
+                    alert('먼저 지도에서 여행지를 선택해주세요.');
+                    return;
+                }
+                
+                // 장소 이름에서 번호 제거 (예: "1. 서울: 경복궁" -> "경복궁")
+                const fullName = currentLocation.name;
+                const colonIndex = fullName.lastIndexOf(':');
+                const placeName = colonIndex !== -1 
+                    ? fullName.substring(colonIndex + 1).trim().split(' (')[0]
+                    : fullName;
+                
+                // 장소 데이터 구성
+                const placeData = {
+                    type: 'recommended',
+                    originalId: currentLocation.id,
+                    image: `images/map/${currentLocation.img}`,
+                    location: currentLocation.desc,
+                    lat: currentLocation.lat,
+                    lng: currentLocation.lng
+                };
+                
+                // 캘린더 모달 열기
+                if (typeof calendarModal !== 'undefined') {
+                    calendarModal.open(placeName, placeData, (scheduleData) => {
+                        console.log("일정이 추가되었습니다:", scheduleData);
+                    });
+                } else {
+                    alert('캘린더 모달을 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+                }
+            });
+        }
     }
 
 });
