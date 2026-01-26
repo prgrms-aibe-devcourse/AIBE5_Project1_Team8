@@ -1,11 +1,4 @@
-:root {
-    --bg-color: #fffffa; /*body 배경색*/
-    --beige-bg: #F4EFEB; /*카드 배경색*/
-    --primary-text: #333333;
-    --navy-blue: #2f4157; 
-    --btn-red: #b93920;
-    --border-radius-lg: 30px;
-}
+/* 색상 변수는 style.css의 :root에서 상속됨 */
 
 * {
     margin: 0;
@@ -14,8 +7,7 @@
 }
 
 body {
-    font-family: 'Noto Sans', 'Noto Sans KR', sans-serif;
-    /* 폰트 통합 */
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     background-color: var(--bg-color);
     color: var(--primary-text);
 }
@@ -30,7 +22,7 @@ body {
     margin: 20px auto 40px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
 }
 
 
@@ -64,7 +56,6 @@ body {
 
 .section-title {
   font-size: 20px;
-  margin-bottom: 16px;
   color: var(--navy-blue);
 }
 
@@ -80,7 +71,7 @@ body {
 .profile-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 50px;
   text-align: left;
 }
 
@@ -98,13 +89,14 @@ body {
 }
 
 .profile-name {
+  font-size: 22px;
   font-weight: 600;
 }
 
 .profile-email,
 .profile-phone {
   font-size: 14px;
-  color: #666;
+  color: var(--secondary-text);
 }
 
 .profile-right {
@@ -139,6 +131,24 @@ body {
 .profile-btn:active {
   transform: translateY(0);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+}
+
+/* 프로필 수정 입력란 */
+.profile-info input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background-color: #fff;
+  outline: none;
+}
+
+.profile-info input:focus {
+  border-color: var(--navy-blue);
+  box-shadow: 0 0 5px rgba(47, 65, 87, 0.3);
 }
 
 
@@ -178,14 +188,22 @@ body {
   align-items: center;
   padding-top: 16px;
   border-top: 1px solid rgba(47, 65, 87, 0.25);
+  flex-wrap: wrap;
 }
 
+/* 상단 영역 */
+.reservation-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
 
 /*좌측 영역*/
 .reservation-left {
   width: 1200px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
 }
 
@@ -199,12 +217,17 @@ body {
 .reservation-info {
   display: flex;
   flex-direction: column;
+  margin-top: 10px;
   gap: 6px;
+}
+
+.reservation-title {
+  font-weight: 600;
 }
 
 .reservation-date {
     font-size: 12px;
-    color: #333333;
+    color: var(--primary-text);
 }
 
 /*우측 영역*/
@@ -214,6 +237,25 @@ body {
   min-height: 90px;          /* d-day + 버튼 공존 */
 }
 
+
+/* 예약 상세  */
+.reservation-detail {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+  margin-left: 10px;
+  font-size: 13px;
+  color: #555;
+  width: 100%;
+  flex-basis: 100%;
+}
+
+.mypage-reservation-item.open .reservation-detail {
+  max-height: 300px; /* 충분히 큰 값 */
+  opacity: 1;
+  margin-top: 12px;
+}
 
 /* 버튼 공통 디자인*/
 .reservation-btn {
@@ -254,26 +296,18 @@ body {
 /* 예정 */
 .mypage-reservation-item.upcoming .d-day {
   position: absolute;
-  top: 0;
+  top: -15px; 
   right: 0;
 
-  width: 52px;
-  height: 52px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
-  background: var(--navy-blue);
-  color: #fff;
+  border: #243549 1px solid;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
 }
-
-.reservation-status.upcoming {
-  color: var(--navy-blue);
-}
-
-
-
 
 /* 완료 */
 .mypage-reservation-item.completed .reservation-actions {
@@ -281,9 +315,6 @@ body {
   gap: 8px;
 }
 
-.reservation-status.completed {
-  color: #777;
-}
 
 .review-btn {
   background: transparent;
@@ -296,36 +327,250 @@ body {
 }
 
 
-
 /* =========================
    후기 영역
    ========================= */
+
+/* 후기 정렬 필터 */
 .review-filter {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
+.review-filter label {
+  font-size: 13px;
+  color: #666;
+}
+
+.review-filter select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  padding: 6px 34px 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--navy-blue);
+  background-color: #fff;
+  color: var(--navy-blue);
+  font-size: 13px;
+  cursor: pointer;
+
+  /* 커스텀 화살표 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%232f4157' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.review-filter select:hover {
+  background-color: rgba(47, 65, 87, 0.05);
+}
+
+.review-filter select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(47, 65, 87, 0.2);
+}
+
+/* 리뷰 리스트*/
 .mypage-review-list {
   list-style: none;
-}
-
-.mypage-review-item {
   display: flex;
-  justify-content: space-between;
-  padding: 14px;
-  background: #fff;
-  border-radius: 10px;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.mypage-write-btn {
-  color: var(--navy-blue);
-  text-decoration: none;
-  font-weight: 500;
+/* 후기 단일 아이템 (좌 / 중 / 우) */
+.mypage-review-item {
+  min-height: 180px;   /* 150~180 사이 추천 */
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 12px;
+  align-items: flex-start;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.05);
 }
-.section-title {
-    font-size: 18px;
-    font-weight: 500;
-    margin-bottom: 12px;
+
+
+.review-left img {
+  width: 200px;
+  height: 150px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.review-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.review-header {
+  display: flex;
+  align-items: baseline;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.review-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.review-date {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 별점 */
+.review-rating {
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #f5a623;
+}
+
+/* 리뷰 내용 */
+.review-content {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.4;
+}
+
+/* 우측: 수정 / 삭제 버튼 */
+.review-right {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.review-action-btn {
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  background: var(--navy-blue);
+  color: #fff;
+}
+
+.review-action-btn.danger {
+  background-color: #ffffff;
+  /* border: #B93920 1px solid; */
+  color: #B93920;
+
+}
+
+/* =========================
+   페이지 네이션 (예약 & 후기
+   ========================= */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--navy-blue);
+  background: #fff;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background: var(--navy-blue);
+  color: #fff;
+}
+
+
+
+/* =========================
+   모달
+   ========================= */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: #fff;
+  width: 400px;      /* 고정 너비 */
+  height: 200px;     /* 고정 높이 */
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+  align-items: center;
+  text-align: center;
+  padding: 24px;
+}
+
+.modal-content .modal-title {
+  font-size: 16px;
+  margin: auto 0;
+}
+
+.modal-actions {
+  width: 300px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 0;  /* 버튼 하단 정렬 */
+}
+
+.modal-actions .confirm,
+.modal-actions .cancel,
+.modal-actions .edit {
+  flex: 1;
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-actions .confirm {
+  background: var(--navy-blue);
+  color: #fff;
+}
+
+.modal-actions .cancel {
+  background: #ddd;
+}
+
+#passwordModal .modal-content {
+  width: 420px;   
+  height: 320px;  
+}
+
+#passwordModal .modal-content input[type="password"] {
+  width: 300px;   
+  font-size: 13px;   
+}
+
+.modal-content input[type="password"] {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal-content input[type="password"]:focus { /* 포커스 강조 */
+  border-color: var(--navy-blue);
+  box-shadow: 0 0 6px rgba(47, 65, 87, 0.2);
 }

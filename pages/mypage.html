@@ -6,8 +6,9 @@
     <title>마이 페이지</title>
 
     <link rel="stylesheet" href="../css/common/header.css" />
+    <link rel="stylesheet" href="../css/common/style.css" />
     <link rel="stylesheet" href="../css/pages/mypage.css" />
-
+ 
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
       rel="stylesheet"
@@ -42,9 +43,8 @@
         </section>
 
         <!-- 예약 내역 -->
+        <h3 class="section-title">나의 예약 내역</h3>
         <section class="mypage-reservations card">
-            <h3 class="section-title">나의 예약 내역</h3>
-
             <div class="reservation-tabs">
             <button class="reservation-tab active">전체</button>
             <button class="reservation-tab">예정</button>
@@ -54,89 +54,247 @@
             <ul class="mypage-reservation-list">
                 <!-- 예정 항목 -->
                 <li class="mypage-reservation-item upcoming">
-                    <!-- 좌측 -->
-                    <div class="reservation-left">
-                        <img class="reservation-img" src="../images/daejeon_hotel.jpg" />
-                        <div class="reservation-info">
-                            <p class="reservation-title">호텔 그랜드</p>
-                            <p class="reservation-date">2026-02-20(15:00) ~ 2026-02-22(11:00)</p>
+                    <div class="reservation-top">
+                        <!-- 좌측 -->
+                        <div class="reservation-left">
+                            <img class="reservation-img" src="../images/daejeon_hotel.jpg" />
+                            <div class="reservation-info">
+                                <p class="reservation-title">호텔 그랜드</p>
+                                <p class="reservation-date">2026-02-20(15:00) ~ 2026-02-22(11:00)</p>
+                            </div>
+                        </div>
+
+                        <!-- 우측 -->
+                        <div class="reservation-right">
+                            <div class="d-day"></div> <!-- 예정일일 때 -->
+
+                            <div class="reservation-actions">
+                                <button class="reservation-btn detail-btn">상세보기</button>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- 우측 -->
-                    <div class="reservation-right">
-                        <div class="d-day">D-3</div> <!-- 예정일일 때 -->
-
-                        <div class="reservation-actions">
-                            <button class="reservation-btn detail-btn">상세보기</button>
-                        </div>
+                    <!-- 상세 영역 -->
+                    <div class="reservation-detail">
+                        <p><strong>예약자</strong> 닉네임</p>
+                        <p><strong>예약 일자</strong> 2026-02-20 ~ 2026-02-22</p>
+                        <p><strong>숙소 주소</strong> 대전광역시 서구 둔산로 123</p>
+                        <p><strong>숙소 연락처</strong> 042-123-4567</p>
                     </div>
                 </li>
 
                 <!-- 완료 항목 -->
                 <li class="mypage-reservation-item completed">
-                    <!-- 좌측 -->
-                    <div class="reservation-left">
-                        <img class="reservation-img" src="../images/seoul_hotel2.jpg" />
-                        <div class="reservation-info">
-                        <p class="reservation-title">서울 호텔</p>
-                        <p class="reservation-date">2026-01-15(15:00) ~ 2026-01-16(10:00)</p>
+                    <div class="reservation-top">
+                        <!-- 좌측 -->
+                        <div class="reservation-left">
+                            <img class="reservation-img" src="../images/seoul_hotel2.jpg" />
+                            <div class="reservation-info">
+                                <p class="reservation-title">서울 호텔</p>
+                                <p class="reservation-date">2026-01-15(15:00) ~ 2026-01-16(10:00)</p>
+                            </div>
+                        </div>
+
+                        <!-- 우측 -->
+                        <div class="reservation-right">
+                            <div class="reservation-actions">
+                                <button class="reservation-btn review-btn" onclick="location.href='./review.html'">후기 작성</button> <!-- 완료일일 때 -->
+                                <button class="reservation-btn detail-btn">상세보기</button>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- 우측 -->
-                    <div class="reservation-right">
-                        <div class="reservation-actions">
-                            <button class="reservation-btn review-btn">후기 작성</button> <!-- 완료일일 때 -->
-                            <button class="reservation-btn detail-btn">상세보기</button>
-                        </div>
+                    <!-- 상세 영역 -->
+                    <div class="reservation-detail">
+                        <p><strong>예약자</strong> 닉네임</p>
+                        <p><strong>예약 일자</strong> 2026-02-20 ~ 2026-02-22</p>
+                        <p><strong>숙소 주소</strong> 대전광역시 서구 둔산로 123</p>
+                        <p><strong>숙소 연락처</strong> 042-123-4567</p>
                     </div>
                 </li>
-                <!-- 완료 항목 -->
-                <li class="mypage-reservation-item completed">
-                    <!-- 좌측 -->
-                    <div class="reservation-left">
-                        <img class="reservation-img" src="../images/seoul_hotel2.jpg" />
-                        <div class="reservation-info">
-                        <p class="reservation-title">서울 호텔</p>
-                        <p class="reservation-date">2026-01-15(15:00) ~ 2026-01-16(10:00)</p>
-                        </div>
-                    </div>
-
-                    <!-- 우측 -->
-                    <div class="reservation-right">
-                        <div class="reservation-actions">
-                            <button class="reservation-btn review-btn">후기 작성</button> <!-- 완료일일 때 -->
-                            <button class="reservation-btn detail-btn">상세보기</button>
-                        </div>
-                    </div>
-                </li>
+                
             </ul>
+
+            <!-- 페이지네이션 -->
+            <div class="pagination reservation-pagination"></div>
         </section>
 
         <!-- 후기 내역 -->
+        <h3 class="section-title">나의 후기 내역</h3>
         <section class="mypage-reviews card">
-            <h3 class="section-title">나의 후기 내역</h3>
-
             <div class="review-filter">
-            <label for="sortSelect">정렬</label>
-            <select id="sortSelect">
-                <option>작성일순</option>
-                <option>별점순</option>
-            </select>
+                <label for="sortSelect">정렬</label>
+                <select id="sortSelect">
+                    <option>작성일순</option>
+                    <option>별점순</option>
+                </select>
             </div>
 
             <ul class="mypage-review-list">
-            <li class="mypage-review-item">
-                <div>
-                <p class="mypage-review-title">호텔 그랜드</p>
-                <p class="mypage-review-date">2026-01-20</p>
-                </div>
-                <a href="#" class="mypage-write-btn">리뷰 보기</a>
-            </li>
+                <li class="mypage-review-item">
+                    <!-- 좌측: 이미지/영상 -->
+                    <div class="review-left">
+                        <img src="../images/busan_hotel.jpg" alt="리뷰 이미지" />
+                    </div>
+
+                    <!-- 중앙: 내용 -->
+                    <div class="review-center">
+                        <!-- 숙소명 + 날짜 (가로 정렬) -->
+                        <div class="review-header">
+                        <span class="review-title">부산 바다 팬션</span>
+                        <span class="review-date">2026-01-15 ~ 2026-01-16</span>
+                        </div>
+
+                        <p class="review-rating">⭐⭐⭐</p>
+
+                        <p class="review-content">
+                        위치도 좋고 직원분들이 정말 친절했어요. 다음에 또 이용하고 싶어요!
+                        </p>
+                    </div>
+
+                    <!-- 우측: 버튼 -->
+                    <div class="review-right">
+                        <button class="review-action-btn danger">삭제</button>
+                    </div>
+                </li>
+
+                <li class="mypage-review-item">
+                    <div class="review-left">
+                        <img src="../images/busan_hotel.jpg" alt="리뷰 이미지" />
+                    </div>
+                    <div class="review-center">
+                        <div class="review-header">
+                        <span class="review-title">서울 시티 호텔</span>
+                        <span class="review-date">2026-02-01 ~ 2026-02-03</span>
+                        </div>
+                        <p class="review-rating">⭐⭐⭐⭐</p>
+                        <p class="review-content">
+                        교통이 너무 편하고 방도 깔끔했어요. 출장 숙소로 딱입니다.
+                        </p>
+                    </div>
+                    <div class="review-right">
+                        <button class="review-action-btn danger">삭제</button>
+                    </div>
+                    </li>
+
+                    <li class="mypage-review-item">
+                    <div class="review-left">
+                        <img src="../images/busan_hotel.jpg" alt="리뷰 이미지" />
+                    </div>
+                    <div class="review-center">
+                        <div class="review-header">
+                        <span class="review-title">제주 오션 뷰 리조트</span>
+                        <span class="review-date">2026-01-20 ~ 2026-01-22</span>
+                        </div>
+                        <p class="review-rating">⭐⭐⭐⭐⭐</p>
+                        <p class="review-content">
+                        바다 뷰 미쳤어요… 아침에 창문 여는 순간 힐링 그 자체였습니다.
+                        </p>
+                    </div>
+                    <div class="review-right">
+                        <button class="review-action-btn danger">삭제</button>
+                    </div>
+                    </li>
+
+                    <li class="mypage-review-item">
+                    <div class="review-left">
+                        <img src="../images/busan_hotel.jpg" alt="리뷰 이미지" />
+                    </div>
+                    <div class="review-center">
+                        <div class="review-header">
+                        <span class="review-title">강릉 바다 스테이</span>
+                        <span class="review-date">2026-03-05 ~ 2026-03-06</span>
+                        </div>
+                        <p class="review-rating">⭐⭐⭐</p>
+                        <p class="review-content">
+                        위치는 좋은데 방이 조금 좁았어요. 가성비는 괜찮아요.
+                        </p>
+                    </div>
+                    <div class="review-right">
+                        <button class="review-action-btn danger">삭제</button>
+                    </div>
+                    </li>
+
+                    <li class="mypage-review-item">
+                    <div class="review-left">
+                        <img src="../images/busan_hotel.jpg" alt="리뷰 이미지" />
+                    </div>
+                    <div class="review-center">
+                        <div class="review-header">
+                        <span class="review-title">대전 비즈니스 호텔</span>
+                        <span class="review-date">2026-01-08 ~ 2026-01-09</span>
+                        </div>
+                        <p class="review-rating">⭐⭐⭐</p>
+                        <p class="review-content">
+                        무난무난한 숙소예요. 하루 묵기엔 충분했습니다.
+                        </p>
+                    </div>
+                    <div class="review-right">
+                        <button class="review-action-btn danger">삭제</button>
+                    </div>
+                    </li>
+
+                    <li class="mypage-review-item">
+                    <div class="review-left">
+                        <img src="../images/busan_hotel.jpg" alt="리뷰 이미지" />
+                    </div>
+                    <div class="review-center">
+                        <div class="review-header">
+                        <span class="review-title">경주 한옥 스테이</span>
+                        <span class="review-date">2026-03-15 ~ 2026-03-16</span>
+                        </div>
+                        <p class="review-rating">⭐⭐⭐⭐⭐</p>
+                        <p class="review-content">
+                        분위기 최고… 조용하고 감성 넘쳐서 부모님도 만족하셨어요.
+                        </p>
+                    </div>
+                    <div class="review-right">
+                        <button class="review-action-btn danger">삭제</button>
+                    </div>
+                </li>
             </ul>
+
+            <!-- 페이지네이션 -->
+            <div class="pagination review-pagination"></div>
         </section>
     </main>
+
+
+    <!-- 비밀번호 변경 모달 -->
+    <div class="modal hidden" id="passwordModal">
+        <div class="modal-content">
+        <h3>비밀번호 변경</h3>
+        <input type="password" placeholder="현재 비밀번호" />
+        <input type="password" placeholder="현재 비밀번호 확인" />
+        <input type="password" placeholder="새로운 비밀번호" />
+        <div class="modal-actions">
+            <button class="cancel">취소</button>
+            <button class="confirm">변경</button>
+        </div>
+        </div>
+    </div>
+
+    <!-- 계정 탈퇴 모달 -->
+    <div class="modal hidden" id="withdrawModal">
+        <div class="modal-content">
+        <p class="modal-title">정말 탈퇴하시겠습니까?</p>
+        <div class="modal-actions">
+            <button class="cancel">취소</button>
+            <button class="confirm">확인</button>
+        </div>
+        </div>
+    </div>
+
+    <!-- 후기 삭제 모달 -->
+    <div class="modal hidden" id="reviewDeleteModal">
+        <div class="modal-content">
+        <p class="modal-title">후기를 삭제하시겠습니까?</p>
+        <div class="modal-actions">
+            <button class="cancel">취소</button>
+            <button class="confirm">삭제</button>
+        </div>
+        </div>
+    </div>
 
     <script src="../js/common/header.js"></script>
     <script src="../js/mypage/mypage.js"></script>
