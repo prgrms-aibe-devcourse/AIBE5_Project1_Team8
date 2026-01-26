@@ -1,3 +1,13 @@
+:root {
+  --bg-color: #fffffa; /* 흰색 배경 */
+  --beige-bg: #F4EFEB; /* 박스 배경 */
+  --primary-text: #333333; /* 글씨 색상*/
+  --secondary-text: #666666; /* 글씨 색상 */
+  --navy-blue: #2f4157; /* 버튼 색상 등등 */
+  --btn-red: #b93920; /* 로그인 버튼, 삭제 버튼 등 색상상 */
+  --border-radius-lg: 30px; /* 모서리 둥글기 값값 */
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -469,9 +479,11 @@ header {
     width: 100%;
     padding: 14px;
     margin-bottom: 20px;
-    border
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
 
-  /* [디자인] 와이어프레임 스타일 박스 */
+/* [디자인] 와이어프레임 스타일 박스 */
 .wireframe-style {
     background-color: #EAEAEA !important;
     border-radius: 15px;
@@ -671,8 +683,7 @@ body {
 }
 
 .underlines { 
-    border-bottom: 1px 
-    solid #CCC; 
+    border-bottom: 1px solid #CCC; 
 }
 
 .tab-under { background: none; border: none; padding: 10px 15px; font-size: 13px; cursor: pointer; color: #999; }
