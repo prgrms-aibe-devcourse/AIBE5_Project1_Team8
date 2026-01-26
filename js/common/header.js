@@ -116,14 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="header-inner">
 
       <!-- 로고 -->
-      <div class="logo">LOGO</div>
+      <div class="logo"><a href="/index.html">LOGO<a></div>
 
       <!-- 메뉴 -->
       <nav class="nav">
         <a href="/index.html">홈</a>
         <a href="/pages/hotel/hotel.html">관광지</a>
         <a href="/pages/support.html">고객센터</a>
-        <a href="/pages/my-schedule.html">나의 일정</a>
+        <a href="/pages/schedule.html">나의 일정</a>
         <a href="/pages/mypage.html">마이 페이지</a>
       </nav>
 
