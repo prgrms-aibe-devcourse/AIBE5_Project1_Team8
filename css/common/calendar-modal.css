@@ -42,7 +42,7 @@
 .calendar-modal-header h3 {
   font-size: 1rem;
   font-weight: 500;
-  color: #333;
+  color: var(--primary-text);
 }
 
 .calendar-modal-body {
@@ -67,15 +67,15 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   font-size: 1rem;
-  color: #666;
+  color: var(--secondary-text);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .calendar-modal-nav-btn:hover {
-  background: #333;
+  background: var(--primary-text);
   color: #fff;
-  border-color: #333;
+  border-color: var(--primary-text);
 }
 
 .calendar-modal-selects {
@@ -90,7 +90,7 @@
   border-radius: 8px;
   font-family: inherit;
   font-size: 0.85rem;
-  color: #333;
+  color: var(--primary-text);
   cursor: pointer;
 }
 
@@ -133,7 +133,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   background: #fff;
-  color: #333;
+  color: var(--primary-text);
   border: 1px solid transparent;
 }
 
@@ -147,7 +147,7 @@
 }
 
 .calendar-modal-day.today {
-  border: 2px solid #333;
+  border: 2px solid var(--primary-text);
 }
 
 .calendar-modal-day.sun {
@@ -159,7 +159,7 @@
 }
 
 .calendar-modal-day.selected {
-  background: #333;
+  background: var(--navy-blue);
   color: #fff;
 }
 
@@ -196,12 +196,12 @@
 
 .calendar-modal-selected-text {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--secondary-text);
 }
 
 .calendar-modal-selected-date {
   font-weight: 600;
-  color: #333;
+  color: var(--primary-text);
 }
 
 .calendar-modal-footer {
@@ -225,16 +225,16 @@
 
 .calendar-modal-btn-cancel {
   background: #fff;
-  color: #333;
+  color: var(--primary-text);
   border: 1px solid #e0e0e0;
 }
 
 .calendar-modal-btn-cancel:hover {
-  background: #e0e0e0;
+  background: var(--beige-bg);
 }
 
 .calendar-modal-btn-confirm {
-  background: #333;
+  background: var(--navy-blue);
   color: #fff;
   border: none;
 }

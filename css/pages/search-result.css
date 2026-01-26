@@ -14,13 +14,13 @@
 
 /* 검색어 표시줄 */
 .search-query-bar {
-    background-color: #f5f5f5;
-    border-radius: 30px;
+    background-color: var(--beige-bg);
+    border-radius: var(--border-radius-lg);
     padding: 20px 30px;
     text-align: center;
     font-size: 18px;
     font-weight: 500;
-    color: #333;
+    color: var(--primary-text);
     margin-bottom: 30px;
 }
 
@@ -36,8 +36,8 @@
     padding: 10px 20px;
     border: none;
     border-radius: 20px;
-    background-color: #e0e0e0;
-    color: #666;
+    background-color: var(--beige-bg);
+    color: var(--secondary-text);
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
@@ -50,7 +50,7 @@
 }
 
 .category-tab.active {
-    background-color: #666;
+    background-color: var(--navy-blue);
     color: #fff;
 }
 
@@ -64,7 +64,7 @@
 
 /* 결과 카드 */
 .result-card {
-    background-color: #f4efeb;
+    background-color: var(--beige-bg);
     border-radius: 12px;
     padding: 20px;
     display: flex;
@@ -110,7 +110,7 @@
     border-radius: 20px;
     padding: 4px 8px;
     font-size: 10px;
-    color: #666;
+    color: var(--secondary-text);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -121,12 +121,12 @@
 
 .save-btn:hover {
     background-color: #fff;
-    color: #333;
+    color: var(--primary-text);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .save-btn.saved {
-    background-color: #B93920;
+    background-color: var(--btn-red);
     color: #fff;
 }
 
@@ -145,14 +145,14 @@
 .card-info h3 {
     font-size: 18px;
     font-weight: 700;
-    color: #333;
+    color: var(--primary-text);
     margin: 0;
     font-family: 'Noto Sans KR', sans-serif;
 }
 
 .card-info p {
     font-size: 14px;
-    color: #666;
+    color: var(--secondary-text);
     margin: 0;
     line-height: 1.5;
     font-family: 'Noto Sans KR', sans-serif;
@@ -171,14 +171,14 @@
     background: none;
     border: none;
     font-size: 16px;
-    color: #666;
+    color: var(--secondary-text);
     cursor: pointer;
     padding: 5px 10px;
     transition: color 0.2s ease;
 }
 
 .pagination-btn:hover {
-    color: #333;
+    color: var(--primary-text);
 }
 
 .pagination-btn:disabled {
@@ -188,7 +188,7 @@
 
 .page-number {
     font-size: 14px;
-    color: #333;
+    color: var(--primary-text);
     font-weight: 500;
     font-family: 'Noto Sans KR', sans-serif;
 }

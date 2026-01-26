@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // 탭 클릭 이벤트
-    const tabs = document.querySelectorAll(".tab");
+    const tabs = document.querySelectorAll(".search-container .tab");
     if (tabs.length > 0) {
         tabs.forEach(tab => {
             tab.addEventListener("click", () => {
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnSearch && keywordInput) {
         btnSearch.addEventListener("click", () => {
             const keyword = keywordInput.value.trim();
-            const activeTab = document.querySelector('.tab.active');
+            const activeTab = document.querySelector('.search-container .tab.active');
             const selectedType = activeTab ? activeTab.innerText : '전체';
             
             // hotel.html에서는 페이지 내 검색 (hotel.js에서 처리)
@@ -71,10 +71,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // 검색어와 타입을 함께 전달
             if (keyword) {
-                window.location.href = `../pages/search-result.html?keyword=${encodeURIComponent(keyword)}&type=${encodeURIComponent(selectedType)}`;
+                window.location.href = `${searchResultPath}?keyword=${encodeURIComponent(keyword)}&type=${encodeURIComponent(selectedType)}`;
             } else {
                 // 검색어가 없으면 기본 검색 결과 페이지로 이동
-                window.location.href = `../pages/search-result.html?keyword=관광지&type=${encodeURIComponent(selectedType)}`;
+                window.location.href = `${searchResultPath}?keyword=관광지&type=${encodeURIComponent(selectedType)}`;
             }
         });
 

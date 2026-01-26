@@ -53,10 +53,10 @@ main {
     background: var(--beige-bg);
     border: none;
     padding: 10px 30px;
-    border-radius: 30px;
+    border-radius: var(--border-radius-lg);
     cursor: pointer;
     font-weight: 700;
-    color: #333;
+    color: var(--primary-text);
 }
 
 .tab.active {

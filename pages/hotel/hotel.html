@@ -26,29 +26,23 @@
 <body>
   <!-- Header (Dynamic from AIBE5) -->
   <header>
+    
   </header>
 
   <main>
     <!-- Hotel Content -->
 
-    <!-- Header Banner (Adapted from hotel.html) -->
-    <div class="page-header" style="padding-top: 0;">
-      <div class="header-banner">
-        <h1 class="page-title">관광지 조회</h1>
+    <!-- 검색창 -->
+    <section class="search-container">
+      <div class="search-tabs">
+        <button class="tab active">전체</button>
+        <button class="tab">지역</button>
+        <button class="tab">즐길거리</button>
+        <button class="tab">숙소</button>
       </div>
-    </div>
-
-    <!-- Category Tabs -->
-    <section class="category-tabs-section">
-      <div class="container">
-        <div class="category-tabs">
-          <button class="category-tab active" data-category="accommodation">숙박</button>
-          <button class="category-tab" data-category="culture">문화</button>
-          <button class="category-tab" data-category="restaurant">식당</button>
-          <button class="category-tab" data-category="nature">자연</button>
-          <button class="category-tab" data-category="leisure">레져</button>
-          <button class="category-tab" data-category="shopping">쇼핑</button>
-        </div>
+      <div class="search-bar">
+        <input type="text" id="keyword" placeholder="검색어를 입력하세요">
+        <button class="btn-search" id="btnSearch">검색</button>
       </div>
     </section>
 
