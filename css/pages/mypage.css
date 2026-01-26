@@ -1,11 +1,4 @@
-:root {
-    --bg-color: #fffffa; /*body 배경색*/
-    --beige-bg: #F4EFEB; /*카드 배경색*/
-    --primary-text: #333333;
-    --navy-blue: #2f4157; 
-    --btn-red: #b93920;
-    --border-radius-lg: 30px;
-}
+/* 색상 변수는 style.css의 :root에서 상속됨 */
 
 * {
     margin: 0;
@@ -14,8 +7,7 @@
 }
 
 body {
-    font-family: 'Noto Sans', 'Noto Sans KR', sans-serif;
-    /* 폰트 통합 */
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     background-color: var(--bg-color);
     color: var(--primary-text);
 }
@@ -104,7 +96,7 @@ body {
 .profile-email,
 .profile-phone {
   font-size: 14px;
-  color: #666;
+  color: var(--secondary-text);
 }
 
 .profile-right {
@@ -204,7 +196,7 @@ body {
 
 .reservation-date {
     font-size: 12px;
-    color: #333333;
+    color: var(--primary-text);
 }
 
 /*우측 영역*/
