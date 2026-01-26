@@ -1,10 +1,4 @@
-:root {
-    --bg-color: #fffffa;
-    --beige-bg: #F4EFEB;
-    --primary-text: #333333;
-    --navy-blue: #2f4157;
-    --border-radius-lg: 30px;
-}
+/* 색상 변수는 style.css의 :root에서 상속됨 */
 
 * {
     margin: 0;
@@ -13,11 +7,9 @@
 }
 
 body {
-    font-family: 'Noto Sans', 'Noto Sans KR', sans-serif;
-    /* 폰트 통합 */
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     background-color: var(--bg-color);
     color: var(--primary-text);
-    color: #333;
     line-height: 1.5;
 }
 
@@ -115,7 +107,7 @@ body {
   text-align: center;
   font-size: 13px;
   font-weight: 600;
-  color: #666;
+  color: var(--secondary-text);
 }
 
 .calendar-week div {
@@ -231,6 +223,6 @@ body {
 }
 
 .btn-confirm {
-  background: #B93920;
+  background: var(--btn-red);
   color: #fff;
 }

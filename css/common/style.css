@@ -1,11 +1,13 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
 :root {
-    --bg-color: #fffffa;
-    --beige-bg: #F4EFEB;
-    --primary-text: #333333;
-    --secondary-text: #666666;
-    --navy-blue: #2f4157;
-    --btn-red: #b93920;
-    --border-radius-lg: 30px;
+    --bg-color: #fffffa; /* 흰색 배경 */
+    --beige-bg: #F4EFEB; /* 박스 배경 */
+    --primary-text: #333333; /* 글씨 색상*/
+    --secondary-text: #666666; /* 글씨 색상 */
+    --navy-blue: #2f4157; /* 버튼 색상 등등 */
+    --btn-red: #b93920; /* 로그인 버튼, 삭제 버튼 등 색상상 */
+    --border-radius-lg: 30px; /* 모서리 둥글기 값값 */
 }
 
 * {
@@ -15,8 +17,7 @@
 }
 
 body {
-    font-family: 'Noto Sans', 'Noto Sans KR', sans-serif;
-    /* 폰트 통합 */
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     background-color: var(--bg-color);
     color: var(--primary-text);
 }
@@ -53,10 +54,10 @@ main {
     background: var(--beige-bg);
     border: none;
     padding: 10px 30px;
-    border-radius: 30px;
+    border-radius: var(--border-radius-lg);
     cursor: pointer;
     font-weight: 700;
-    color: #333;
+    color: var(--primary-text);
 }
 
 .tab.active {
@@ -548,7 +549,7 @@ main {
 .quote-mark {
     font-size: 60px;
     color: #999;
-    font-family: 'Noto Sans', 'Noto Sans KR', sans-serif;
+    font-family: 'Pretendard', sans-serif;
     line-height: 0;
     margin-bottom: 20px;
     display: block;
@@ -669,7 +670,7 @@ main {
     font-size: 60px;
     color: #828282;
     opacity: 0.5;
-    font-family: serif;
+    font-family: 'Pretendard', sans-serif;
     position: absolute;
     /* Slide Left: Negative value pulls it out to the left */
     left: -20px;
