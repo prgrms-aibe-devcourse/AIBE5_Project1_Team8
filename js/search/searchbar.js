@@ -1,4 +1,80 @@
 // 검색 기능
+
+// 검색바 CSS 동적 삽입
+(function() {
+    const searchbarStyles = `
+        /* --- Search Section --- */
+        .search-container {
+            max-width: 1200px;
+            margin: 50px auto 80px auto;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .search-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .search-container .tab {
+            background: var(--beige-bg);
+            border: none;
+            padding: 10px 30px;
+            border-radius: var(--border-radius-lg);
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--primary-text);
+        }
+
+        .search-container .tab.active {
+            background-color: var(--navy-blue);
+            color: #fff;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        .search-bar input {
+            flex: 1;
+            height: 60px;
+            padding: 12px 18px;
+            padding-right: 120px;
+            font-size: 16px;
+            border: none;
+            border-radius: 30px;
+            background-color: var(--beige-bg);
+            outline: none;
+        }
+
+        .btn-search {
+            background-color: var(--navy-blue);
+            color: #fff;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            position: absolute;
+            right: 30px;
+            top: 30%;
+            transform: translateY(50%);
+            z-index: 1;
+        }
+    `;
+
+    const styleElement = document.createElement('style');
+    styleElement.textContent = searchbarStyles;
+    document.head.appendChild(styleElement);
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
     //데이터 API로 가져와야 함
     const sampleData = [

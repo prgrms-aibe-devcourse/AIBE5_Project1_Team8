@@ -1,13 +1,3 @@
-:root {
-  --bg-color: #fffffa; /* 흰색 배경 */
-  --beige-bg: #F4EFEB; /* 박스 배경 */
-  --primary-text: #333333; /* 글씨 색상*/
-  --secondary-text: #666666; /* 글씨 색상 */
-  --navy-blue: #2f4157; /* 버튼 색상 등등 */
-  --btn-red: #b93920; /* 로그인 버튼, 삭제 버튼 등 색상상 */
-  --border-radius-lg: 30px; /* 모서리 둥글기 값값 */
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -528,33 +518,19 @@ header {
 /* [버튼] 저장 버튼 우하단 배치 */
 .modal-footer { display: flex; justify-content: flex-end; }
 .btn-save {
-    background: #FFF;
+    background: var(--navy-blue);
     border: none;
     padding: 12px 40px;
     border-radius: 50px;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.  2s;
+    color: #fff;
 }
-.btn-save:hover { background: #f0f0f0; }
+.btn-save:hover { background: #b93920; }
 
 /* [1] 기본 초기화 */
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-    font-family: 'Pretendard', sans-serif; 
-}
 
-body { 
-    background-color: #F0FAFA; 
-    padding: 30px; 
-}
-
-.wrapper { 
-    max-width: 850px; 
-    margin: 0 auto; 
-}
 
 /* [2] 상단 요소 */
 /* .site-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 30px; }
@@ -623,15 +599,17 @@ body {
 }
 
 .btn-absolute { 
-    position: absolute; 
-    bottom: 30px; 
-    right: 35px; 
-    background: white; 
-    border: none; 
-    border-radius: 8px; 
-    padding: 8px 18px; 
-    font-size: 12px; 
-    cursor: pointer; 
+    position: absolute !important; 
+    bottom: 20px !important; 
+    right: 20px !important; 
+    background: var(--navy-blue) !important; 
+    color: #fff !important;
+    border: none !important; 
+    border-radius: 15px !important; 
+    padding: 8px 12px !important; 
+    font-size: 11px !important; 
+    font-weight: 600 !important;
+    cursor: pointer !important; 
 }
 
 /* [5] FAQ 및 탭 디자인 (이미지 완벽 반영) */
@@ -686,8 +664,20 @@ body {
     border-bottom: 1px solid #CCC; 
 }
 
-.tab-under { background: none; border: none; padding: 10px 15px; font-size: 13px; cursor: pointer; color: #999; }
-.tab-under.active { color: #333; font-weight: bold; border-bottom: 2px solid #333; margin-bottom: -1px; }
+.tab-under { 
+  background: none; 
+  border: none; 
+  padding: 10px 15px; 
+  font-size: 13px; 
+  cursor: pointer; 
+  color: #999; 
+}
+
+.tab-under.active { 
+  color: #333; 
+  font-weight: bold; 
+  border-bottom: 2px solid #333; 
+  margin-bottom: -1px; }
 
 /* [6] 상태 프레임 */
 .status-frame { 
