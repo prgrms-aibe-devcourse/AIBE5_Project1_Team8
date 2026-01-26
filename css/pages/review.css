@@ -184,6 +184,22 @@ textarea {
     border-top: 1px solid #eee;
 }
 
+/* 기본 상태 */
+#current-count {
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+/* 30자 미만일 때 적용될 클래스 */
+#current-count.warning {
+    color: #fa5c5c; 
+}
+
+/* 30자 이상일 때 적용될 클래스 */
+#current-count.success {
+    color: #00ae38;
+}
+
 /* 4. 사진 업로드 영역 */
 /* 업로드 영역 전체를 감싸는 컨테이너 */
 .upload-area-wrapper {
@@ -229,12 +245,12 @@ textarea {
     display: flex;
     align-items: flex-end;
     /* 애니메이션 속성 추가: 0.3초 동안 부드럽게 변함 */
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: transform 0.15s ease, opacity 0.15s ease;
 }
 /* 삭제 시 적용될 애니메이션 상태 */
 .preview-item.fade-out {
-    opacity: 0;             /* 투명해짐 */
-    transform: scale(0.7);  /* 크기가 70%로 작아짐 */
+    opacity: 0;            /* 투명해짐 */
+    transform: scale(0.9);  /* 크기가 70%로 작아짐 */
 }
 .preview-thumbnail {
     width: 80px;

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko">
 
+<!-- Do not use anymore (use hotel-booking.js instead) -->
+<!-- Not removed for backup -->
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -246,8 +249,8 @@
   </main>
 
   <!-- AIBE5 Scripts -->
-  <script src="../js/common/header.js"></script>
-  <script src="../js/common/script.js"></script>
+  <script src="../../js/common/header.js"></script>
+  <script src="../../js/common/script.js"></script>
 
   <script>
     // 예약 데이터 불러오기
@@ -502,7 +505,8 @@
         specialRequest: document.getElementById('specialRequest').value,
         paymentMethod: document.querySelector('input[name="payment"]:checked').value,
         reservationDate: new Date().toISOString(),
-        reservationNumber: 'RES' + Date.now()
+        reservationNumber: 'RES' + Date.now(),
+        username: 'noname' // 추후 로그인 정보에서 username 추출하는 로직 추가
       };
 
       // localStorage에 저장

@@ -1,10 +1,8 @@
-// js/review/preview.js
-
 // 현재 선택된 파일들을 담는 전역 배열 (페이지가 열려있는 동안 유지됨)
 let selectedFiles = []; 
 
 /**
- * 이미지 미리보기 및 삭제 기능 초기화
+ * @description 이미지 미리보기 및 삭제 기능 초기화
  */
 export function initImagePreview(inputId, containerId, countId, maxFiles = 9) {
     const fileInput = document.getElementById(inputId);
@@ -36,7 +34,7 @@ export function initImagePreview(inputId, containerId, countId, maxFiles = 9) {
 }
 
 /**
- * 화면에 썸네일과 삭제 버튼을 그리는 함수
+ * @description 화면에 썸네일과 삭제 버튼을 그리는 함수
  */
 function renderPreviews(container, countDisplay, maxFiles) {
     // 기존 화면을 비우고 새로 그림
@@ -58,10 +56,10 @@ function renderPreviews(container, countDisplay, maxFiles) {
 
             // 삭제 버튼 이벤트 연결
             item.querySelector('.delete-btn').addEventListener('click', () => {
-                // 삭제 애니메이션 실행
-                item.classList.add('fade-out');
+                // // 삭제 애니메이션 실행
+                item.classList.add('fade-out'); // classList.add() 요소에 클래스 값을 추가한다.
 
-                // 애니메이션이 끝나면(0.3초 후) 실제 데이터 삭제 및 재랜더링
+                // 애니메이션이 끝나면 실제 데이터 삭제 및 재랜더링
                 item.addEventListener('transitionend', () => {
                     selectedFiles.splice(index, 1);
                     renderPreviews(container, countDisplay, maxFiles);

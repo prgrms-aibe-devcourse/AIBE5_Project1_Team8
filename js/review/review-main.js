@@ -1,15 +1,15 @@
 import { initStarRating } from './rating.js';
-import { initCharCounter } from './counter.js'; //
-import { initTravelerType } from './types.js'; //
+import { initCharCounter } from './counter.js';
+import { initTravelerType } from './types.js';
 import { initImagePreview, getSelectedFiles } from './preview.js';
 import { showToast } from '../common/toast.js';
 import { saveReview } from './db.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. 각 기능 초기화 (누락된 부분을 다시 추가했습니다)
+    // 1. 각 기능 초기화
     initStarRating('star-rating');
-    const typeController = initTravelerType('traveler-type-group'); //
-    initCharCounter('review-textarea', 'current-count'); //
+    const typeController = initTravelerType('traveler-type-group');
+    initCharCounter('review-textarea', 'current-count');
     
     // 사진 미리보기 초기화
     initImagePreview('file-input', 'preview-container', 'image-count');
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const reviewData = {
             rating: ratingCount,
-            travelerType: typeController.getSelectedValue(), //
+            travelerType: typeController.getSelectedValue(),
             content: contentBody,
             images: files,
             createdAt: new Date(),
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 30자 이상 작성 검사
         if (reviewData.content.length < 30) {
-            showToast(`⚠️ 리뷰를 30자 이상 작성해주세요. (현재 ${reviewData.content.length}자)`, 'error'); //
+            showToast(`⚠️ 리뷰를 30자 이상 작성해주세요.`, 'error');
             return;
         }
 

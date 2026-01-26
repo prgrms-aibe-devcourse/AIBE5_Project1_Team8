@@ -1,3 +1,5 @@
+import { openBookingPanel } from "./hotel-booking.js";
+
 // 숙소 데이터 (10개)
 const hotels = {
   1: {
@@ -255,7 +257,7 @@ function renderHotelInfo() {
   hotelContact.textContent = hotel.contact;
   hotelPrice.textContent = hotel.price;
   hotelDesc.textContent = hotel.desc;
-  modalHotelName.textContent = hotel.name;
+  if(modalHotelName) modalHotelName.textContent = hotel.name;
 }
 
 // 픽토그램 상태 업데이트
@@ -348,15 +350,16 @@ bookingBtn.addEventListener("click", () => {
   const bookingData = {
     hotelId: hotelId,
     hotelName: hotel.name,
-    region: hotel.address,
+    addr: hotel.address,
     image: hotel.image,
-    basePrice: hotel.basePrice
+    basePrice: hotel.basePrice,
+    tel: hotel.contact
   };
   
   sessionStorage.setItem("bookingData", JSON.stringify(bookingData));
   
-  // 예약 페이지로 이동
-  window.location.href = `hotel-booking.html`;
+  // 예약 패널 열기
+  openBookingPanel(bookingData);
 });
 
 // 리뷰 페이지네이션
@@ -460,6 +463,18 @@ function goToPage(page) {
 window.goToPage = goToPage;
 
 // 초기화
-renderHotelInfo();
-updatePictograms();
-renderReviews();
+try {
+  renderHotelInfo();
+} catch (e) {
+  console.error("renderHotelInfo crashed:", e);
+}
+try {
+  updatePictograms();
+} catch (e) {
+  console.error("updatePictograms crashed:", e);
+}
+try {
+  renderReviews();
+} catch (e) {
+  console.error("renderReviews crashed:", e);
+}

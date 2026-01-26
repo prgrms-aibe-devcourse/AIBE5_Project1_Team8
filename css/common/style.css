@@ -1,5 +1,5 @@
 :root {
-    --bg-color: #ffffff;
+    --bg-color: #fffffa;
     --beige-bg: #F4EFEB;
     --primary-text: #333333;
     --secondary-text: #666666;
@@ -501,11 +501,13 @@ main {
 
 /* --- Map & Details Section --- */
 .map-detail-section {
+    /* Remove fixed height to prevent cutting off content */
+    height: auto;
+    min-height: 600px;
+    /* Use min-height instead */
     display: flex;
     gap: 30px;
-    border-radius: var(--border-radius-lg);
-    overflow: hidden;
-    height: 600px;
+    border-radius: 30px;
     padding: 30px;
     box-sizing: border-box;
 }
@@ -605,5 +607,180 @@ main {
 
     .slider-wrapper {
         flex-direction: column;
+    }
+}
+
+/* --- Interactive Map Styles --- */
+
+/* Map Wrapper (replaces .container in your snippet) */
+.map-wrapper {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    /* Remove fixed height here too */
+    height: auto;
+    min-height: 600px;
+    gap: 30px;
+    position: relative;
+    margin: 0 auto;
+}
+
+#map {
+    flex: 2.5;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    position: relative;
+    /* Ensure it fills the parent's min-height */
+    height: auto;
+    min-height: 100%;
+}
+
+/* 2. Info Card Area */
+.info-card {
+    flex: 1;
+    background-color: #F4EFEB;
+    border-radius: 40px;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Text Styles */
+.location-title {
+    color: #4F4F4F;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 30px;
+    word-break: keep-all;
+}
+
+.description-box {
+    position: relative;
+    flex-grow: 1;
+    /* Reduced margin to bring text area closer to title if needed */
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.quote-mark {
+    font-size: 60px;
+    color: #828282;
+    opacity: 0.5;
+    font-family: serif;
+    position: absolute;
+    /* Slide Left: Negative value pulls it out to the left */
+    left: -20px;
+    /* Adjust Top if needed */
+    top: -10px;
+    line-height: 1;
+}
+
+.description-text {
+    color: #828282;
+    font-size: 15px;
+    line-height: 1.7;
+    /* Slide Top: Removed top padding so text moves up */
+    padding-top: 0px;
+    padding-left: 5px;
+    /* Slight left padding to separate from quote if they overlap */
+    word-break: keep-all;
+    position: relative;
+    z-index: 1;
+}
+
+/* Add to Schedule Button */
+.add-btn {
+    position: absolute;
+    bottom: -25px;
+    right: 40px;
+    z-index: 10;
+    background-color: #2F4157;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(47, 65, 87, 0.4);
+    transition: opacity 0.3s, transform 0.2s;
+}
+
+.add-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-3px);
+}
+
+/* Reset Map Button */
+#reset-map-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    background-color: #2F4157;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    display: none;
+    transition: opacity 0.3s, transform 0.2s;
+}
+
+#reset-map-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Leaflet Popup Styles */
+.leaflet-popup-content-wrapper {
+    padding: 0 !important;
+    /* Force zero padding */
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+/* 2. Content: Remove margins and text spacing */
+.leaflet-popup-content {
+    margin: 0 !important;
+    width: 300px !important;
+    line-height: 0;
+    /* CRITICAL: Removes the invisible text gap */
+}
+
+/* 3. Image: Fill space completely */
+.popup-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* Removes inline spacing */
+    margin: 0;
+    border: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .map-wrapper {
+        flex-direction: column;
+        height: auto;
+    }
+
+    #map {
+        height: 300px;
+    }
+
+    .add-btn {
+        position: static;
+        margin-top: 30px;
+        width: 100%;
+        transform: none;
+        bottom: auto;
+        right: auto;
     }
 }
