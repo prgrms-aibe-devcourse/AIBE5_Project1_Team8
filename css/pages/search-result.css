@@ -42,7 +42,7 @@
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Pretendard', sans-serif;
 }
 
 .category-tab:hover {
@@ -116,7 +116,7 @@
     align-items: center;
     gap: 4px;
     transition: all 0.2s ease;
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Pretendard', sans-serif;
 }
 
 .save-btn:hover {
@@ -147,7 +147,7 @@
     font-weight: 700;
     color: var(--primary-text);
     margin: 0;
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Pretendard', sans-serif;
 }
 
 .card-info p {
@@ -155,7 +155,7 @@
     color: var(--secondary-text);
     margin: 0;
     line-height: 1.5;
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Pretendard', sans-serif;
 }
 
 /* 페이지네이션 */
@@ -190,7 +190,7 @@
     font-size: 14px;
     color: var(--primary-text);
     font-weight: 500;
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Pretendard', sans-serif;
 }
 
 /* 반응형 디자인 */
