@@ -158,13 +158,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* 로그인 버튼 이벤트 (로그인 페이지) */
     loginBtn.addEventListener('click', () => {
-      window.location.href = './html/auth.html';
+      window.location.href = '/pages/auth.html';
     });
 
     /* 로그아웃 버튼 이벤트  (로그아웃 처리 후 메인) */
     logoutBtn.addEventListener('click', () => {
       // 브라우저 내장 DB에서 로그인 상태 여부 수정 로직
-      window.location.href = './html/index.html';
+      window.location.href = '/index.html';
     });
   }
 });
