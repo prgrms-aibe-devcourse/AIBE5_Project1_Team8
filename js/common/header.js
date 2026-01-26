@@ -121,8 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <!-- 메뉴 -->
       <nav class="nav">
         <a href="/index.html">홈</a>
-        <a href="/pages/place/place.html">지역/명소</a>
-        <a href="/pages/hotel/hotel.html">호텔/숙소</a>
+        <a href="/pages/hotel/hotel.html">관광지</a>
         <a href="/pages/support.html">고객센터</a>
         <a href="/pages/my-schedule.html">나의 일정</a>
         <a href="/pages/mypage.html">마이 페이지</a>
