@@ -1,52 +1,87 @@
-/* [1] 기본 초기화 */
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
-body { background-color: #F0FAFA; padding: 30px; }
-.wrapper { max-width: 850px; margin: 0 auto; }
+/* =====================
+   FAQ 토글
+===================== */
+document.querySelectorAll('.card.flex-between').forEach(card => {
+  card.addEventListener('click', () => {
+    // 이미 열린 FAQ 닫기
+    document.querySelectorAll('.faq-container').forEach(openFaq => {
+      openFaq.remove();
+    });
 
-/* [2] 헤더 및 메인 배너 */
-.site-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 30px; }
-.nav-menu { display: flex; gap: 12px; font-size: 11px; color: #999; align-items: center; }
-.nav-menu span { cursor: pointer; }
-.auth-btn { background: #D9D9D9; border: none; padding: 5px 12px; border-radius: 15px; cursor: pointer; }
+    // FAQ 컨테이너 생성
+    const faq = document.createElement('div');
+    faq.className = 'card faq-container';
 
-.main-title-box { 
-    background-color: #BDBDBD; color: white; text-align: center; 
-    padding: 40px; border-radius: 20px; font-size: 26px; font-weight: bold; margin-bottom: 45px; 
-}
+    faq.innerHTML = `
+      <div class="faq-question">
+        <span>Q. 자주 묻는 질문</span>
+        <span class="icon-up"></span>
+      </div>
+      <div class="faq-answer">
+        A. 질문에 대한 답변입니다. 실제 서비스에서는 서버 데이터로 치환됩니다.
+      </div>
+    `;
 
-/* [3] 섹션 레이아웃 */
-.section-wrap { margin-bottom: 45px; }
-.label { font-size: 14px; font-weight: bold; color: #444; margin-bottom: 12px; display: block; padding-left: 5px; }
-.gray-box { background-color: #E5E5E5; border-radius: 30px; padding: 35px; position: relative; }
+    // 클릭한 질문 바로 아래에 삽입
+    card.after(faq);
+  });
+});
 
-/* [4] 카드 인터랙션 (색 변화 없이 눌리는 느낌만) */
-.card { 
-    background: white; border-radius: 12px; border: none; padding: 18px 25px; 
-    margin-bottom: 12px; display: flex; align-items: center; width: 100%; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02); 
-    cursor: pointer; transition: transform 0.1s; 
-}
-.card:active { transform: translateY(1px); }
-.card-center { justify-content: center; width: 250px; font-size: 14px; }
-.btn-absolute { position: absolute; bottom: 25px; right: 35px; background: white; border: none; border-radius: 8px; padding: 8px 20px; font-size: 12px; cursor: pointer; }
 
-/* [5] 탭 디자인 수정 (선 제거, 전체 탭 배경 채움) */
-.tabs { display: flex; gap: 10px; margin-bottom: 25px; border: none; }
-.tab { background: white; border: none; padding: 10px 25px; border-radius: 8px; font-size: 13px; cursor: pointer; }
-.tab.active { background-color: #BDBDBD; color: white; font-weight: bold; }
+/* =====================
+   상단 FAQ 탭 활성화
+===================== */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
 
-/* [6] 아이콘 및 정렬 */
-.flex-between { justify-content: space-between; font-size: 14px; }
-.icon-down::after { content: "▼"; font-size: 10px; margin-left: 10px; }
-.icon-up::after { content: "▲"; font-size: 10px; margin-left: 10px; }
 
-.faq-open { flex-direction: column; align-items: flex-start; cursor: default; }
-.faq-header { display: flex; justify-content: space-between; width: 100%; cursor: pointer; }
-.faq-answer { width: 100%; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; color: #666; font-size: 13px; }
+/* =====================
+   문의내역 하단 탭 활성화
+===================== */
+document.querySelectorAll('.tab-under').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab-under').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
 
-/* [7] 문의 내역 상태 프레임 */
-.status-frame { 
-    background: #FFFFFF; border: 1px solid #DDD; padding: 6px 15px; 
-    border-radius: 12px; font-size: 12px; display: flex; 
-    align-items: center; gap: 8px; min-width: 100px; justify-content: center; 
-}
+/* =====================
+   1:1 문의 모달 제어 (안전형)
+===================== */
+// 페이지가 완전히 로드된 후 실행되도록 감쌉니다.
+window.onload = function() {
+    const modal = document.getElementById('inquiryModal');
+    const openBtn = document.querySelector('.btn-absolute'); // '1:1 문의하기' 버튼
+    const closeBtn = document.querySelector('.close-modal');
+
+    // [확인용] 버튼이 제대로 잡혔는지 확인
+    if(!openBtn) {
+        console.error("1:1 문의하기 버튼(.btn-absolute)을 찾을 수 없습니다.");
+        return;
+    }
+
+    // 1. 모달 열기
+    openBtn.onclick = function() {
+        console.log("문의하기 버튼 클릭됨!");
+        modal.style.display = 'flex'; // CSS에서 숨긴 모달을 flex로 변경하여 표시
+    };
+
+    // 2. X 버튼으로 닫기
+    closeBtn.onclick = function() {
+        modal.style.display = 'none';
+    };
+
+    // 3. 배경 클릭 시 닫기
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+};
+
+
+
