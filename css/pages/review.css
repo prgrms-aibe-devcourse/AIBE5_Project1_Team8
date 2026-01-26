@@ -1,11 +1,13 @@
 /* 기본 설정 */
+
 :root {
     --bg-color: #fffffa;
-    --box-bg: #e0e0e0;
-    --accent-bg: #2f4157;
-    --text-color: #222222;
-    --text-color-white: #f5f5f5;
-    --border-radius: 3px;
+    --beige-bg: #F4EFEB;
+    --primary-text: #333333;
+    --secondary-text: #666666;
+    --navy-blue: #2f4157;
+    --btn-red: #b93920;
+    --border-radius-lg: 30px;
 }
 
 * {
@@ -16,8 +18,9 @@
 
 body {
     font-family: 'Noto Sans KR', sans-serif;
-    background-color: #f4f6f8;
-    color: #333;
+    /* background-color: #f4f6f8; */
+    background-color: var(--bg-color);
+    color: var(--primary-text);
     line-height: 1.5;
 }
 
@@ -44,7 +47,8 @@ body {
 
 /* 섹션 공통 */
 .review-section {
-    background: #ffffff;
+    /* background: #ffffff; */
+    background: var(--beige-bg);
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -146,9 +150,9 @@ body {
 
 /* 선택된 상태의 스타일 */
 .type-tag.active {
-    background-color: var(--accent-bg); /* 강조색  */
+    background-color: var(--navy-blue); /* 강조색  */
     color: #fff; /* 글자색 반전 */
-    border-color: #333;
+    border-color: var(--primary-text);
     font-weight: 700;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     transform: translateY(-2px); /* 살짝 떠오르는 효과 */
@@ -179,7 +183,7 @@ textarea {
     text-align: right;
     padding: 8px 15px;
     font-size: 12px;
-    color: #999;
+    color: var(--secondary-text);
     background-color: #fafafa;
     border-top: 1px solid #eee;
 }
@@ -321,6 +325,6 @@ textarea {
 }
 
 .submit-btn:hover {
-    background-color: var(--accent-bg);
-    color: var(--text-color-white);
+    background-color: var(--navy-blue);
+    color: #ffffff;
 }
