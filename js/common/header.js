@@ -116,14 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="header-inner">
 
       <!-- 로고 -->
-      <div class="logo">LOGO</div>
+      <div class="logo"><a href="/index.html">LOGO<a></div>
 
       <!-- 메뉴 -->
       <nav class="nav">
         <a href="/index.html">홈</a>
         <a href="/pages/hotel/hotel.html">관광지</a>
         <a href="/pages/support.html">고객센터</a>
-        <a href="/pages/my-schedule.html">나의 일정</a>
+        <a href="/pages/schedule.html">나의 일정</a>
         <a href="/pages/mypage.html">마이 페이지</a>
       </nav>
 
@@ -158,13 +158,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* 로그인 버튼 이벤트 (로그인 페이지) */
     loginBtn.addEventListener('click', () => {
-      window.location.href = './html/auth.html';
+      window.location.href = '/pages/auth.html';
     });
 
     /* 로그아웃 버튼 이벤트  (로그아웃 처리 후 메인) */
     logoutBtn.addEventListener('click', () => {
       // 브라우저 내장 DB에서 로그인 상태 여부 수정 로직
-      window.location.href = './html/index.html';
+      window.location.href = '/index.html';
     });
   }
 });
