@@ -1,4 +1,7 @@
-document.addEventListener("DOMContentLoaded", () => {
+    import { getAllReviews, deleteReview } from '../review/db.js'; // firebase 연동
+
+
+document.addEventListener("DOMContentLoaded", async () => {    
     /* =====================
         프로필 수정
     ===================== */
