@@ -15,13 +15,13 @@
 
 /* 왼쪽: 더 투명 */
 .auth-left {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0);
   backdrop-filter: blur(6px);
 }
 
 /* 오른쪽: 덜 투명(조금 더 진함) */
 .auth-right {
-  background: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.705);
   backdrop-filter: blur(10px);
 }
 
@@ -29,7 +29,7 @@
 .greeting-text {
   font-size: 24px;
   letter-spacing: 6px;
-  color: #000;
+  color: var(--primary-text);
 }
 
 /* 오른쪽 박스 */
@@ -76,9 +76,10 @@
   padding: 12px 40px;
   border-radius: 25px;
   border: none;
-  background-color: #bdbdbd;
+  background-color: var(--navy-blue);
   font-weight: 600;
   cursor: pointer;
+  color: var(--bg-color);
 }
 
 /* OR 구분선 */

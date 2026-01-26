@@ -1,4 +1,13 @@
 /* 색상 변수는 style.css의 :root에서 상속됨 */
+:root {
+  --bg-color: #fffffa; /* 흰색 배경 */
+  --beige-bg: #F4EFEB; /* 박스 배경 */
+  --primary-text: #333333; /* 글씨 색상*/
+  --secondary-text: #666666; /* 글씨 색상 */
+  --navy-blue: #2f4157; /* 버튼 색상 등등 */
+  --btn-red: #b93920; /* 로그인 버튼, 삭제 버튼 등 색상상 */
+  --border-radius-lg: 30px; /* 모서리 둥글기 값값 */
+}
 
 * {
     margin: 0;
@@ -45,6 +54,7 @@ body {
 
 /* ================= 카드 공통 ================= */
 .card {
+  color: var(--primary-text);
   background: var(--beige-bg);
   border-radius: 15px;
   padding: 30px;
@@ -81,10 +91,11 @@ body {
 }
 
 .calendar-day:hover {
-  background: #f0f0f0;
+  background: #7e94a3;
 }
 
 .calendar-day.active {
+  background: #2F4157;
   background: var(--navy-blue);
   color: #fff;
 }
@@ -96,6 +107,7 @@ body {
 }
 
 .calendar-day.active.has-schedule {
+  background: #2F4157;
   background: var(--navy-blue);
   color: #fff;
 }
@@ -107,7 +119,7 @@ body {
   text-align: center;
   font-size: 13px;
   font-weight: 600;
-  color: var(--secondary-text);
+  color: #666;
 }
 
 .calendar-week div {
