@@ -64,6 +64,6 @@
 | **전우현** | 팀원 | 숙소 예약 및 결제 페이지 구현 | [Github](https://github.com/jwh039) |
 | **황보혜** | 팀원 | 마이페이지, 나의 일정 페이지 구현, 발표 | [Github](https://github.com/hwangbohye03) |
 | **이근찬** | 팀원 | 여행 후기 작성 및 리뷰 기능 구현 | [Github](https://github.com/geunchanlee) |
-| **이상민** | 팀원 | 메인 페이지 UI, 메뉴바/검색바 구현, 발표 | [Github](https://github.com/Paley-Z) |
+| **이상민** | 팀원 | 디자인 레이아웃, 메인 페이지, UI, 메뉴바/검색바 구현, 검수/검토, 발표 | [Github](https://github.com/Paley-Z) |
 | **박수빈** | 팀원 | 고객센터 기능 및 UI 구현 | [Github](https://github.com/SooBin111) |
 | **김진현** | 팀원 | AI 기반 추천 시스템 및 여행지 검색 로직 구현 | [Github](https://github.com/jinhyenkim01) |
