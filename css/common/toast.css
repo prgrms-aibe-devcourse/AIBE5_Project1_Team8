@@ -24,7 +24,7 @@
 
 /* 타입별 색상 */
 .toast-info {
-    background-color: #333;
+    background-color: var(--primary-text);
 }
 /* 성공, 실패 토스트 메세지백그라운드 컬러 */
 .toast-success {

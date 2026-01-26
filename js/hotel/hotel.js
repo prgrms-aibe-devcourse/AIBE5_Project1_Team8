@@ -554,14 +554,22 @@ const shoppingData = [
   }
 ];
 
-// 전체 데이터 통합
-const allData = {
+// 전체 데이터 통합 (기존)
+const allDataOriginal = {
   accommodation: accommodationData,
   culture: cultureData,
   restaurant: restaurantData,
   nature: natureData,
   leisure: leisureData,
   shopping: shoppingData
+};
+
+// 검색 탭 카테고리별 데이터 통합
+const allData = {
+  전체: [...accommodationData, ...cultureData, ...restaurantData, ...natureData, ...leisureData, ...shoppingData],
+  지역: [...natureData, ...cultureData],
+  즐길거리: [...leisureData, ...restaurantData, ...shoppingData],
+  숙소: [...accommodationData]
 };
 
 // 지역명 매핑
@@ -581,20 +589,31 @@ const regionNames = {
 // ===== DOM 요소 =====
 const spotList = document.getElementById("spotList");
 const noResults = document.getElementById("noResults");
-const categoryTabs = document.querySelectorAll(".category-tab");
+const searchTabs = document.querySelectorAll(".search-container .tab");
 const pagination = document.getElementById("pagination");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const pageInfo = document.getElementById("pageInfo");
 
 // ===== 상태 관리 =====
-let currentCategory = "accommodation";
+let currentCategory = "전체";
 let currentPage = 1;
+let currentKeyword = "";
 const itemsPerPage = 8;
 
 // ===== 카드 렌더링 =====
 function renderSpots() {
-  const data = allData[currentCategory] || [];
+  let data = allData[currentCategory] || [];
+  
+  // 검색어로 필터링
+  if (currentKeyword) {
+    const keyword = currentKeyword.toLowerCase();
+    data = data.filter(spot => 
+      spot.name.toLowerCase().includes(keyword) ||
+      spot.address.toLowerCase().includes(keyword)
+    );
+  }
+  
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
   // 페이지 범위 조정
@@ -655,16 +674,22 @@ function updatePagination(totalPages) {
   nextBtn.disabled = currentPage >= totalPages;
 }
 
-// ===== 탭 클릭 이벤트 =====
-categoryTabs.forEach(tab => {
+// ===== 검색 탭 클릭 이벤트 =====
+searchTabs.forEach(tab => {
   tab.addEventListener("click", () => {
     // 활성 탭 변경
-    categoryTabs.forEach(t => t.classList.remove("active"));
+    searchTabs.forEach(t => t.classList.remove("active"));
     tab.classList.add("active");
 
-    // 카테고리 변경 및 페이지 초기화
-    currentCategory = tab.dataset.category;
+    // 카테고리 변경 및 페이지, 검색어 초기화
+    currentCategory = tab.innerText;
     currentPage = 1;
+    currentKeyword = "";
+    
+    // 검색창 초기화
+    const keywordInput = document.getElementById("keyword");
+    if (keywordInput) keywordInput.value = "";
+    
     renderSpots();
   });
 });
@@ -697,7 +722,7 @@ spotList.addEventListener("click", (e) => {
     e.stopPropagation();
     const spotId = parseInt(addBtn.dataset.spotId);
     const category = addBtn.dataset.category;
-    const data = allData[category] || [];
+    const data = allDataOriginal[category] || [];
     const selectedSpot = data.find(s => s.id === spotId);
 
     if (selectedSpot) {
@@ -750,53 +775,39 @@ spotList.addEventListener("click", (e) => {
 
 // ===== URL 파라미터 처리 =====
 const params = new URLSearchParams(window.location.search);
-const categoryParam = params.get("category");
+const categoryParam = params.get("type");
 if (categoryParam && allData[categoryParam]) {
   currentCategory = categoryParam;
-  categoryTabs.forEach(tab => {
+  searchTabs.forEach(tab => {
     tab.classList.remove("active");
-    if (tab.dataset.category === categoryParam) {
+    if (tab.innerText === categoryParam) {
       tab.classList.add("active");
     }
   });
 }
 
+// ===== 검색 이벤트 처리 (searchbar.js에서 발생) =====
+document.addEventListener('hotelSearch', (e) => {
+  const { keyword, type } = e.detail;
+  
+  // 카테고리 변경
+  if (type && allData[type]) {
+    currentCategory = type;
+    searchTabs.forEach(tab => {
+      tab.classList.remove("active");
+      if (tab.innerText === type) {
+        tab.classList.add("active");
+      }
+    });
+  }
+  
+  // 검색어 설정 및 렌더링
+  currentKeyword = keyword;
+  currentPage = 1;
+  renderSpots();
+});
+
 // ===== 초기 렌더링 =====
 setTimeout(() => {
   renderSpots();
 }, 300);
-
-
-// 나중에 실제 로직으로 교체 -> 로그인 상태 여부 브라우저 DB에 저장하고 가져오는 방식으로
-// 나중에 실제 로직으로 교체 -> 로그인 상태 여부 브라우저 DB에 저장하고 가져오는 방식으로
-// const isLoggedIn = true; // true면 로그인 상태
-
-// const loginBtn = document.querySelector('.login-btn');
-// const logoutBtn = document.querySelector('.logout-btn');
-
-/* 로그인 상태에 따른 버튼 노출 제어 */
-// if (loginBtn && logoutBtn) {
-//   if (isLoggedIn) {
-//     loginBtn.style.display = 'none';
-//     logoutBtn.style.display = 'block';
-//   } else {
-//     loginBtn.style.display = 'block';
-//     logoutBtn.style.display = 'none';
-//   }
-// }
-
-
-/* 로그인 버튼 이벤트 (로그인 페이지) */
-// if (loginBtn) {
-//   loginBtn.addEventListener('click', () => {
-//     window.location.href = './html/auth.html';
-//   });
-// }
-
-/* 로그아웃 버튼 이벤트  (로그아웃 처리 후 메인) */
-// if (logoutBtn) {
-//   logoutBtn.addEventListener('click', () => {
-//     // 브라우저 내장 DB에서 로그인 상태 여부 수정 로직
-//     window.location.href = './html/index.html';
-//   });
-// }
