@@ -4,14 +4,14 @@
 
 // Header CSS 스타일 동적 삽입
 function injectHeaderStyles() {
-  // 이미 스타일이 삽입되었는지 확인
-  if (document.getElementById('header-styles')) {
-      return;
-  }
+    // 이미 스타일이 삽입되었는지 확인
+    if (document.getElementById('header-styles')) {
+        return;
+    }
 
-  const style = document.createElement('style');
-  style.id = 'header-styles';
-  style.textContent = `
+    const style = document.createElement('style');
+    style.id = 'header-styles';
+    style.textContent = `
       /* 헤더 전체 */
       .header {
         position: fixed; /*상단 고정*/
@@ -102,69 +102,92 @@ function injectHeaderStyles() {
         background-color: #9E2F19;
         border-color: #9E2F19;
       }
+      .header-inner {
+         display: flex;
+         align-items: center; /* 요소들을 세로 중앙 정렬 */
+      }
+
+      .header-divider {
+        width: 1px;
+        height: 14px;
+        background-color: #ccc; 
+        margin-left: 20px;
+
+        display: inline-block;
+      }
+
+      .user-greeting {
+        margin-right: 15px;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 400;
+      }
+      .user-greeting strong {
+        font-weight: 700;
+        color: var(--navy-blue, #2f4157);
+      }
   `;
-  document.head.appendChild(style);
+    document.head.appendChild(style);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // CSS 스타일 먼저 삽입
-  injectHeaderStyles();
-  
-  const header = document.querySelector('header');
-  if (header) {
+    injectHeaderStyles();
+
+    const header = document.querySelector('header');
+    if (!header) return;
+
     header.innerHTML = `
-    <div class="header-inner">
+  <div class="header-inner">
+    <div class="logo" onclick="location.href='/'">LOGO</div>
 
-      <!-- 로고 -->
-      <div class="logo"><a href="/index.html">LOGO<a></div>
+    <nav class="nav">
+      <a href="/index.html">홈</a>
+      <a href="/pages/search.html?tab=place">지역/명소</a>
+      <a href="/pages/search.html?tab=hotel">호텔/숙소</a>
+      <a href="/pages/support.html">고객센터</a>
+      <a href="/pages/schedule.html">나의 일정</a>
+      <a href="/pages/mypage.html">마이 페이지</a>
+    </nav>
+    <span class="header-divider"></span>
 
-      <!-- 메뉴 -->
-      <nav class="nav">
-        <a href="/index.html">홈</a>
-        <a href="/pages/hotel/hotel.html">관광지</a>
-        <a href="/pages/support.html">고객센터</a>
-        <a href="/pages/schedule.html">나의 일정</a>
-        <a href="/pages/mypage.html">마이 페이지</a>
-      </nav>
-
-      <!-- 로그인 / 로그아웃 -->
-      <div class="auth">
-        <!-- 로그아웃 상태일 때(기본값) -->
-        <button class="login-btn">Sign in / Register</button>
-
-        <!-- 로그인 상태일 때 -->
-        <button class="logout-btn">Logout</button>
-      </div>
-
-    </div>
-    `;
+    <div class="auth"></div>
+  </div>
+  `;
     header.classList.add('header');
 
-    // 나중에 실제 로직으로 교체 -> 로그인 상태 여부 브라우저 DB에 저장하고 가져오는 방식으로
-    const isLoggedIn = true; // true면 로그인 상태
+    // 3. 로그인 상태 확인 (localStorage 활용)
+    const authArea = header.querySelector('.auth');
+    const isLoggedIn = localStorage.getItem('auth_isLoggedIn') === 'true';
+    const userData = JSON.parse(localStorage.getItem('auth_user'));
 
-    const loginBtn = document.querySelector('.login-btn');
-    const logoutBtn = document.querySelector('.logout-btn');
+    if (isLoggedIn && userData) {
+        // [로그인 상태] 이름 표시 및 로그아웃 버튼
+        authArea.innerHTML = `
+      <span class="user-greeting" style="margin-right: 15px; font-size: 14px; color: #555;">
+        <strong>${userData.name}</strong>님 환영합니다
+      </span>
+      <button class="logout-btn">Logout</button>
+    `;
 
-    /* 로그인 상태에 따른 버튼 노출 제어 */
-    if (isLoggedIn) {
-        loginBtn.style.display = 'block';
-        logoutBtn.style.display = 'none';
+        // 로그아웃 이벤트
+        authArea.querySelector('.logout-btn').addEventListener('click', () => {
+          // 로그아웃 확인하는 confirm
+            if (confirm('로그아웃 하시겠습니까?')) {
+                localStorage.removeItem('auth_user');
+                localStorage.removeItem('auth_isLoggedIn');
+
+                // href 대신 replace를 쓰면 브라우저 히스토리에서 현재 페이지를 지워버려 더 깔끔
+                window.location.replace('/index.html');
+            }
+        });
     } else {
-        loginBtn.style.display = 'none';
-        logoutBtn.style.display = 'block';
+        // [로그아웃 상태] 로그인 버튼
+        authArea.innerHTML = `
+      <button class="login-btn">Sign in / Register</button>
+    `;
+
+        // 로그인 페이지로 이동
+        authArea.querySelector('.login-btn').addEventListener('click', () => {
+            window.location.href = '/pages/auth/';
+        });
     }
-
-
-    /* 로그인 버튼 이벤트 (로그인 페이지) */
-    loginBtn.addEventListener('click', () => {
-      window.location.href = '/pages/auth.html';
-    });
-
-    /* 로그아웃 버튼 이벤트  (로그아웃 처리 후 메인) */
-    logoutBtn.addEventListener('click', () => {
-      // 브라우저 내장 DB에서 로그인 상태 여부 수정 로직
-      window.location.href = '/index.html';
-    });
-  }
 });
