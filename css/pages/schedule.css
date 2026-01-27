@@ -1,13 +1,4 @@
 /* 색상 변수는 style.css의 :root에서 상속됨 */
-:root {
-  --bg-color: #fffffa; /* 흰색 배경 */
-  --beige-bg: #F4EFEB; /* 박스 배경 */
-  --primary-text: #333333; /* 글씨 색상*/
-  --secondary-text: #666666; /* 글씨 색상 */
-  --navy-blue: #2f4157; /* 버튼 색상 등등 */
-  --btn-red: #b93920; /* 로그인 버튼, 삭제 버튼 등 색상상 */
-  --border-radius-lg: 30px; /* 모서리 둥글기 값값 */
-}
 
 * {
     margin: 0;
@@ -38,10 +29,11 @@ body {
   padding: 24px 0;
   border-radius: 20px;
 
-  background: rgba(17, 24, 39, 0.3);;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  background: var(--beige-bg);
+  border: var(--border-gray);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 
-  color:white;
+  color: var(--primary-text);
   text-align: center;
   font-size: 26px;
   font-weight: 300; /* 얇게 */
@@ -56,6 +48,7 @@ body {
 .card {
   color: var(--primary-text);
   background: var(--beige-bg);
+  border: var(--border-gray);
   border-radius: 15px;
   padding: 30px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);

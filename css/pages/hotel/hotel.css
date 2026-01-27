@@ -10,7 +10,7 @@
 
 body {
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  background: var(--bg-main);
+  background: var(--bg-color);
   color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
@@ -72,6 +72,7 @@ body {
 /* ===== Spot Card ===== */
 .spot-card {
   background: var(--beige-bg);
+  border: var(--border-gray);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-sm);
   padding: 1.5rem;
@@ -183,6 +184,33 @@ body {
   font-size: 0.8rem;
 }
 
+/* Detail View Button (숙소 전용) */
+.detail-view-btn {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: var(--navy-blue);
+  border: 1px solid var(--navy-blue);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #fff;
+  font-size: 0.85rem;
+  transition: var(--transition);
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  z-index: 2;
+}
+
+.detail-view-btn:hover {
+  filter: brightness(0.92);
+}
+
+.detail-text {
+  font-size: 0.8rem;
+}
+
 /* ===== No Results ===== */
 .no-results {
   text-align: center;
@@ -240,9 +268,47 @@ body {
   cursor: not-allowed;
 }
 
-.page-info {
+.page-info-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.page-input {
+  width: 50px;
+  height: 36px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  padding: 0 0.5rem;
+  transition: var(--transition);
+}
+
+.page-input:focus {
+  outline: none;
+  border-color: var(--text-primary);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.page-input::-webkit-inner-spin-button,
+.page-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.page-input[type=number] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.page-total {
   font-size: 0.9rem;
   color: var(--text-secondary);
+  font-weight: 500;
 }
 
 /* ===== Modal ===== */

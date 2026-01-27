@@ -57,6 +57,8 @@ function injectHeaderStyles() {
       }
 
       .logo {
+        display: flex;
+        align-items: center;
         font-size: 20px;
         font-weight: 700;
         cursor: pointer;
@@ -67,6 +69,12 @@ function injectHeaderStyles() {
 
       .logo:hover {
         opacity: 0.8;
+      }
+
+      .logo-text {
+        font-size: 25px;
+        font-weight: 700;
+        color: var(--navy-blue, #2f4157);
       }
 
       /* 네비게이션 */
@@ -151,7 +159,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     header.innerHTML = `
   <div class="header-inner">
-    <div class="logo" onclick="location.href='/'">LOGO</div>
+    <div class="logo" onclick="location.href='/'">
+      <div class="logo-image">
+        <img src="/images/logo/logo.png" alt="로고" />
+      </div>
+      <span class="logo-text">tripial</span>
+    </div>
 
       <!-- 메뉴 -->
       <nav class="nav">

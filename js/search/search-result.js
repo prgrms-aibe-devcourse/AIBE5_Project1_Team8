@@ -1,268 +1,470 @@
-// 검색 결과 페이지 기능
+// 검색 결과 페이지 기능 - Firebase DB 사용
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 샘플 데이터 (실제로는 API에서 가져와야 함)
-    const sampleResults = [
-        {
-            id: 1,
-            name: "경복궁",
-            address: "서울특별시 종로구 사직로 161",
-            phone: "02-3700-3900",
-            category: "문화",
-            type: "지역", // 지역 분류
-            image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=300&fit=crop"
-        },
-        {
-            id: 2,
-            name: "N서울타워",
-            address: "서울특별시 용산구 남산공원길 105",
-            phone: "02-3455-9277",
-            category: "문화",
-            type: "지역", // 지역 분류
-            image: "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=300&h=300&fit=crop"
-        },
-        {
-            id: 3,
-            name: "롯데월드",
-            address: "서울특별시 송파구 올림픽로 240",
-            phone: "02-411-2000",
-            category: "레저",
-            type: "즐길거리", // 즐길거리 분류
-            image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop"
-        },
-        {
-            id: 4,
-            name: "명동",
-            address: "서울특별시 중구 명동길",
-            phone: "02-778-0333",
-            category: "쇼핑",
-            type: "지역", // 지역 분류
-            image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=300&h=300&fit=crop"
-        },
-        {
-            id: 5,
-            name: "북한산국립공원",
-            address: "서울특별시 강북구 우이동",
-            phone: "02-909-0497",
-            category: "자연",
-            type: "즐길거리", // 즐길거리 분류
-            image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=300&fit=crop"
-        },
-        {
-            id: 6,
-            name: "한강공원",
-            address: "서울특별시 영등포구 여의도동",
-            phone: "02-3780-0561",
-            category: "자연",
-            type: "즐길거리", // 즐길거리 분류
-            image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=300&h=300&fit=crop"
-        },
-        {
-            id: 7,
-            name: "인사동",
-            address: "서울특별시 종로구 인사동길",
-            phone: "02-734-0222",
-            category: "문화",
-            type: "지역", // 지역 분류
-            image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=300&h=300&fit=crop"
-        },
-        {
-            id: 8,
-            name: "동대문디자인플라자",
-            address: "서울특별시 중구 을지로 281",
-            phone: "02-2153-0000",
-            category: "문화",
-            type: "지역", // 지역 분류
-            image: "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?w=300&h=300&fit=crop"
-        },
-        {
-            id: 9,
-            name: "서울 그랜드 호텔",
-            address: "서울특별시 중구 을지로 30",
-            phone: "02-771-0500",
-            category: "숙박",
-            type: "숙소", // 숙소 분류
-            image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=300&h=300&fit=crop"
-        },
-        {
-            id: 10,
-            name: "롯데 호텔 서울",
-            address: "서울특별시 중구 을지로 30",
-            phone: "02-771-1000",
-            category: "숙박",
-            type: "숙소", // 숙소 분류
-            image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=300&h=300&fit=crop"
-        },
-        {
-            id: 11,
-            name: "에버랜드",
-            address: "경기도 용인시 처인구 포곡읍 에버랜드로 199",
-            phone: "031-320-5000",
-            category: "레저",
-            type: "즐길거리", // 즐길거리 분류
-            image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop"
-        },
-        {
-            id: 12,
-            name: "부산 해운대",
-            address: "부산광역시 해운대구 해운대해변로 264",
-            phone: "051-749-4000",
-            category: "자연",
-            type: "지역", // 지역 분류
-            image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=300&h=300&fit=crop"
-        }
-    ];
+document.addEventListener('DOMContentLoaded', async () => {
+    // Firebase에서 로드한 데이터 (탭별)
+    let allData = {
+        전체: [],
+        지역: [],
+        즐길거리: [],
+        숙소: []
+    };
 
     // 상태 관리
     let currentPage = 1;
     const itemsPerPage = 8;
     let savedItems = JSON.parse(localStorage.getItem('savedItems') || '[]');
-    let currentType = "전체"; // 검색 탭 타입
+    let currentType = '전체';
 
     // DOM 요소
     const resultsGrid = document.getElementById('searchResultsGrid');
     const prevPageBtn = document.getElementById('prevPageBtn');
     const nextPageBtn = document.getElementById('nextPageBtn');
-    const currentPageSpan = document.getElementById('currentPage');
+    const pageInput = document.getElementById('pageInput');
+    const pageTotal = document.getElementById('pageTotal');
     const searchInput = document.getElementById('keyword');
     const searchTabs = document.querySelectorAll('.tab');
 
-    // URL 파라미터에서 검색어와 타입 가져오기
+    // URL 파라미터
     const urlParams = new URLSearchParams(window.location.search);
     const rawKeyword = urlParams.get('keyword');
     const searchKeyword = rawKeyword ? decodeURIComponent(rawKeyword).trim() : '';
     const urlType = urlParams.get('type');
-    if (urlType) {
-        currentType = decodeURIComponent(urlType);
-    }
-    
-    // 검색 입력창에 검색어 설정
+    if (urlType) currentType = decodeURIComponent(urlType);
+
     if (searchInput) {
-        if (searchKeyword && searchKeyword !== '관광지') {
-            // 검색어가 있으면 입력창에 표시
-            searchInput.value = searchKeyword;
-        } else {
-            // 검색어가 없거나 기본값이면 빈 값 (placeholder 표시)
-            searchInput.value = '';
-        }
+        if (searchKeyword && searchKeyword !== '관광지') searchInput.value = searchKeyword;
+        else searchInput.value = '';
     }
 
-    // 검색 탭 활성화 상태 설정
     if (searchTabs.length > 0) {
         searchTabs.forEach(tab => {
             tab.classList.remove('active');
-            if (tab.innerText === currentType) {
-                tab.classList.add('active');
-            }
+            if (tab.innerText === currentType) tab.classList.add('active');
         });
     }
 
-    // 검색 탭 클릭 이벤트
-    if (searchTabs.length > 0) {
-        searchTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                searchTabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                currentType = tab.innerText;
-                currentPage = 1; // 탭 변경 시 첫 페이지로
+    // ---- Firebase 데이터 로드 ----
+    function formatFirebaseData(firebaseData, category) {
+        return {
+            id: firebaseData.id || firebaseData.contentid || '',
+            detailId: firebaseData.detailId || firebaseData.contentid || firebaseData.id || 0,
+            name: firebaseData.name || firebaseData.title || '',
+            address: firebaseData.address || firebaseData.addr1 || '',
+            contact: firebaseData.contact || firebaseData.tel || '',
+            image: firebaseData.image || firebaseData.firstimage || firebaseData.firstimage2 || '',
+            category: category || firebaseData.category || 'culture'
+        };
+    }
+
+    function inferCategoryFromData(data) {
+        const t = (data.title || data.name || '').toLowerCase();
+        if (/호텔|리조트|펜션|모텔|게스트하우스/.test(t)) return 'accommodation';
+        if (/궁|사찰|유적|박물관|미술관/.test(t)) return 'culture';
+        if (/맛집|식당|카페|시장|거리/.test(t)) return 'restaurant';
+        if (/산|해수욕장|공원|해변|섬/.test(t)) return 'nature';
+        if (/테마파크|워터파크|스키장|골프장|케이블카/.test(t)) return 'leisure';
+        if (/쇼핑|아울렛|마트|한옥마을|문화마을/.test(t)) return 'shopping';
+        return 'culture';
+    }
+
+    // 페이지네이션 상태 관리
+    const BATCH_SIZE = 64;
+    let lastAccommodationDoc = null;
+    let lastTourItemDoc = null;
+    let hasMoreAccommodations = true;
+    let hasMoreTourItems = true;
+
+    // 데이터 배열 (외부에서 접근 가능하도록)
+    const acc = [];
+    const culture = [], restaurant = [], nature = [], leisure = [], shopping = [];
+
+    async function loadDataFromFirebase() {
+        try {
+            console.log('Firebase 데이터 로드 시작...');
+            const { db } = await import('../common/firebase-config.js');
+            console.log('Firebase DB 연결 성공:', db ? 'OK' : 'FAILED');
+            
+            const { collection, query, getDocs, limit, startAfter, orderBy } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
+            // 초기화 (첫 로드 시에만)
+            if (lastAccommodationDoc === null) {
+                acc.length = 0;
+                culture.length = 0;
+                restaurant.length = 0;
+                nature.length = 0;
+                leisure.length = 0;
+                shopping.length = 0;
+                hasMoreAccommodations = true;
+                hasMoreTourItems = true;
+            }
+
+            // accommodations 64개씩 가져오기
+            if (hasMoreAccommodations) {
+                try {
+                    let accQuery;
+                    
+                    if (lastAccommodationDoc) {
+                        accQuery = query(
+                            collection(db, 'accommodations'),
+                            orderBy('__name__'),
+                            startAfter(lastAccommodationDoc),
+                            limit(BATCH_SIZE)
+                        );
+                    } else {
+                        // 첫 로드: orderBy 없이 limit만 사용
+                        accQuery = query(
+                            collection(db, 'accommodations'),
+                            limit(BATCH_SIZE)
+                        );
+                    }
+                    
+                    console.log('accommodations 쿼리 실행 중...');
+                    const snap = await getDocs(accQuery);
+                    console.log(`accommodations 스냅샷: ${snap.size}개 문서`);
+                    
+                    if (snap.empty) {
+                        hasMoreAccommodations = false;
+                    } else {
+                        snap.forEach(doc => {
+                            const d = { id: doc.id, ...doc.data() };
+                            acc.push(formatFirebaseData(d, 'accommodation'));
+                            lastAccommodationDoc = doc;
+                        });
+                        
+                        if (snap.size < BATCH_SIZE) {
+                            hasMoreAccommodations = false;
+                        }
+                        console.log(`✅ Accommodations 로드 완료: ${acc.length}개`);
+                    }
+                } catch (e) { 
+                    console.error('❌ accommodations 로드 실패:', e);
+                    console.error('에러 상세:', e.message, e.code);
+                    hasMoreAccommodations = false;
+                    
+                    // orderBy 에러인 경우 재시도
+                    if (e.code === 'failed-precondition' || e.message.includes('index')) {
+                        try {
+                            const accQuery = query(
+                                collection(db, 'accommodations'),
+                                limit(BATCH_SIZE)
+                            );
+                            const snap = await getDocs(accQuery);
+                            if (!snap.empty) {
+                                snap.forEach(doc => {
+                                    const d = { id: doc.id, ...doc.data() };
+                                    acc.push(formatFirebaseData(d, 'accommodation'));
+                                    lastAccommodationDoc = doc;
+                                });
+                                console.log(`✅ Accommodations 재시도 성공: ${acc.length}개`);
+                                if (snap.size < BATCH_SIZE) {
+                                    hasMoreAccommodations = false;
+                                }
+                            }
+                        } catch (retryError) {
+                            console.error('재시도도 실패:', retryError);
+                        }
+                    }
+                }
+            }
+
+            // tour_items 64개씩 가져오기
+            if (hasMoreTourItems) {
+                try {
+                    let tourQuery;
+                    
+                    if (lastTourItemDoc) {
+                        tourQuery = query(
+                            collection(db, 'tour_items'),
+                            orderBy('__name__'),
+                            startAfter(lastTourItemDoc),
+                            limit(BATCH_SIZE)
+                        );
+                    } else {
+                        // 첫 로드: orderBy 없이 limit만 사용
+                        tourQuery = query(
+                            collection(db, 'tour_items'),
+                            limit(BATCH_SIZE)
+                        );
+                    }
+                    
+                    console.log('tour_items 쿼리 실행 중...');
+                    const snap = await getDocs(tourQuery);
+                    console.log(`tour_items 스냅샷: ${snap.size}개 문서`);
+                    
+                    if (snap.empty) {
+                        hasMoreTourItems = false;
+                    } else {
+                        snap.forEach(doc => {
+                            const d = { id: doc.id, ...doc.data() };
+                            const cat = d.category || inferCategoryFromData(d);
+                            const fd = formatFirebaseData(d, cat);
+                            if (cat === 'culture') culture.push(fd);
+                            else if (cat === 'restaurant') restaurant.push(fd);
+                            else if (cat === 'nature') nature.push(fd);
+                            else if (cat === 'leisure') leisure.push(fd);
+                            else if (cat === 'shopping') shopping.push(fd);
+                            else culture.push(fd);
+                            lastTourItemDoc = doc;
+                        });
+                        
+                        if (snap.size < BATCH_SIZE) {
+                            hasMoreTourItems = false;
+                        }
+                        console.log(`✅ Tour items 로드 완료: ${culture.length + restaurant.length + nature.length + leisure.length + shopping.length}개`);
+                    }
+                } catch (e) { 
+                    console.error('❌ tour_items 로드 실패:', e);
+                    console.error('에러 상세:', e.message, e.code);
+                    hasMoreTourItems = false;
+                    
+                    // orderBy 에러인 경우 재시도
+                    if (e.code === 'failed-precondition' || e.message.includes('index')) {
+                        try {
+                            const tourQuery = query(
+                                collection(db, 'tour_items'),
+                                limit(BATCH_SIZE)
+                            );
+                            const snap = await getDocs(tourQuery);
+                            if (!snap.empty) {
+                                snap.forEach(doc => {
+                                    const d = { id: doc.id, ...doc.data() };
+                                    const cat = d.category || inferCategoryFromData(d);
+                                    const fd = formatFirebaseData(d, cat);
+                                    if (cat === 'culture') culture.push(fd);
+                                    else if (cat === 'restaurant') restaurant.push(fd);
+                                    else if (cat === 'nature') nature.push(fd);
+                                    else if (cat === 'leisure') leisure.push(fd);
+                                    else if (cat === 'shopping') shopping.push(fd);
+                                    else culture.push(fd);
+                                    lastTourItemDoc = doc;
+                                });
+                                console.log(`✅ Tour items 재시도 성공`);
+                                if (snap.size < BATCH_SIZE) {
+                                    hasMoreTourItems = false;
+                                }
+                            }
+                        } catch (retryError) {
+                            console.error('재시도도 실패:', retryError);
+                        }
+                    }
+                }
+            }
+
+            const addType = (arr, type) => arr.map(o => ({ ...o, type }));
+
+            allData = {
+                전체: [
+                    ...addType(acc, '숙소'),
+                    ...addType(nature, '지역'),
+                    ...addType(culture, '지역'),
+                    ...addType(leisure, '즐길거리'),
+                    ...addType(restaurant, '즐길거리'),
+                    ...addType(shopping, '즐길거리')
+                ],
+                지역: [...addType(nature, '지역'), ...addType(culture, '지역')],
+                즐길거리: [...addType(leisure, '즐길거리'), ...addType(restaurant, '즐길거리'), ...addType(shopping, '즐길거리')],
+                숙소: addType(acc, '숙소')
+            };
+            console.log('✅ Firebase 데이터 로드 완료');
+        } catch (e) {
+            console.error('❌ Firebase 검색 데이터 로드 실패:', e);
+            console.error('에러 상세:', e.message, e.stack);
+        }
+    }
+
+    // ===== 추가 데이터 로드 함수 =====
+    async function loadMoreData() {
+        if (!hasMoreAccommodations && !hasMoreTourItems) {
+            console.log('더 이상 로드할 데이터가 없습니다.');
+            return false;
+        }
+
+        const beforeAccCount = acc.length;
+        const beforeTourCount = culture.length + restaurant.length + nature.length + leisure.length + shopping.length;
+
+        // 추가 데이터 로드
+        await loadDataFromFirebase();
+
+        const afterAccCount = acc.length;
+        const afterTourCount = culture.length + restaurant.length + nature.length + leisure.length + shopping.length;
+
+        const loadedAcc = afterAccCount - beforeAccCount;
+        const loadedTours = afterTourCount - beforeTourCount;
+
+        if (loadedAcc > 0 || loadedTours > 0) {
+            console.log(`추가 데이터 로드 완료: Accommodations ${loadedAcc}개, Tour items ${loadedTours}개`);
+            
+            // allData 재구성
+            const addType = (arr, type) => arr.map(o => ({ ...o, type }));
+            allData = {
+                전체: [
+                    ...addType(acc, '숙소'),
+                    ...addType(nature, '지역'),
+                    ...addType(culture, '지역'),
+                    ...addType(leisure, '즐길거리'),
+                    ...addType(restaurant, '즐길거리'),
+                    ...addType(shopping, '즐길거리')
+                ],
+                지역: [...addType(nature, '지역'), ...addType(culture, '지역')],
+                즐길거리: [...addType(leisure, '즐길거리'), ...addType(restaurant, '즐길거리'), ...addType(shopping, '즐길거리')],
+                숙소: addType(acc, '숙소')
+            };
+            
+            renderResults();
+            updatePagination();
+            
+            return true;
+        }
+
+        return false;
+    }
+
+    function getFilteredResults() {
+        let list = allData[currentType] || [];
+        if (searchKeyword && searchKeyword !== '관광지') {
+            const k = searchKeyword.toLowerCase();
+            list = list.filter(item =>
+                (item.name || '').toLowerCase().includes(k) ||
+                (item.address || '').toLowerCase().includes(k)
+            );
+        }
+        return list;
+    }
+
+    function renderResults() {
+        const filtered = getFilteredResults();
+        const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+        if (currentPage > totalPages) currentPage = totalPages || 1;
+        if (currentPage < 1) currentPage = 1;
+
+        const start = (currentPage - 1) * itemsPerPage;
+        const pageData = filtered.slice(start, start + itemsPerPage);
+
+        if (!resultsGrid) return;
+
+        const hasSearchKeyword = searchKeyword && searchKeyword !== '관광지';
+
+        if (pageData.length === 0) {
+            const msg = hasSearchKeyword
+                ? '검색 결과가 없습니다.'
+                : '등록된 관광지가 없습니다.';
+            resultsGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">${msg}</div>`;
+            return;
+        }
+
+        const idStr = (id) => (id == null ? '' : String(id));
+        const isSaved = (id) => savedItems.some(s => idStr(s) === idStr(id));
+
+        resultsGrid.innerHTML = pageData.map(item => {
+            const sid = idStr(item.id);
+            const saved = isSaved(item.id);
+            return `
+                <div class="result-card">
+                    <div class="card-image">
+                        <img src="${item.image || ''}" alt="${(item.name || '').replace(/"/g, '&quot;')}" onerror="this.style.display='none'; this.parentElement.innerHTML='관광지 이미지';">
+                        <button class="save-btn ${saved ? 'saved' : ''}" data-id="${sid.replace(/"/g, '&quot;')}" type="button">
+                            <i class="fas fa-plus"></i>
+                            <span>${saved ? '담아둠' : '담아두기'}</span>
+                        </button>
+                    </div>
+                    <div class="card-info">
+                        <h3>${(item.name || '').replace(/</g, '&lt;')}</h3>
+                        <p>${(item.address || '').replace(/</g, '&lt;')}</p>
+                        <p>${(item.contact || '').replace(/</g, '&lt;')}</p>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        resultsGrid.querySelectorAll('.save-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-id');
+                if (id == null) return;
+                const idx = savedItems.findIndex(s => idStr(s) === id);
+                if (idx > -1) savedItems.splice(idx, 1);
+                else savedItems.push(id);
+                localStorage.setItem('savedItems', JSON.stringify(savedItems));
                 renderResults();
                 updatePagination();
             });
         });
     }
 
-    // 결과 렌더링
-    function renderResults() {
-        // 타입 필터링 (전체, 지역, 즐길거리, 숙소)
-        let filteredResults = sampleResults;
-        if (currentType !== "전체") {
-            filteredResults = filteredResults.filter(item => item.type === currentType);
-        }
-
-        // 검색어 필터링
-        if (searchKeyword && searchKeyword !== '관광지') {
-            filteredResults = filteredResults.filter(item => 
-                item.name.includes(searchKeyword) || 
-                item.address.includes(searchKeyword)
-            );
-        }
-
-        // 페이지네이션
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const paginatedResults = filteredResults.slice(startIndex, endIndex);
-
-        // 결과 그리드 렌더링
-        if (resultsGrid) {
-            if (paginatedResults.length === 0) {
-                resultsGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">검색 결과가 없습니다.</div>';
-            } else {
-                resultsGrid.innerHTML = paginatedResults.map(item => `
-                    <div class="result-card">
-                        <div class="card-image">
-                            <img src="${item.image}" alt="${item.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='관광지 이미지';">
-                            <button class="save-btn ${savedItems.includes(item.id) ? 'saved' : ''}" 
-                                    data-id="${item.id}"
-                                    onclick="toggleSave(${item.id})">
-                                <i class="fas fa-plus"></i>
-                                <span>${savedItems.includes(item.id) ? '담아둠' : '담아두기'}</span>
-                            </button>
-                        </div>
-                        <div class="card-info">
-                            <h3>${item.name}</h3>
-                            <p>${item.address}</p>
-                            <p>${item.phone}</p>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-    }
-
-    // 페이지네이션 업데이트
     function updatePagination() {
-        // 타입 필터링
-        let filteredResults = sampleResults;
-        if (currentType !== "전체") {
-            filteredResults = filteredResults.filter(item => item.type === currentType);
-        }
+        const filtered = getFilteredResults();
+        const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
 
-        // 검색어 필터링
-        if (searchKeyword && searchKeyword !== '관광지') {
-            filteredResults = filteredResults.filter(item => 
-                item.name.includes(searchKeyword) || 
-                item.address.includes(searchKeyword)
-            );
+        if (pageInput) {
+            pageInput.value = currentPage;
+            pageInput.max = totalPages;
         }
-
-        const totalPages = Math.ceil(filteredResults.length / itemsPerPage);
+        if (pageTotal) {
+            pageTotal.textContent = `/ ${totalPages} 페이지`;
+        }
+        if (prevPageBtn) prevPageBtn.disabled = currentPage <= 1;
         
-        if (currentPageSpan) {
-            currentPageSpan.textContent = currentPage;
-        }
-
-        if (prevPageBtn) {
-            prevPageBtn.disabled = currentPage === 1;
-        }
-
+        // 다음 버튼: 마지막 페이지이거나 더 이상 로드할 데이터가 없으면 비활성화
+        const hasMoreData = hasMoreAccommodations || hasMoreTourItems;
         if (nextPageBtn) {
-            nextPageBtn.disabled = currentPage >= totalPages || totalPages === 0;
+            nextPageBtn.disabled = currentPage >= totalPages && !hasMoreData;
         }
     }
 
-    // 담아두기 토글 함수 (전역으로 노출)
-    window.toggleSave = function(itemId) {
-        const index = savedItems.indexOf(itemId);
-        if (index > -1) {
-            savedItems.splice(index, 1);
-        } else {
-            savedItems.push(itemId);
-        }
-        localStorage.setItem('savedItems', JSON.stringify(savedItems));
-        renderResults();
-    };
+    // ===== 페이지 입력 이벤트 =====
+    if (pageInput) {
+        pageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                goToPage();
+            }
+        });
+        
+        pageInput.addEventListener('blur', () => {
+            goToPage();
+        });
+    }
 
-    // 페이지네이션 버튼 이벤트
+    // ===== 특정 페이지로 이동 =====
+    function goToPage() {
+        if (!pageInput) return;
+        
+        const filtered = getFilteredResults();
+        const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+        
+        let targetPage = parseInt(pageInput.value);
+        
+        // 유효성 검사
+        if (isNaN(targetPage) || targetPage < 1) {
+            targetPage = 1;
+        } else if (targetPage > totalPages) {
+            targetPage = totalPages;
+        }
+        
+        // 페이지가 변경되었을 때만 이동
+        if (targetPage !== currentPage) {
+            currentPage = targetPage;
+            renderResults();
+            updatePagination();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            // 같은 페이지면 입력값만 업데이트
+            pageInput.value = currentPage;
+        }
+    }
+
+    if (searchTabs.length > 0) {
+        searchTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                searchTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentType = tab.innerText;
+                currentPage = 1;
+                renderResults();
+                updatePagination();
+            });
+        });
+    }
+
     if (prevPageBtn) {
         prevPageBtn.addEventListener('click', () => {
             if (currentPage > 1) {
@@ -275,22 +477,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (nextPageBtn) {
-        nextPageBtn.addEventListener('click', () => {
-            // 타입 필터링
-            let filteredResults = sampleResults;
-            if (currentType !== "전체") {
-                filteredResults = filteredResults.filter(item => item.type === currentType);
+        nextPageBtn.addEventListener('click', async () => {
+            const filtered = getFilteredResults();
+            const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+            
+            // 현재 페이지가 마지막 페이지이고, 더 로드할 데이터가 있으면 자동으로 로드
+            if (currentPage >= totalPages) {
+                const hasMoreData = hasMoreAccommodations || hasMoreTourItems;
+                if (hasMoreData) {
+                    // 로딩 표시
+                    nextPageBtn.disabled = true;
+                    const originalText = nextPageBtn.textContent;
+                    nextPageBtn.textContent = '로딩 중...';
+                    
+                    // 추가 데이터 로드
+                    const loaded = await loadMoreData();
+                    
+                    if (loaded) {
+                        // 데이터 로드 후 다시 렌더링
+                        renderResults();
+                        updatePagination();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        // 더 이상 데이터가 없으면 버튼 비활성화
+                        nextPageBtn.disabled = true;
+                    }
+                    nextPageBtn.textContent = originalText;
+                    return;
+                }
             }
             
-            // 검색어 필터링
-            if (searchKeyword && searchKeyword !== '관광지') {
-                filteredResults = filteredResults.filter(item => 
-                    item.name.includes(searchKeyword) || 
-                    item.address.includes(searchKeyword)
-                );
-            }
-            const totalPages = Math.ceil(filteredResults.length / itemsPerPage);
-            
+            // 일반적인 다음 페이지 이동
             if (currentPage < totalPages) {
                 currentPage++;
                 renderResults();
@@ -300,7 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 초기 렌더링
+    await loadDataFromFirebase();
     renderResults();
     updatePagination();
 });

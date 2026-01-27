@@ -43,8 +43,8 @@ body {
 
 /* 섹션 공통 */
 .review-section {
-    /* background: #ffffff; */
     background: var(--beige-bg);
+    border: var(--border-gray);
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -116,7 +116,7 @@ body {
 
 .stars {
     font-size: 28px;
-    color: #ddd;
+    color: #ccc;
     display: flex;
     gap: 5px;
     cursor: pointer;
@@ -136,7 +136,7 @@ body {
 
 .type-tag {
     padding: 8px 16px;
-    background-color: #f8f9fa;
+    background-color: #fcfcfc;
     border: 1px solid #dee2e6;
     border-radius: 20px;
     font-size: 14px;
@@ -160,19 +160,24 @@ body {
 
 /* 3. 리뷰 작성 영역 */
 .textarea-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     border: 1px solid #dee2e6;
-    border-radius: 4px;
+    border-radius: 3px;
+    
 }
 
 textarea {
     width: 100%;
-    height: 150px;
+    height: 140px;
     padding: 15px;
     border: none;
     resize: none;
     font-family: inherit;
     font-size: 15px;
     outline: none;
+    margin-bottom: 0px;
 }
 
 .char-count {
@@ -182,12 +187,13 @@ textarea {
     color: var(--secondary-text);
     background-color: #fafafa;
     border-top: 1px solid #eee;
+    margin-top: 0px;
 }
 
 /* 기본 상태 */
 #current-count {
     font-weight: bold;
-    transition: color 0.3s ease;
+    transition: color 0.2s ease;
 }
 
 /* 30자 미만일 때 적용될 클래스 */
@@ -309,7 +315,7 @@ textarea {
     width: 100%;
     max-width: 300px;
     padding: 15px;
-    background-color: #ffffff;
+    background-color: var(--bg-color);
     color: var(--text-color);
     border: 1px solid;
     border-radius: 4px;

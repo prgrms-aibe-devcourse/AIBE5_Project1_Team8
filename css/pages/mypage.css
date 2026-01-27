@@ -18,9 +18,10 @@
     width: 100%;
     padding: 24px 0;
     border-radius: 20px;
-    background: rgba(17, 24, 39, 0.3);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    color: #fff;
+    background: var(--beige-bg);
+    border: var(--border-gray);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    color: var(--primary-text);
     text-align: center;
     font-size: 26px;
     font-weight: 300;
@@ -34,9 +35,10 @@
    ========================= */
 .card {
     background: var(--beige-bg);
+    border: var(--border-gray);
     border-radius: 15px;
     padding: 30px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .section-title {

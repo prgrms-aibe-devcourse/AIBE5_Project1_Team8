@@ -68,7 +68,10 @@
       <!-- Pagination -->
       <div class="pagination" id="pagination">
         <button class="page-btn prev" id="prevBtn">&lt;</button>
-        <span class="page-info" id="pageInfo">페이지</span>
+        <div class="page-info-container">
+          <input type="number" class="page-input" id="pageInput" min="1" value="1">
+          <span class="page-total" id="pageTotal">/ 1 페이지</span>
+        </div>
         <button class="page-btn next" id="nextBtn">&gt;</button>
       </div>
     </div>
