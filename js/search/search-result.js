@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const resultsGrid = document.getElementById('searchResultsGrid');
     const prevPageBtn = document.getElementById('prevPageBtn');
     const nextPageBtn = document.getElementById('nextPageBtn');
-    const currentPageSpan = document.getElementById('currentPage');
+    const pageInput = document.getElementById('pageInput');
+    const pageTotal = document.getElementById('pageTotal');
     const searchInput = document.getElementById('keyword');
     const searchTabs = document.querySelectorAll('.tab');
 
@@ -79,7 +80,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function loadDataFromFirebase() {
         try {
+            console.log('Firebase 데이터 로드 시작...');
             const { db } = await import('../common/firebase-config.js');
+            console.log('Firebase DB 연결 성공:', db ? 'OK' : 'FAILED');
+            
             const { collection, query, getDocs, limit, startAfter, orderBy } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
             // 초기화 (첫 로드 시에만)
@@ -97,11 +101,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             // accommodations 64개씩 가져오기
             if (hasMoreAccommodations) {
                 try {
-                    let accQuery = query(
-                        collection(db, 'accommodations'),
-                        orderBy('__name__'),
-                        limit(BATCH_SIZE)
-                    );
+                    let accQuery;
                     
                     if (lastAccommodationDoc) {
                         accQuery = query(
@@ -110,9 +110,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                             startAfter(lastAccommodationDoc),
                             limit(BATCH_SIZE)
                         );
+                    } else {
+                        // 첫 로드: orderBy 없이 limit만 사용
+                        accQuery = query(
+                            collection(db, 'accommodations'),
+                            limit(BATCH_SIZE)
+                        );
                     }
                     
+                    console.log('accommodations 쿼리 실행 중...');
                     const snap = await getDocs(accQuery);
+                    console.log(`accommodations 스냅샷: ${snap.size}개 문서`);
                     
                     if (snap.empty) {
                         hasMoreAccommodations = false;
@@ -126,21 +134,43 @@ document.addEventListener('DOMContentLoaded', async () => {
                         if (snap.size < BATCH_SIZE) {
                             hasMoreAccommodations = false;
                         }
+                        console.log(`✅ Accommodations 로드 완료: ${acc.length}개`);
                     }
                 } catch (e) { 
-                    console.warn('accommodations 로드 실패:', e);
+                    console.error('❌ accommodations 로드 실패:', e);
+                    console.error('에러 상세:', e.message, e.code);
                     hasMoreAccommodations = false;
+                    
+                    // orderBy 에러인 경우 재시도
+                    if (e.code === 'failed-precondition' || e.message.includes('index')) {
+                        try {
+                            const accQuery = query(
+                                collection(db, 'accommodations'),
+                                limit(BATCH_SIZE)
+                            );
+                            const snap = await getDocs(accQuery);
+                            if (!snap.empty) {
+                                snap.forEach(doc => {
+                                    const d = { id: doc.id, ...doc.data() };
+                                    acc.push(formatFirebaseData(d, 'accommodation'));
+                                    lastAccommodationDoc = doc;
+                                });
+                                console.log(`✅ Accommodations 재시도 성공: ${acc.length}개`);
+                                if (snap.size < BATCH_SIZE) {
+                                    hasMoreAccommodations = false;
+                                }
+                            }
+                        } catch (retryError) {
+                            console.error('재시도도 실패:', retryError);
+                        }
+                    }
                 }
             }
 
             // tour_items 64개씩 가져오기
             if (hasMoreTourItems) {
                 try {
-                    let tourQuery = query(
-                        collection(db, 'tour_items'),
-                        orderBy('__name__'),
-                        limit(BATCH_SIZE)
-                    );
+                    let tourQuery;
                     
                     if (lastTourItemDoc) {
                         tourQuery = query(
@@ -149,9 +179,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                             startAfter(lastTourItemDoc),
                             limit(BATCH_SIZE)
                         );
+                    } else {
+                        // 첫 로드: orderBy 없이 limit만 사용
+                        tourQuery = query(
+                            collection(db, 'tour_items'),
+                            limit(BATCH_SIZE)
+                        );
                     }
                     
+                    console.log('tour_items 쿼리 실행 중...');
                     const snap = await getDocs(tourQuery);
+                    console.log(`tour_items 스냅샷: ${snap.size}개 문서`);
                     
                     if (snap.empty) {
                         hasMoreTourItems = false;
@@ -172,10 +210,43 @@ document.addEventListener('DOMContentLoaded', async () => {
                         if (snap.size < BATCH_SIZE) {
                             hasMoreTourItems = false;
                         }
+                        console.log(`✅ Tour items 로드 완료: ${culture.length + restaurant.length + nature.length + leisure.length + shopping.length}개`);
                     }
                 } catch (e) { 
-                    console.warn('tour_items 로드 실패:', e);
+                    console.error('❌ tour_items 로드 실패:', e);
+                    console.error('에러 상세:', e.message, e.code);
                     hasMoreTourItems = false;
+                    
+                    // orderBy 에러인 경우 재시도
+                    if (e.code === 'failed-precondition' || e.message.includes('index')) {
+                        try {
+                            const tourQuery = query(
+                                collection(db, 'tour_items'),
+                                limit(BATCH_SIZE)
+                            );
+                            const snap = await getDocs(tourQuery);
+                            if (!snap.empty) {
+                                snap.forEach(doc => {
+                                    const d = { id: doc.id, ...doc.data() };
+                                    const cat = d.category || inferCategoryFromData(d);
+                                    const fd = formatFirebaseData(d, cat);
+                                    if (cat === 'culture') culture.push(fd);
+                                    else if (cat === 'restaurant') restaurant.push(fd);
+                                    else if (cat === 'nature') nature.push(fd);
+                                    else if (cat === 'leisure') leisure.push(fd);
+                                    else if (cat === 'shopping') shopping.push(fd);
+                                    else culture.push(fd);
+                                    lastTourItemDoc = doc;
+                                });
+                                console.log(`✅ Tour items 재시도 성공`);
+                                if (snap.size < BATCH_SIZE) {
+                                    hasMoreTourItems = false;
+                                }
+                            }
+                        } catch (retryError) {
+                            console.error('재시도도 실패:', retryError);
+                        }
+                    }
                 }
             }
 
@@ -194,8 +265,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 즐길거리: [...addType(leisure, '즐길거리'), ...addType(restaurant, '즐길거리'), ...addType(shopping, '즐길거리')],
                 숙소: addType(acc, '숙소')
             };
+            console.log('✅ Firebase 데이터 로드 완료');
         } catch (e) {
-            console.error('Firebase 검색 데이터 로드 실패:', e);
+            console.error('❌ Firebase 검색 데이터 로드 실패:', e);
+            console.error('에러 상세:', e.message, e.stack);
         }
     }
 
@@ -321,19 +394,61 @@ document.addEventListener('DOMContentLoaded', async () => {
         const filtered = getFilteredResults();
         const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
 
-        if (currentPageSpan) currentPageSpan.textContent = currentPage;
+        if (pageInput) {
+            pageInput.value = currentPage;
+            pageInput.max = totalPages;
+        }
+        if (pageTotal) {
+            pageTotal.textContent = `/ ${totalPages} 페이지`;
+        }
         if (prevPageBtn) prevPageBtn.disabled = currentPage <= 1;
-        if (nextPageBtn) nextPageBtn.disabled = currentPage >= totalPages || totalPages === 0;
         
-        // 더 보기 버튼 표시/숨김
-        const loadMoreBtn = document.getElementById('loadMoreBtn');
-        if (loadMoreBtn) {
-            if (hasMoreAccommodations || hasMoreTourItems) {
-                loadMoreBtn.style.display = 'block';
-                loadMoreBtn.disabled = false;
-            } else {
-                loadMoreBtn.style.display = 'none';
+        // 다음 버튼: 마지막 페이지이거나 더 이상 로드할 데이터가 없으면 비활성화
+        const hasMoreData = hasMoreAccommodations || hasMoreTourItems;
+        if (nextPageBtn) {
+            nextPageBtn.disabled = currentPage >= totalPages && !hasMoreData;
+        }
+    }
+
+    // ===== 페이지 입력 이벤트 =====
+    if (pageInput) {
+        pageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                goToPage();
             }
+        });
+        
+        pageInput.addEventListener('blur', () => {
+            goToPage();
+        });
+    }
+
+    // ===== 특정 페이지로 이동 =====
+    function goToPage() {
+        if (!pageInput) return;
+        
+        const filtered = getFilteredResults();
+        const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+        
+        let targetPage = parseInt(pageInput.value);
+        
+        // 유효성 검사
+        if (isNaN(targetPage) || targetPage < 1) {
+            targetPage = 1;
+        } else if (targetPage > totalPages) {
+            targetPage = totalPages;
+        }
+        
+        // 페이지가 변경되었을 때만 이동
+        if (targetPage !== currentPage) {
+            currentPage = targetPage;
+            renderResults();
+            updatePagination();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            // 같은 페이지면 입력값만 업데이트
+            pageInput.value = currentPage;
         }
     }
 
@@ -362,33 +477,42 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (nextPageBtn) {
-        nextPageBtn.addEventListener('click', () => {
+        nextPageBtn.addEventListener('click', async () => {
             const filtered = getFilteredResults();
             const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+            
+            // 현재 페이지가 마지막 페이지이고, 더 로드할 데이터가 있으면 자동으로 로드
+            if (currentPage >= totalPages) {
+                const hasMoreData = hasMoreAccommodations || hasMoreTourItems;
+                if (hasMoreData) {
+                    // 로딩 표시
+                    nextPageBtn.disabled = true;
+                    const originalText = nextPageBtn.textContent;
+                    nextPageBtn.textContent = '로딩 중...';
+                    
+                    // 추가 데이터 로드
+                    const loaded = await loadMoreData();
+                    
+                    if (loaded) {
+                        // 데이터 로드 후 다시 렌더링
+                        renderResults();
+                        updatePagination();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        // 더 이상 데이터가 없으면 버튼 비활성화
+                        nextPageBtn.disabled = true;
+                    }
+                    nextPageBtn.textContent = originalText;
+                    return;
+                }
+            }
+            
+            // 일반적인 다음 페이지 이동
             if (currentPage < totalPages) {
                 currentPage++;
                 renderResults();
                 updatePagination();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        });
-    }
-
-    // 더 보기 버튼 이벤트
-    const loadMoreBtn = document.getElementById('loadMoreBtn');
-    if (loadMoreBtn) {
-        loadMoreBtn.addEventListener('click', async () => {
-            loadMoreBtn.disabled = true;
-            loadMoreBtn.textContent = '로딩 중...';
-            
-            const loaded = await loadMoreData();
-            
-            if (loaded) {
-                loadMoreBtn.textContent = '더 보기';
-                window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-            } else {
-                loadMoreBtn.textContent = '더 이상 없음';
-                loadMoreBtn.disabled = true;
             }
         });
     }
