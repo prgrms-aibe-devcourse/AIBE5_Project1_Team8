@@ -1,386 +1,226 @@
-// hotel-detail.js
-// 호텔 상세 페이지 로직
-
 import { openBookingPanel } from "./hotel-booking.js";
 
-// ===============================
-// 1. URL 파라미터 읽기
-// ===============================
-const params = new URLSearchParams(window.location.search);
-const hotelId = parseInt(params.get("id"), 10);
-const region = params.get("region");
-
-// 유효성 검사
-if (!hotelId || !region) {
-  alert("잘못된 접근입니다.");
-  location.href = "../accommodation/accommodation.html";
-}
-
-// ===============================
-// 2. hotel-data.js에서 호텔 찾기
-// ===============================
-const regionHotels = window.allHotelData?.[region];
-if (!regionHotels) {
-  alert("존재하지 않는 지역입니다.");
-  location.href = "../accommodation/accommodation.html";
-}
-
-const hotel = regionHotels.find(h => h.id === hotelId);
-if (!hotel) {
-  alert("해당 호텔 정보를 찾을 수 없습니다.");
-  location.href = "../accommodation/accommodation.html";
-}
-
-// ===============================
-// 3. 호텔 상세 정보 (id 기준)
-// ===============================
-const hotelDetailData = {
-  // 서울
-  1001: {
-    desc: "서울 도심과 한강을 동시에 조망할 수 있는 럭셔리 호텔입니다. 남산의 푸른 자연과 서울의 스카이라인을 한눈에 담을 수 있으며, 세계적인 수준의 서비스와 시설을 갖추고 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 350000
-  },
-  1002: {
-    desc: "명동 중심에 위치한 비즈니스·관광 최적의 호텔입니다. 쇼핑과 관광의 중심지에서 편리한 접근성을 자랑하며, 다양한 부대시설과 함께 최고의 휴식을 제공합니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 280000
-  },
-  1003: {
-    desc: "대한민국을 대표하는 5성급 호텔로 최고급 서비스를 제공합니다. 1979년 개관 이래 한국 최고의 호텔로서의 명성을 이어오고 있으며, 세계 정상급 VIP들이 선호하는 호텔입니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 400000
-  },
-  1004: {
-    desc: "동대문 쇼핑 중심지에 위치한 럭셔리 호텔입니다. 동대문디자인플라자(DDP)와 인접하여 쇼핑과 문화를 동시에 즐길 수 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 320000
-  },
-  1005: {
-    desc: "강남 테헤란로에 위치한 부티크 럭셔리 호텔입니다. 현대적인 디자인과 프라이빗한 서비스로 비즈니스 여행객에게 인기가 높습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 380000
-  },
-  1006: {
-    desc: "강남 코엑스 인근에 위치한 비즈니스 호텔입니다. 합리적인 가격에 편안한 숙박을 제공하며, 주요 비즈니스 지구와의 접근성이 뛰어납니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 180000
-  },
-  // 부산
-  2001: {
-    desc: "마린시티의 오션뷰를 자랑하는 부산 최고급 호텔입니다. 광안대교와 해운대 바다를 한눈에 담을 수 있는 파노라마 뷰가 압권입니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 350000
-  },
-  2002: {
-    desc: "해운대 해변 바로 앞에 위치한 전통 있는 특급 호텔입니다. 아침에 일어나면 창밖으로 펼쳐지는 해운대 바다가 여행의 피로를 씻어줍니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 280000
-  },
-  2003: {
-    desc: "부산 최고층 랜드마크 호텔로, 도시와 바다의 환상적인 조화를 경험할 수 있습니다. 인피니티풀에서 바라보는 일몰은 잊지 못할 추억이 됩니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 450000
-  },
-  2004: {
-    desc: "해운대 해변에서 도보 1분 거리에 위치한 호텔입니다. 여름 해수욕과 겨울 바다 산책 모두 즐기기 좋은 최적의 위치입니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 200000
-  },
-  2005: {
-    desc: "부산의 대표적인 복합 리조트 호텔입니다. 카지노, 스파, 다양한 레스토랑이 한 곳에 모여 있어 호텔 안에서 모든 것을 즐길 수 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 300000
-  },
-  2006: {
-    desc: "동래 금강공원 인근의 온천 호텔입니다. 천연 온천수로 여행의 피로를 풀 수 있으며, 전통과 현대가 어우러진 분위기를 자랑합니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 150000
-  },
-  // 제주
-  3001: {
-    desc: "중문 관광단지 내 위치한 가족 친화형 리조트 호텔입니다. 다양한 테마파크와 수영장으로 가족 여행객에게 최고의 선택입니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 320000
-  },
-  3002: {
-    desc: "제주 중문에 위치한 명품 호텔로, 프라이빗 비치와 최고급 골프 코스를 보유하고 있습니다. 럭셔리한 휴양을 원하는 분들께 추천합니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 380000
-  },
-  3003: {
-    desc: "표선면 해안가에 위치한 프리미엄 리조트입니다. 아이들을 위한 키즈클럽과 다양한 액티비티로 가족 여행객에게 인기가 높습니다.",
-    parking: true, pet: true, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 350000
-  },
-  3004: {
-    desc: "제주 도심 최대 규모의 럭셔리 호텔로 인피니티풀이 유명합니다. 한라산과 바다를 동시에 조망할 수 있는 최고의 전망을 자랑합니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 400000
-  },
-  3005: {
-    desc: "제주시 탑동에 위치한 비즈니스 호텔입니다. 제주 국제공항에서 가까워 접근성이 뛰어나며, 카지노와 다양한 부대시설을 갖추고 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 180000
-  },
-  3006: {
-    desc: "제주시 노연로에 위치한 감각적인 디자인 호텔입니다. 루프탑 수영장에서 제주의 하늘과 바다를 만끽할 수 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 220000
-  },
-  // 강릉
-  4001: {
-    desc: "경포해변 인근의 감각적인 오션뷰 호텔입니다. 동해의 푸른 바다와 일출을 객실에서 직접 감상할 수 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 280000
-  },
-  4002: {
-    desc: "경포해변 바로 앞에 위치한 호텔입니다. 해변까지 도보 1분으로, 여름 해수욕을 즐기기에 최적의 위치입니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 250000
-  },
-  4003: {
-    desc: "강릉의 대표 럭셔리 호텔로, 오션뷰와 골프장을 함께 즐길 수 있습니다. 가족 및 단체 여행객 모두에게 추천합니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 300000
-  },
-  4004: {
-    desc: "경포 관광지 인근의 가성비 호텔입니다. 깔끔한 시설과 친절한 서비스로 편안한 여행을 보장합니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 180000
-  },
-  4005: {
-    desc: "프라이빗 비치와 인피니티풀을 갖춘 프리미엄 리조트입니다. 동해안 최고의 휴양지로 손꼽히며, 특별한 휴식을 원하는 분께 추천합니다.",
-    parking: true, pet: true, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 350000
-  },
-  // 경주
-  5001: {
-    desc: "보문단지 호수 전망을 자랑하는 프리미엄 호텔입니다. 천년 고도 경주의 역사와 자연을 동시에 느낄 수 있는 최적의 숙소입니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 250000
-  },
-  5002: {
-    desc: "보문관광단지 내에 위치한 전통 있는 호텔입니다. 경주의 주요 관광지와 가까워 관광과 휴식을 동시에 즐길 수 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 200000
-  },
-  5003: {
-    desc: "온천과 수영장을 갖춘 휴양 호텔입니다. 경주 여행 후 온천에서 피로를 풀며 힐링하기 좋습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 180000
-  },
-  5004: {
-    desc: "가족 단위 여행객에게 인기 있는 호텔입니다. 넓은 객실과 다양한 부대시설로 편안한 가족 여행을 보장합니다.",
-    parking: true, pet: true, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 220000
-  },
-  5005: {
-    desc: "워터파크와 스파를 갖춘 복합 리조트입니다. 경주 관광과 함께 물놀이와 휴식을 한 번에 즐길 수 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 280000
-  },
-  // 여수
-  6001: {
-    desc: "여수 밤바다를 한눈에 담을 수 있는 대표 호텔입니다. 오동도와 여수 앞바다의 아름다운 야경이 로맨틱한 분위기를 연출합니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 220000
-  },
-  6002: {
-    desc: "여수 소호동에 위치한 프리미엄 리조트입니다. 인피니티풀에서 바라보는 남해의 풍경이 일품입니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 300000
-  },
-  6003: {
-    desc: "오동도 인근에 위치한 호텔로, 여수의 주요 관광지 접근성이 뛰어납니다. 깔끔한 시설과 친절한 서비스가 강점입니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 250000
-  },
-  6004: {
-    desc: "프라이빗 비치를 보유한 부티크 호텔입니다. 조용하고 한적한 분위기에서 특별한 휴식을 즐길 수 있습니다.",
-    parking: true, pet: true, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 280000
-  },
-  6005: {
-    desc: "돌산도에 위치한 마리나 호텔입니다. 요트 투어와 함께 여수의 바다를 색다르게 즐길 수 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 200000
-  },
-  // 전주
-  7001: {
-    desc: "전주 한옥마을 인근에 위치한 현대식 호텔입니다. 전통과 현대의 조화로운 경험을 선사합니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 180000
-  },
-  7002: {
-    desc: "전주 한옥마을 내 위치한 전통 한옥 스테이입니다. 온돌방에서 한국 전통의 정취를 느끼며 특별한 밤을 보낼 수 있습니다.",
-    parking: false, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 150000
-  },
-  7003: {
-    desc: "전주 객사 근처에 위치한 클래식한 분위기의 호텔입니다. 전주 구도심 탐방에 최적의 위치입니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 160000
-  },
-  7004: {
-    desc: "전주 시내 중심가에 위치한 비즈니스 호텔입니다. 합리적인 가격과 편리한 교통으로 인기가 높습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 140000
-  },
-  7005: {
-    desc: "한옥마을 내 위치한 전통 고택입니다. 아름다운 정원과 다도 체험으로 한국 전통문화를 깊이 경험할 수 있습니다.",
-    parking: false, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 180000
-  },
-  // 속초
-  8001: {
-    desc: "설악산 전망을 자랑하는 프리미엄 호텔입니다. 사계절 설악산의 아름다움을 객실에서 감상할 수 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 280000
-  },
-  8002: {
-    desc: "속초 해변가에 위치한 오션뷰 호텔입니다. 동해의 일출과 함께하는 아침이 특별합니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 250000
-  },
-  8003: {
-    desc: "워터파크와 스파를 갖춘 가족 리조트입니다. 설악산 관광과 물놀이를 한 번에 즐길 수 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 300000
-  },
-  8004: {
-    desc: "설악산 국립공원 입구에 위치한 호텔입니다. 등산과 트레킹을 즐기는 여행객에게 최적의 베이스캠프입니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 220000
-  },
-  8005: {
-    desc: "골프와 스파를 즐길 수 있는 프리미엄 리조트입니다. 설악산과 동해를 동시에 만끽할 수 있는 최고의 휴양지입니다.",
-    parking: true, pet: true, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 350000
-  },
-  // 인천
-  9001: {
-    desc: "송도 국제도시에 위치한 럭셔리 호텔입니다. 현대적인 도시 경관과 함께 최고급 시설을 경험할 수 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 280000
-  },
-  9002: {
-    desc: "영종도에 위치한 복합 리조트입니다. 카지노, 스파, 테마파크 등 다양한 엔터테인먼트를 한 곳에서 즐길 수 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 350000
-  },
-  9003: {
-    desc: "인천공항 인근에 위치한 특급 호텔입니다. 공항 이용객에게 편리한 셔틀 서비스를 제공합니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 300000
-  },
-  9004: {
-    desc: "송도에 위치한 장기 투숙 가능한 레지던스 호텔입니다. 넓은 객실과 키친 시설로 편안한 장기 체류가 가능합니다.",
-    parking: true, pet: true, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 220000
-  },
-  9005: {
-    desc: "인천공항과 가까운 비즈니스 호텔입니다. 이른 비행기나 늦은 도착 시 편리하게 이용할 수 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 180000
-  },
-  // 대전
-  10001: {
-    desc: "대전 컨벤션센터에 인접한 비즈니스 호텔입니다. 전시회 및 컨퍼런스 참가객에게 최적의 위치입니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 200000
-  },
-  10002: {
-    desc: "대전 유성구에 위치한 시티 호텔입니다. 깔끔한 시설과 합리적인 가격으로 비즈니스 여행객에게 인기가 높습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 150000
-  },
-  10003: {
-    desc: "유성 온천지구에 위치한 온천 호텔입니다. 천연 온천수로 여행의 피로를 풀 수 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 180000
-  },
-  10004: {
-    desc: "유성구에 위치한 온천 호텔입니다. 가족 단위 여행객에게 인기 있는 곳으로, 온천과 사우나 시설이 잘 갖춰져 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
+// 숙소 데이터 (10개)
+const hotels = {
+  1: {
+    name: "서울 센트럴 호텔",
+    address: "서울특별시 중구 명동길 123",
+    contact: "02-1234-5678",
+    price: "1박 120,000원~",
+    desc: "서울 중심부에 위치한 비즈니스 및 관광객을 위한 최적의 숙소입니다. 명동과 남산타워가 도보 거리에 있어 관광에 편리하며, 깔끔한 객실과 친절한 서비스로 편안한 휴식을 제공합니다. 조식 뷔페, 피트니스 센터, 비즈니스 라운지 등 다양한 부대시설을 갖추고 있습니다.",
+    image: "https://via.placeholder.com/400x300/4A90E2/FFFFFF?text=Seoul+Hotel",
+    parking: true,
+    pet: false,
+    wifi: true,
+    noSmoking: true,
+    breakfast: true,
     basePrice: 120000
   },
-  10005: {
-    desc: "대전역 인근에 위치한 비즈니스 호텔입니다. KTX 이용객에게 편리한 접근성을 제공합니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 130000
-  },
-  // 대구
-  11001: {
-    desc: "대구 수성구에 위치한 복합 리조트입니다. 골프장, 수영장, 스파 등 다양한 시설을 갖추고 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
-    basePrice: 180000
-  },
-  11002: {
-    desc: "동성로 중심가에 위치한 비즈니스 호텔입니다. 쇼핑과 관광에 최적의 위치를 자랑합니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
+  2: {
+    name: "부산 오션뷰 호텔",
+    address: "부산광역시 해운대구 해운대로 456",
+    contact: "051-2345-6789",
+    price: "1박 150,000원~",
+    desc: "해운대 해수욕장이 한눈에 보이는 오션뷰 객실을 제공합니다. 바다를 바라보며 여유로운 시간을 보낼 수 있으며, 루프탑 수영장과 스파에서 특별한 경험을 즐길 수 있습니다. 신선한 해산물 레스토랑과 바가 있어 미식 여행도 함께 할 수 있습니다.",
+    image: "https://via.placeholder.com/400x300/20B2AA/FFFFFF?text=Busan+Hotel",
+    parking: true,
+    pet: true,
+    wifi: true,
+    noSmoking: true,
+    breakfast: true,
     basePrice: 150000
   },
-  11003: {
-    desc: "동대구역 인근에 위치한 호텔입니다. KTX 이용객에게 편리하며, 비즈니스 미팅에 적합한 시설을 갖추고 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 130000
-  },
-  11004: {
-    desc: "대구 수성구에 위치한 전통 있는 호텔입니다. 사우나와 레스토랑 등 편의시설이 잘 갖춰져 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 140000
-  },
-  11005: {
-    desc: "수성못 인근에 위치한 호텔입니다. 수성못의 아름다운 경치를 감상하며 산책하기 좋습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 160000
-  },
-  // 광주
-  12001: {
-    desc: "광주 상무지구에 위치한 인터내셔널 호텔입니다. 수영장, 피트니스 등 다양한 부대시설을 갖추고 있습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: true,
+  3: {
+    name: "제주 힐링 리조트",
+    address: "제주특별자치도 서귀포시 중문로 789",
+    contact: "064-3456-7890",
+    price: "1박 180,000원~",
+    desc: "제주 중문관광단지 내에 위치한 프리미엄 리조트입니다. 천혜의 자연경관을 배경으로 골프, 스파, 수영장 등 다양한 레저 시설을 갖추고 있습니다. 가족 여행객을 위한 키즈클럽과 프로그램이 마련되어 있어 온 가족이 즐거운 시간을 보낼 수 있습니다.",
+    image: "https://via.placeholder.com/400x300/32CD32/FFFFFF?text=Jeju+Resort",
+    parking: true,
+    pet: false,
+    wifi: true,
+    noSmoking: true,
+    breakfast: true,
     basePrice: 180000
   },
-  12002: {
-    desc: "상무공원 인근에 위치한 비즈니스 호텔입니다. 깔끔한 시설과 편리한 교통으로 비즈니스 여행객에게 인기가 높습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 150000
-  },
-  12003: {
-    desc: "충장로 번화가에 위치한 호텔입니다. 광주의 중심에서 쇼핑과 맛집 탐방을 즐기기 좋습니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 120000
-  },
-  12004: {
-    desc: "무등산 인근에 위치한 호텔입니다. 등산과 자연을 즐기는 여행객에게 추천합니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
-    basePrice: 140000
-  },
-  12005: {
-    desc: "광주 상무지구에 위치한 가성비 호텔입니다. 비즈니스 출장 및 관광 모두에 적합합니다.",
-    parking: true, pet: false, wifi: true, noSmoking: true, breakfast: false,
+  4: {
+    name: "강릉 비치 호텔",
+    address: "강원도 강릉시 경포로 101",
+    contact: "033-4567-8901",
+    price: "1박 110,000원~",
+    desc: "경포해변과 경포호수 사이에 위치한 해변 호텔입니다. 객실에서 바로 바다를 감상할 수 있으며, 안목해변 커피거리가 가까워 바다 카페 투어를 즐기기에 최적입니다. 서핑, 카약 등 해양 레포츠 프로그램도 운영하고 있습니다.",
+    image: "https://via.placeholder.com/400x300/4169E1/FFFFFF?text=Gangneung+Hotel",
+    parking: true,
+    pet: true,
+    wifi: true,
+    noSmoking: false,
+    breakfast: false,
     basePrice: 110000
+  },
+  5: {
+    name: "경주 헤리티지 호텔",
+    address: "경상북도 경주시 불국로 202",
+    contact: "054-5678-9012",
+    price: "1박 100,000원~",
+    desc: "천년 고도 경주의 역사와 함께하는 호텔입니다. 불국사, 석굴암 등 주요 유적지와 가까우며, 한옥 스타일의 인테리어로 전통의 멋을 느낄 수 있습니다. 저녁에는 첨성대와 대릉원의 야경 투어도 즐길 수 있습니다.",
+    image: "https://via.placeholder.com/400x300/8B4513/FFFFFF?text=Gyeongju+Hotel",
+    parking: true,
+    pet: false,
+    wifi: true,
+    noSmoking: true,
+    breakfast: true,
+    basePrice: 100000
+  },
+  6: {
+    name: "여수 마리나 호텔",
+    address: "전라남도 여수시 오동도로 303",
+    contact: "061-6789-0123",
+    price: "1박 130,000원~",
+    desc: "여수 밤바다의 낭만을 느낄 수 있는 마리나 호텔입니다. 돌산대교와 여수 밤바다의 아름다운 야경을 객실에서 감상할 수 있으며, 해상케이블카, 오동도 등 주요 관광지가 가깝습니다. 신선한 해산물 요리를 맛볼 수 있는 레스토랑도 운영됩니다.",
+    image: "https://via.placeholder.com/400x300/1E90FF/FFFFFF?text=Yeosu+Hotel",
+    parking: true,
+    pet: false,
+    wifi: true,
+    noSmoking: true,
+    breakfast: true,
+    basePrice: 130000
+  },
+  7: {
+    name: "전주 한옥 스테이",
+    address: "전라북도 전주시 완산구 한옥마을길 404",
+    contact: "063-7890-1234",
+    price: "1박 90,000원~",
+    desc: "전주 한옥마을 내에 위치한 전통 한옥 숙소입니다. 온돌방에서의 따뜻한 잠자리와 전통 다과 서비스를 제공합니다. 경기전, 전동성당 등 주요 명소가 도보 거리에 있으며, 전주 비빔밥과 한정식 맛집들이 즐비합니다.",
+    image: "https://via.placeholder.com/400x300/D2691E/FFFFFF?text=Jeonju+Hanok",
+    parking: false,
+    pet: false,
+    wifi: true,
+    noSmoking: true,
+    breakfast: true,
+    basePrice: 90000
+  },
+  8: {
+    name: "속초 씨사이드 호텔",
+    address: "강원도 속초시 청초호반로 505",
+    contact: "033-8901-2345",
+    price: "1박 120,000원~",
+    desc: "청초호와 동해바다가 만나는 곳에 위치한 호텔입니다. 설악산 국립공원이 가깝고, 속초 중앙시장과 아바이마을도 쉽게 방문할 수 있습니다. 일출 명소인 영금정이 가까워 새벽 일출 투어를 추천합니다.",
+    image: "https://via.placeholder.com/400x300/00CED1/FFFFFF?text=Sokcho+Hotel",
+    parking: true,
+    pet: true,
+    wifi: true,
+    noSmoking: true,
+    breakfast: false,
+    basePrice: 120000
+  },
+  9: {
+    name: "송도 센트럴 호텔",
+    address: "인천광역시 연수구 센트럴로 606",
+    contact: "032-9012-3456",
+    price: "1박 140,000원~",
+    desc: "인천 송도 국제도시에 위치한 현대적인 비즈니스 호텔입니다. 송도 센트럴파크와 인천대교 전망이 아름다우며, 컨벤션 센터와 가까워 비즈니스 여행객에게 최적입니다. 차이나타운, 월미도도 쉽게 방문할 수 있습니다.",
+    image: "https://via.placeholder.com/400x300/4682B4/FFFFFF?text=Songdo+Hotel",
+    parking: true,
+    pet: false,
+    wifi: true,
+    noSmoking: true,
+    breakfast: true,
+    basePrice: 140000
+  },
+  10: {
+    name: "대전 비즈니스 호텔",
+    address: "대전광역시 유성구 과학로 707",
+    contact: "042-0123-4567",
+    price: "1박 95,000원~",
+    desc: "대전 유성구 과학단지 인근에 위치한 비즈니스 호텔입니다. 유성온천이 가까워 온천욕을 즐길 수 있으며, 엑스포 과학공원과 계족산 황톳길도 추천 코스입니다. 합리적인 가격에 깔끔한 시설을 제공합니다.",
+    image: "https://via.placeholder.com/400x300/708090/FFFFFF?text=Daejeon+Hotel",
+    parking: true,
+    pet: false,
+    wifi: true,
+    noSmoking: true,
+    breakfast: false,
+    basePrice: 95000
   }
 };
 
-// 기본 상세 데이터 (데이터가 없는 호텔용)
-const defaultDetail = {
-  desc: "편안한 휴식과 최적의 위치를 제공하는 호텔입니다. 깨끗한 시설과 친절한 서비스로 여행의 피로를 씻어드립니다.",
-  parking: true,
-  pet: false,
-  wifi: true,
-  noSmoking: true,
-  breakfast: false,
-  basePrice: 150000
+// 리뷰 데이터
+const reviews = {
+  1: [
+    { id: 1, nickname: "여행러버", rating: 5, content: "명동과 가까워서 쇼핑하기 정말 좋았어요. 객실도 깨끗하고 직원분들도 친절했습니다. 조식 뷔페도 다양하게 준비되어 있어서 만족스러웠어요.", date: "2025-01-15", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Review+1" },
+    { id: 2, nickname: "비즈니스맨", rating: 4, content: "출장으로 자주 이용하는데 비즈니스 센터가 잘 되어있어서 편리합니다. 다만 주차장이 협소해서 별 하나 뺍니다.", date: "2025-01-10", image: null },
+    { id: 3, nickname: "가족여행", rating: 5, content: "아이들과 함께 왔는데 가족 객실이 넓어서 좋았어요. 남산타워 야경도 멋지게 보였습니다!", date: "2025-01-05", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Review+2" },
+    { id: 4, nickname: "커플투어", rating: 4, content: "연인과 함께 머물렀는데 분위기가 좋았어요. 명동까지 걸어서 10분 거리라 편했습니다.", date: "2024-12-28", image: null },
+    { id: 5, nickname: "혼자여행", rating: 5, content: "1인 여행자에게도 추천합니다. 가성비 좋고 위치도 좋아요.", date: "2024-12-20", image: null }
+  ],
+  2: [
+    { id: 1, nickname: "바다사랑", rating: 5, content: "객실에서 보이는 해운대 뷰가 정말 환상적이었어요! 아침에 일출 보면서 커피 마시는 게 최고였습니다.", date: "2025-01-18", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Ocean+View" },
+    { id: 2, nickname: "스파매니아", rating: 5, content: "루프탑 수영장과 스파 시설이 정말 훌륭해요. 숙박 가격에 비해 서비스가 뛰어납니다.", date: "2025-01-12", image: null },
+    { id: 3, nickname: "미식가", rating: 4, content: "호텔 내 해산물 레스토랑이 맛있어요. 다만 조금 비싼 편이에요.", date: "2025-01-08", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Restaurant" },
+    { id: 4, nickname: "웨딩투어", rating: 5, content: "신혼여행으로 왔는데 최고의 선택이었어요. 특별한 추억이 되었습니다.", date: "2024-12-30", image: null }
+  ],
+  3: [
+    { id: 1, nickname: "골프왕", rating: 5, content: "리조트 내 골프장이 정말 좋았습니다. 코스도 아름답고 시설 관리가 잘 되어있어요.", date: "2025-01-20", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Golf" },
+    { id: 2, nickname: "아이엄마", rating: 5, content: "키즈클럽 프로그램이 다양해서 아이들이 정말 좋아했어요. 가족 여행으로 강력 추천!", date: "2025-01-14", image: null },
+    { id: 3, nickname: "자연인", rating: 4, content: "제주 자연을 만끽할 수 있어서 좋았어요. 다만 관광지와 조금 떨어져 있어서 렌터카 필수입니다.", date: "2025-01-09", image: null },
+    { id: 4, nickname: "힐링족", rating: 5, content: "스파에서 받은 마사지가 정말 시원했어요. 힐링 여행으로 딱입니다.", date: "2025-01-02", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Spa" },
+    { id: 5, nickname: "사진작가", rating: 5, content: "리조트 전경이 정말 아름다워요. 사진 찍기 좋은 포토존이 많습니다.", date: "2024-12-25", image: null },
+    { id: 6, nickname: "부부여행", rating: 4, content: "조용하고 평화로운 분위기에서 휴식할 수 있었어요. 부부 여행으로 추천합니다.", date: "2024-12-18", image: null }
+  ],
+  4: [
+    { id: 1, nickname: "서핑러버", rating: 5, content: "서핑하기 딱 좋은 위치에요! 해변이 바로 앞이라 편했습니다.", date: "2025-01-19", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Surfing" },
+    { id: 2, nickname: "커피덕후", rating: 4, content: "안목해변 커피거리가 가까워서 매일 카페 투어했어요. 객실도 깨끗했습니다.", date: "2025-01-13", image: null },
+    { id: 3, nickname: "반려동물가족", rating: 5, content: "반려견과 함께 묵을 수 있어서 좋았어요. 해변 산책도 같이 할 수 있었습니다.", date: "2025-01-07", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Pet" }
+  ],
+  5: [
+    { id: 1, nickname: "역사덕후", rating: 5, content: "불국사, 석굴암 관광하기 정말 좋은 위치였어요. 호텔 인테리어도 전통적이라 분위기 있었습니다.", date: "2025-01-17", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Bulguksa" },
+    { id: 2, nickname: "야경투어", rating: 5, content: "첨성대 야경 투어 프로그램이 있어서 참여했는데 너무 좋았어요!", date: "2025-01-11", image: null },
+    { id: 3, nickname: "문화탐방", rating: 4, content: "경주 월드까지 무료 셔틀이 있어서 편리했어요. 조식도 맛있었습니다.", date: "2025-01-06", image: null }
+  ],
+  6: [
+    { id: 1, nickname: "야경마니아", rating: 5, content: "여수 밤바다 노래가 왜 나왔는지 알겠어요. 객실에서 보는 야경이 정말 예뻤습니다.", date: "2025-01-16", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Night+View" },
+    { id: 2, nickname: "케이블카팬", rating: 4, content: "해상케이블카 타러 갔다 왔는데 호텔에서 가까워서 좋았어요. 객실도 깨끗했습니다.", date: "2025-01-10", image: null },
+    { id: 3, nickname: "맛집탐방", rating: 5, content: "여수 맛집들이 가까워서 좋았어요. 갓김치와 게장 맛집 추천 받아서 잘 다녀왔습니다.", date: "2025-01-04", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Food" },
+    { id: 4, nickname: "로맨틱커플", rating: 5, content: "돌산대교 야경 보면서 로맨틱한 시간 보냈어요. 커플 여행으로 추천합니다.", date: "2024-12-29", image: null }
+  ],
+  7: [
+    { id: 1, nickname: "한옥매니아", rating: 5, content: "정말 예쁜 한옥에서 하룻밤 묵었어요. 온돌방이 따뜻하고 정겨웠습니다.", date: "2025-01-18", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Hanok" },
+    { id: 2, nickname: "전주비빔밥", rating: 5, content: "한옥마을 중심에 있어서 관광하기 편했어요. 비빔밥 맛집도 추천받았습니다.", date: "2025-01-12", image: null },
+    { id: 3, nickname: "전통체험", rating: 4, content: "한복 체험하고 사진 많이 찍었어요. 주차장이 없어서 조금 불편했지만 그래도 좋았어요.", date: "2025-01-06", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Hanbok" },
+    { id: 4, nickname: "다과타임", rating: 5, content: "저녁에 제공되는 전통 다과가 정말 맛있었어요. 분위기 최고!", date: "2024-12-31", image: null }
+  ],
+  8: [
+    { id: 1, nickname: "설악산등산", rating: 5, content: "설악산 등산 후 묵기 좋았어요. 피로가 확 풀렸습니다.", date: "2025-01-20", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Seoraksan" },
+    { id: 2, nickname: "일출투어", rating: 5, content: "영금정 일출 보러 새벽에 나갔는데 감동적이었어요. 호텔에서 도보로 가능해서 편했습니다.", date: "2025-01-14", image: null },
+    { id: 3, nickname: "시장투어", rating: 4, content: "중앙시장 닭강정이 맛있었어요! 호텔에서 가까워서 편하게 다녀왔습니다.", date: "2025-01-08", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Market" },
+    { id: 4, nickname: "펫프렌들리", rating: 5, content: "반려견과 함께 숙박할 수 있어서 좋았어요. 청초호 산책도 같이 했습니다.", date: "2025-01-02", image: null }
+  ],
+  9: [
+    { id: 1, nickname: "비즈니스", rating: 4, content: "컨벤션 참석차 왔는데 위치가 좋았어요. 시설도 현대적이고 깔끔합니다.", date: "2025-01-17", image: null },
+    { id: 2, nickname: "센트럴파크", rating: 5, content: "송도 센트럴파크 야경이 멋있어요. 산책하기 좋았습니다.", date: "2025-01-11", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Songdo+Park" },
+    { id: 3, nickname: "차이나타운", rating: 4, content: "인천 차이나타운까지 버스로 30분 정도 걸렸어요. 자장면 맛있게 먹고 왔습니다.", date: "2025-01-05", image: null },
+    { id: 4, nickname: "가족여행객", rating: 5, content: "가족들과 왔는데 조식이 다양해서 좋았어요. 아이들이 좋아했습니다.", date: "2024-12-29", image: null }
+  ],
+  10: [
+    { id: 1, nickname: "온천여행", rating: 5, content: "유성온천이 가까워서 온천욕 다녀왔어요. 피로가 확 풀렸습니다.", date: "2025-01-19", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Hot+Spring" },
+    { id: 2, nickname: "출장맨", rating: 4, content: "출장으로 왔는데 가격 대비 시설이 좋았어요. 위치도 편리합니다.", date: "2025-01-13", image: null },
+    { id: 3, nickname: "황톳길", rating: 5, content: "계족산 황톳길 맨발 걷기 체험했어요. 힐링됐습니다!", date: "2025-01-07", image: "https://via.placeholder.com/200x150/e0e0e0/666666?text=Trail" }
+  ]
 };
 
-// 상세 데이터 병합
-const detail = hotelDetailData[hotel.id] || defaultDetail;
+// URL에서 호텔 ID 가져오기
+const params = new URLSearchParams(window.location.search);
+const hotelId = params.get("id") || "1";
+const hotel = hotels[hotelId];
+const hotelReviews = reviews[hotelId] || [];
 
-// ===============================
-// 4. DOM 요소
-// ===============================
+// 페이지 유효성 검사
+if (!hotel) {
+  alert("존재하지 않는 숙소입니다.");
+  location.href = "hotel.html";
+}
+
+// DOM 요소
 const headerHotelName = document.getElementById("headerHotelName");
 const hotelImage = document.getElementById("hotelImage");
 const hotelName = document.getElementById("hotelName");
@@ -389,175 +229,170 @@ const hotelContact = document.getElementById("hotelContact");
 const hotelPrice = document.getElementById("hotelPrice");
 const hotelDesc = document.getElementById("hotelDesc");
 
-// 픽토그램
+const detailBtn = document.getElementById("detailBtn");
+const pictogramSection = document.getElementById("pictogramSection");
 const parkingInfo = document.getElementById("parkingInfo");
 const petInfo = document.getElementById("petInfo");
 const wifiInfo = document.getElementById("wifiInfo");
 const noSmokingInfo = document.getElementById("noSmokingInfo");
 const breakfastInfo = document.getElementById("breakfastInfo");
 
-// 버튼
 const bookingBtn = document.getElementById("bookingBtn");
-const addScheduleBtn = document.getElementById("addScheduleBtn");
-const detailBtn = document.getElementById("detailBtn");
+const bookingModal = document.getElementById("bookingModal");
 const modalHotelName = document.getElementById("modalHotelName");
+const cancelBtn = document.getElementById("cancelBtn");
+const confirmBtn = document.getElementById("confirmBtn");
 
-// 픽토그램 섹션
-const pictogramSection = document.getElementById("pictogramSection");
+const reviewList = document.getElementById("reviewList");
+const reviewCount = document.getElementById("reviewCount");
+const pagination = document.getElementById("pagination");
 
-// ===============================
-// 5. 호텔 정보 렌더링
-// ===============================
+// 숙소 정보 표시
 function renderHotelInfo() {
-  // 헤더 및 기본 정보
-  if (headerHotelName) headerHotelName.textContent = hotel.name;
-  if (hotelName) hotelName.textContent = hotel.name;
-  if (hotelAddress) hotelAddress.textContent = hotel.address;
-  if (hotelContact) hotelContact.textContent = hotel.contact;
-  if (hotelPrice) hotelPrice.textContent = hotel.price;
-  if (modalHotelName) modalHotelName.textContent = hotel.name;
-
-  // 이미지
-  if (hotelImage) {
-    hotelImage.src = `../../${hotel.image}`;
-    hotelImage.alt = hotel.name;
-    hotelImage.onerror = function() {
-      this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="320" height="280"%3E%3Crect fill="%23e0e0e0" width="320" height="280" rx="16"/%3E%3Ctext x="50%25" y="45%25" text-anchor="middle" dy=".3em" fill="%23999" font-family="sans-serif" font-size="18"%3E%EC%88%99%EC%86%8C%3C/text%3E%3Ctext x="50%25" y="55%25" text-anchor="middle" fill="%23999" font-family="sans-serif" font-size="18"%3E%EC%9D%B4%EB%AF%B8%EC%A7%80%3C/text%3E%3C/svg%3E';
-    };
-  }
-
-  // 설명
-  if (hotelDesc) hotelDesc.textContent = detail.desc;
-
-  // 픽토그램 상태 설정
-  setPictogram(parkingInfo, detail.parking, detail.parking ? "가능" : "불가");
-  setPictogram(petInfo, detail.pet, detail.pet ? "동반 가능" : "불가");
-  setPictogram(wifiInfo, detail.wifi, detail.wifi ? "무료" : "유료");
-  setPictogram(noSmokingInfo, detail.noSmoking, detail.noSmoking ? "금연" : "흡연 가능");
-  setPictogram(breakfastInfo, detail.breakfast, detail.breakfast ? "제공" : "미제공");
-
-  // 페이지 타이틀 업데이트
-  document.title = `${hotel.name} | TravelKorea`;
+  headerHotelName.textContent = hotel.name;
+  hotelImage.src = hotel.image;
+  hotelImage.alt = hotel.name;
+  hotelName.textContent = hotel.name;
+  hotelAddress.textContent = hotel.address;
+  hotelContact.textContent = hotel.contact;
+  hotelPrice.textContent = hotel.price;
+  hotelDesc.textContent = hotel.desc;
+  if(modalHotelName) modalHotelName.textContent = hotel.name;
 }
 
-// ===============================
-// 6. 픽토그램 렌더링
-// ===============================
-function setPictogram(element, available, text) {
-  if (!element) return;
+// 픽토그램 상태 업데이트
+function updatePictograms() {
+  // 주차시설
+  if (hotel.parking) {
+    parkingInfo.classList.add("available");
+    parkingInfo.classList.remove("unavailable");
+    document.getElementById("parkingStatus").textContent = "가능";
+  } else {
+    parkingInfo.classList.add("unavailable");
+    parkingInfo.classList.remove("available");
+    document.getElementById("parkingStatus").textContent = "불가";
+  }
 
-  element.classList.toggle("available", available);
-  element.classList.toggle("unavailable", !available);
+  // 반려동물
+  if (hotel.pet) {
+    petInfo.classList.add("available");
+    petInfo.classList.remove("unavailable");
+    document.getElementById("petStatus").textContent = "동반가능";
+  } else {
+    petInfo.classList.add("unavailable");
+    petInfo.classList.remove("available");
+    document.getElementById("petStatus").textContent = "불가";
+  }
 
-  const statusEl = element.querySelector(".pictogram-status");
-  if (statusEl) {
-    statusEl.textContent = text;
+  // 와이파이
+  if (hotel.wifi) {
+    wifiInfo.classList.add("available");
+    wifiInfo.classList.remove("unavailable");
+    document.getElementById("wifiStatus").textContent = "무료";
+  } else {
+    wifiInfo.classList.add("unavailable");
+    wifiInfo.classList.remove("available");
+    document.getElementById("wifiStatus").textContent = "없음";
+  }
+
+  // 금연공간
+  if (hotel.noSmoking) {
+    noSmokingInfo.classList.add("available");
+    noSmokingInfo.classList.remove("unavailable");
+    document.getElementById("noSmokingStatus").textContent = "금연";
+  } else {
+    noSmokingInfo.classList.add("unavailable");
+    noSmokingInfo.classList.remove("available");
+    document.getElementById("noSmokingStatus").textContent = "흡연가능";
+  }
+
+  // 조식제공
+  if (hotel.breakfast) {
+    breakfastInfo.classList.add("available");
+    breakfastInfo.classList.remove("unavailable");
+    document.getElementById("breakfastStatus").textContent = "제공";
+  } else {
+    breakfastInfo.classList.add("unavailable");
+    breakfastInfo.classList.remove("available");
+    document.getElementById("breakfastStatus").textContent = "미제공";
   }
 }
 
-// ===============================
-// 7. 이벤트 리스너
-// ===============================
+// 상세 정보 버튼 클릭 - 픽토그램 토글
+let isPictogramVisible = false;
 
-// 상세 정보 버튼 (픽토그램 토글)
-if (detailBtn) {
-  detailBtn.addEventListener("click", function() {
-    if (pictogramSection) {
-      const isHidden = pictogramSection.style.display === "none";
-      pictogramSection.style.display = isHidden ? "block" : "none";
-      this.textContent = isHidden ? "상세 정보 숨기기" : "상세 정보";
+detailBtn.addEventListener("click", () => {
+  isPictogramVisible = !isPictogramVisible;
+  pictogramSection.style.display = isPictogramVisible ? "block" : "none";
+  detailBtn.textContent = isPictogramVisible ? "상세 정보 닫기" : "상세 정보";
+});
+
+// 일정추가 버튼 클릭 - 캘린더 모달 열기
+const addScheduleBtn = document.getElementById("addScheduleBtn");
+addScheduleBtn.addEventListener("click", () => {
+  const placeData = {
+    type: "hotel",
+    hotelId: hotelId,
+    image: hotel.image,
+    location: hotel.address,
+    contact: hotel.contact,
+    price: hotel.price
+  };
+
+  calendarModal.open(hotel.name, placeData, (scheduleData) => {
+    console.log("일정이 추가되었습니다:", scheduleData);
+  });
+});
+
+// 예약 버튼 클릭 - 예약 페이지로 이동
+bookingBtn.addEventListener("click", () => {
+  // 예약 데이터를 sessionStorage에 저장
+  const bookingData = {
+    hotelId: hotelId,
+    hotelName: hotel.name,
+    addr: hotel.address,
+    image: hotel.image,
+    basePrice: hotel.basePrice,
+    tel: hotel.contact
+  };
+  
+  sessionStorage.setItem("bookingData", JSON.stringify(bookingData));
+  
+  // 예약 패널 열기
+  openBookingPanel(bookingData);
+});
+
+// 리뷰 페이지네이션
+const REVIEWS_PER_PAGE = 3;
+let currentPage = 1;
+const totalPages = Math.ceil(hotelReviews.length / REVIEWS_PER_PAGE);
+
+// 별점 렌더링
+function renderStars(rating) {
+  let stars = "";
+  for (let i = 1; i <= 5; i++) {
+    if (i <= rating) {
+      stars += '<span class="star">&#9733;</span>';
+    } else {
+      stars += '<span class="star empty">&#9733;</span>';
     }
-  });
-}
-
-// 예약 버튼
-if (bookingBtn) {
-  bookingBtn.addEventListener("click", function() {
-    const bookingData = {
-      hotelId: hotel.id,
-      hotelName: hotel.name,
-      image: `../../${hotel.image}`,
-      addr: hotel.address,
-      tel: hotel.contact,
-      basePrice: detail.basePrice,
-      region: region
-    };
-
-    openBookingPanel(bookingData);
-  });
-}
-
-// 일정 추가 버튼
-if (addScheduleBtn) {
-  addScheduleBtn.addEventListener("click", function() {
-    const schedules = JSON.parse(localStorage.getItem("mySchedules")) || [];
-
-    // 중복 체크
-    const exists = schedules.some(s => s.originalId === hotel.id && s.type === "hotel");
-    if (exists) {
-      alert("이미 일정에 추가된 숙소입니다.");
-      return;
-    }
-
-    schedules.push({
-      id: Date.now(),
-      originalId: hotel.id,
-      name: hotel.name,
-      image: `../../${hotel.image}`,
-      location: hotel.address,
-      description: `1박 ${detail.basePrice.toLocaleString()}원부터`,
-      type: "hotel",
-      region: region,
-      addedAt: new Date().toISOString()
-    });
-
-    localStorage.setItem("mySchedules", JSON.stringify(schedules));
-    alert("일정에 추가되었습니다!");
-  });
-}
-
-// ===============================
-// 8. 리뷰 섹션 (샘플 데이터)
-// ===============================
-const sampleReviews = [
-  {
-    id: 1,
-    nickname: "여행자123",
-    date: "2024.12.15",
-    rating: 5,
-    content: "위치도 좋고 시설도 깨끗해서 너무 만족스러웠습니다. 직원분들도 친절하시고 다음에 또 방문하고 싶네요!"
-  },
-  {
-    id: 2,
-    nickname: "김서울",
-    date: "2024.12.10",
-    rating: 4,
-    content: "전반적으로 좋았습니다. 조식이 다양하고 맛있었어요. 다만 주차 공간이 조금 협소한 점이 아쉬웠습니다."
-  },
-  {
-    id: 3,
-    nickname: "부산사람",
-    date: "2024.12.05",
-    rating: 5,
-    content: "뷰가 정말 최고였습니다! 특히 야경이 너무 예뻐서 오래도록 기억에 남을 것 같아요. 강력 추천합니다."
   }
-];
+  return stars;
+}
 
+// 리뷰 렌더링
 function renderReviews() {
-  const reviewList = document.getElementById("reviewList");
-  const reviewCount = document.getElementById("reviewCount");
+  reviewCount.textContent = `${hotelReviews.length}개의 후기`;
 
-  if (!reviewList) return;
+  const startIndex = (currentPage - 1) * REVIEWS_PER_PAGE;
+  const endIndex = startIndex + REVIEWS_PER_PAGE;
+  const pageReviews = hotelReviews.slice(startIndex, endIndex);
 
-  if (reviewCount) {
-    reviewCount.textContent = `${sampleReviews.length}개의 후기`;
-  }
-
-  reviewList.innerHTML = sampleReviews.map(review => `
+  reviewList.innerHTML = pageReviews.map(review => `
     <div class="review-card">
       <div class="review-user">
         <div class="review-avatar">
-          <span class="review-avatar-placeholder">👤</span>
+          <span class="review-avatar-placeholder">&#128100;</span>
         </div>
         <div class="review-user-info">
           <div class="review-nickname">${review.nickname}</div>
@@ -568,32 +403,78 @@ function renderReviews() {
         </div>
       </div>
       <div class="review-content">${review.content}</div>
+      ${review.image ? `
+        <div class="review-image">
+          <img src="${review.image}" alt="리뷰 이미지">
+        </div>
+      ` : ""}
     </div>
   `).join("");
+
+  renderPagination();
 }
 
-function renderStars(rating) {
-  let stars = "";
-  for (let i = 1; i <= 5; i++) {
-    if (i <= rating) {
-      stars += '<span class="star">★</span>';
-    } else {
-      stars += '<span class="star empty">☆</span>';
-    }
+// 페이지네이션 렌더링
+function renderPagination() {
+  if (totalPages <= 1) {
+    pagination.innerHTML = "";
+    return;
   }
-  return stars;
+
+  let paginationHTML = "";
+
+  // 이전 버튼
+  paginationHTML += `
+    <button class="page-btn" ${currentPage === 1 ? "disabled" : ""} onclick="goToPage(${currentPage - 1})">
+      &lt;
+    </button>
+  `;
+
+  // 페이지 번호
+  for (let i = 1; i <= totalPages; i++) {
+    paginationHTML += `
+      <button class="page-btn ${i === currentPage ? "active" : ""}" onclick="goToPage(${i})">
+        ${i}
+      </button>
+    `;
+  }
+
+  // 다음 버튼
+  paginationHTML += `
+    <button class="page-btn" ${currentPage === totalPages ? "disabled" : ""} onclick="goToPage(${currentPage + 1})">
+      &gt;
+    </button>
+  `;
+
+  pagination.innerHTML = paginationHTML;
 }
 
-// ===============================
-// 9. 초기화
-// ===============================
-document.addEventListener("DOMContentLoaded", function() {
-  renderHotelInfo();
+// 페이지 이동
+function goToPage(page) {
+  if (page < 1 || page > totalPages) return;
+  currentPage = page;
   renderReviews();
-});
 
-// 페이지 로드 시 바로 실행 (DOMContentLoaded 이벤트가 이미 발생한 경우)
-if (document.readyState === "complete" || document.readyState === "interactive") {
+  // 리뷰 섹션으로 스크롤
+  document.querySelector(".review-section").scrollIntoView({ behavior: "smooth" });
+}
+
+// 전역 함수로 노출
+window.goToPage = goToPage;
+
+// 초기화
+try {
   renderHotelInfo();
+} catch (e) {
+  console.error("renderHotelInfo crashed:", e);
+}
+try {
+  updatePictograms();
+} catch (e) {
+  console.error("updatePictograms crashed:", e);
+}
+try {
   renderReviews();
+} catch (e) {
+  console.error("renderReviews crashed:", e);
 }

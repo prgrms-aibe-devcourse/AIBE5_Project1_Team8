@@ -42,6 +42,20 @@ function injectHeaderStyles() {
       }
 
       /* 로고 */
+      .logo-image {
+        height: 40px;
+        width: auto;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+      }
+
+      .logo-image img {
+        height: 100%;
+        width: auto;
+        object-fit: contain;
+      }
+
       .logo {
         font-size: 20px;
         font-weight: 700;
@@ -116,13 +130,15 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="header-inner">
 
       <!-- 로고 -->
-      <div class="logo"><a href="/index.html">LOGO<a></div>
+      <div class="logo-image">
+        <img src="/images/logo/logo.png" alt="Tripial Logo">
+      </div>
+      <div class="logo"><a href="/index.html">Tripial<a></div>
 
       <!-- 메뉴 -->
       <nav class="nav">
         <a href="/index.html">홈</a>
         <a href="/pages/hotel/hotel.html">관광지</a>
-        <a href="/pages/accommodation/accommodation.html">숙소</a>
         <a href="/pages/support.html">고객센터</a>
         <a href="/pages/schedule.html">나의 일정</a>
         <a href="/pages/mypage.html">마이 페이지</a>

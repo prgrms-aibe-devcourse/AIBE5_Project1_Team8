@@ -1,17 +1,5 @@
 /* 색상 변수는 style.css의 :root에서 상속됨 */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--primary-text);
-}
-
 
 
 /* =========================
@@ -39,9 +27,6 @@ body {
     letter-spacing: 0.5px;
 }
 
-.mypage-nickname {
-    font-weight: 400;
-}
 
 
 /* =========================
@@ -256,6 +241,11 @@ body {
   opacity: 1;
   margin-top: 12px;
 }
+
+.mypage-reservation-item .reservation-detail p {
+    margin: 3px;
+}
+
 
 /* 버튼 공통 디자인*/
 .reservation-btn {

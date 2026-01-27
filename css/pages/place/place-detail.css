@@ -1,16 +1,41 @@
-/* ===== Place Detail Page Styles ===== */
-/* 변수는 common/style.css의 :root를 사용 */
+/* ===== CSS Variables ===== */
+:root {
+  --bg-main: #f5f5f5;
+  --bg-card: #ffffff;
+  --bg-header: #c4c4c4;
+  --bg-item: #f0f0f0;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-light: #999999;
+  --border-color: #e0e0e0;
+  --success: #4caf50;
+  --danger: #f44336;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --transition: all 0.3s ease;
+}
+
+/* ===== Reset & Base ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
-  background: #f5f5f5;
-  color: var(--primary-text);
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: var(--bg-main);
+  color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
 }
 
 /* ===== Navigation ===== */
 .navbar {
-  background: var(--beige-bg);
+  background: var(--bg-header);
   padding: 1rem 0;
 }
 
@@ -26,7 +51,7 @@ body {
 .nav-logo {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--primary-text);
+  color: var(--text-primary);
 }
 
 .nav-menu {
@@ -37,15 +62,15 @@ body {
 
 .nav-menu a {
   text-decoration: none;
-  color: var(--secondary-text);
+  color: var(--text-secondary);
   font-size: 0.9rem;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: var(--transition);
 }
 
 .nav-menu a:hover,
 .nav-menu a.active {
-  color: var(--primary-text);
+  color: var(--text-primary);
 }
 
 .nav-auth {
@@ -55,17 +80,17 @@ body {
 
 .auth-link {
   text-decoration: none;
-  color: var(--secondary-text);
+  color: var(--text-secondary);
   font-size: 0.85rem;
   font-weight: 500;
   padding: 0.5rem 1rem;
-  border: 1px solid var(--secondary-text);
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  border: 1px solid var(--text-secondary);
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
 }
 
 .auth-link:hover {
-  background: var(--secondary-text);
+  background: var(--text-secondary);
   color: white;
 }
 
@@ -77,8 +102,8 @@ body {
 .header-banner {
   max-width: 800px;
   margin: 0 auto;
-  background: var(--beige-bg);
-  border-radius: var(--border-radius-lg);
+  background: var(--bg-header);
+  border-radius: var(--radius-lg);
   padding: 3rem 2rem;
   text-align: center;
 }
@@ -86,7 +111,7 @@ body {
 .page-title {
   font-size: 1.8rem;
   font-weight: 600;
-  color: var(--primary-text);
+  color: var(--text-primary);
 }
 
 /* ===== Container ===== */
@@ -98,9 +123,9 @@ body {
 
 /* ===== Place Detail Card ===== */
 .place-detail-card {
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   padding: 2rem;
   display: flex;
   gap: 2rem;
@@ -111,8 +136,8 @@ body {
 .place-image-section {
   flex: 0 0 320px;
   height: 280px;
-  background: #f0f0f0;
-  border-radius: 16px;
+  background: var(--bg-item);
+  border-radius: var(--radius-md);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -141,11 +166,11 @@ body {
 }
 
 .info-item {
-  background: #f0f0f0;
+  background: var(--bg-item);
   padding: 0.6rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 0.9rem;
-  color: var(--primary-text);
+  color: var(--text-primary);
 }
 
 .info-row .info-item {
@@ -155,48 +180,48 @@ body {
 /* Buttons */
 .btn-schedule {
   padding: 0.6rem 1.2rem;
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
   font-weight: 500;
-  color: var(--secondary-text);
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   white-space: nowrap;
 }
 
 .btn-schedule:hover {
-  background: var(--primary-text);
+  background: var(--text-primary);
   color: white;
-  border-color: var(--primary-text);
+  border-color: var(--text-primary);
 }
 
 .btn-detail {
   margin-top: auto;
   padding: 0.75rem 1.5rem;
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--secondary-text);
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   align-self: flex-start;
 }
 
 .btn-detail:hover {
-  background: var(--primary-text);
+  background: var(--text-primary);
   color: white;
-  border-color: var(--primary-text);
+  border-color: var(--text-primary);
 }
 
 /* ===== Pictogram Section ===== */
 .pictogram-section {
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   padding: 2rem;
   margin-bottom: 2rem;
   animation: slideDown 0.3s ease;
@@ -225,9 +250,9 @@ body {
   align-items: center;
   text-align: center;
   padding: 1.5rem 1rem;
-  background: #f0f0f0;
-  border-radius: 16px;
-  transition: all 0.3s ease;
+  background: var(--bg-item);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
 }
 
 .pictogram-item.available {
@@ -242,15 +267,15 @@ body {
   width: 48px;
   height: 48px;
   margin-bottom: 0.75rem;
-  color: var(--secondary-text);
+  color: var(--text-secondary);
 }
 
 .pictogram-item.available .pictogram-icon {
-  color: #4caf50;
+  color: var(--success);
 }
 
 .pictogram-item.unavailable .pictogram-icon {
-  color: #f44336;
+  color: var(--danger);
 }
 
 .pictogram-icon svg {
@@ -260,22 +285,22 @@ body {
 
 .pictogram-label {
   font-size: 0.85rem;
-  color: var(--secondary-text);
+  color: var(--text-secondary);
   margin-bottom: 0.25rem;
 }
 
 .pictogram-status {
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--primary-text);
+  color: var(--text-primary);
 }
 
 .pictogram-item.available .pictogram-status {
-  color: #4caf50;
+  color: var(--success);
 }
 
 .pictogram-item.unavailable .pictogram-status {
-  color: #f44336;
+  color: var(--danger);
 }
 
 /* ===== Description Section ===== */
@@ -284,27 +309,27 @@ body {
 }
 
 .description-box {
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   padding: 2rem;
 }
 
 .description-title {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--secondary-text);
+  color: var(--text-secondary);
   margin-bottom: 1.5rem;
   text-align: center;
 }
 
 .description-box p {
-  color: var(--secondary-text);
+  color: var(--text-secondary);
   font-size: 0.95rem;
   line-height: 1.8;
-  background: #f0f0f0;
+  background: var(--bg-item);
   padding: 1.5rem;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 /* ===== Modal ===== */
@@ -322,9 +347,9 @@ body {
 }
 
 .modal {
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
   max-width: 400px;
   width: 90%;
   animation: modalIn 0.3s ease;
@@ -343,13 +368,13 @@ body {
 
 .modal-header {
   padding: 1.5rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .modal-header h3 {
   font-size: 1.2rem;
   font-weight: 600;
-  color: var(--primary-text);
+  color: var(--text-primary);
 }
 
 .modal-body {
@@ -358,18 +383,18 @@ body {
 
 .modal-body p {
   margin-bottom: 0.75rem;
-  color: var(--secondary-text);
+  color: var(--text-secondary);
 }
 
 .modal-place-name {
   font-weight: 600;
-  color: var(--primary-text);
+  color: var(--text-primary);
   font-size: 1.1rem;
 }
 
 .modal-footer {
   padding: 1.5rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--border-color);
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
@@ -377,28 +402,28 @@ body {
 
 .btn-cancel {
   padding: 0.75rem 1.5rem;
-  background: #f5f5f5;
-  color: var(--primary-text);
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition);
 }
 
 .btn-cancel:hover {
-  background: #e0e0e0;
+  background: var(--border-color);
 }
 
 .btn-confirm {
   padding: 0.75rem 1.5rem;
-  background: var(--primary-text);
+  background: var(--text-primary);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition);
 }
 
 .btn-confirm:hover {

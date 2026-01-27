@@ -1,860 +1,575 @@
-// ===== 카테고리별 데이터 (색상 테마 기반) =====
+// ===== 카테고리별 데이터 =====
 
-// 문화 (gold, beige, brown) - 역사/전통 명소
+// 숙박 (호텔)
+const accommodationData = [
+  {
+    id: 1,
+    name: "서울 센트럴 호텔",
+    address: "서울특별시 중구 명동길 123",
+    contact: "02-1234-5678",
+    image: "images/seoul_hotel.png",
+    category: "accommodation"
+  },
+  {
+    id: 2,
+    name: "부산 오션뷰 호텔",
+    address: "부산광역시 해운대구 해운대로 456",
+    contact: "051-2345-6789",
+    image: "images/busan_hotel.png",
+    category: "accommodation"
+  },
+  {
+    id: 3,
+    name: "제주 힐링 리조트",
+    address: "제주특별자치도 서귀포시 중문로 789",
+    contact: "064-3456-7890",
+    image: "images/jeju_hotel.png",
+    category: "accommodation"
+  },
+  {
+    id: 4,
+    name: "강릉 비치 호텔",
+    address: "강원도 강릉시 경포로 101",
+    contact: "033-4567-8901",
+    image: "images/gangneung_hotel.jpg",
+    category: "accommodation"
+  },
+  {
+    id: 5,
+    name: "경주 헤리티지 호텔",
+    address: "경상북도 경주시 불국로 202",
+    contact: "054-5678-9012",
+    image: "images/gyeongju_hotel.jpg",
+    category: "accommodation"
+  },
+  {
+    id: 6,
+    name: "여수 마리나 호텔",
+    address: "전라남도 여수시 오동도로 303",
+    contact: "061-6789-0123",
+    image: "images/yeosu_hotel.jpg",
+    category: "accommodation"
+  },
+  {
+    id: 7,
+    name: "전주 한옥 스테이",
+    address: "전라북도 전주시 완산구 한옥마을길 404",
+    contact: "063-7890-1234",
+    image: "images/jeonju_hotel.jpg",
+    category: "accommodation"
+  },
+  {
+    id: 8,
+    name: "속초 씨사이드 호텔",
+    address: "강원도 속초시 청초호반로 505",
+    contact: "033-8901-2345",
+    image: "images/sokcho_hotel.jpg",
+    category: "accommodation"
+  },
+  {
+    id: 9,
+    name: "송도 센트럴 호텔",
+    address: "인천광역시 연수구 센트럴로 606",
+    contact: "032-9012-3456",
+    image: "images/incheon_hotel.jpg",
+    category: "accommodation"
+  },
+  {
+    id: 10,
+    name: "대전 비즈니스 호텔",
+    address: "대전광역시 유성구 과학로 707",
+    contact: "042-0123-4567",
+    image: "images/daejeon_hotel.jpg",
+    category: "accommodation"
+  }
+];
+
+// 문화 (궁궐, 사찰, 유적지 등)
 const cultureData = [
-  // gold 색상 (선셋 골드)
   {
     id: 101,
-    detailId: 101,
-    name: "아산 곡교천",
-    address: "충청남도 아산시 염치읍 백암리",
-    contact: "041-540-2114",
-    image: "images/color/gold_1.jpg",
+    detailId: 1,
+    name: "경복궁",
+    address: "서울특별시 종로구 사직로 161",
+    contact: "02-3700-3900",
+    image: "images/places/gyeongbokgung.jpg",
     category: "culture"
   },
   {
     id: 102,
-    detailId: 102,
-    name: "태안 꽃지해수욕장",
-    address: "충청남도 태안군 안면읍 꽃지해안로",
-    contact: "041-670-2114",
-    image: "images/color/gold_2.jpg",
+    detailId: 12,
+    name: "불국사",
+    address: "경상북도 경주시 불국로 385",
+    contact: "054-746-9913",
+    image: "images/places/bulguksa.jpg",
     category: "culture"
   },
   {
     id: 103,
-    detailId: 103,
-    name: "순천만 습지",
-    address: "전라남도 순천시 순천만길 513-25",
-    contact: "061-749-6052",
-    image: "images/color/gold_3.jpg",
+    detailId: 13,
+    name: "첨성대",
+    address: "경상북도 경주시 인왕동 839-1",
+    contact: "054-772-5134",
+    image: "images/places/cheomseongdae.jpg",
     category: "culture"
   },
   {
     id: 104,
-    detailId: 104,
-    name: "제주 성산일출봉",
-    address: "제주특별자치도 서귀포시 성산읍 성산리",
-    contact: "064-783-0959",
-    image: "images/color/gold_4.jpg",
+    detailId: 36,
+    name: "석굴암",
+    address: "경상북도 경주시 불국로 873-243",
+    contact: "054-746-9933",
+    image: "images/places/seokguram.jpg",
     category: "culture"
   },
   {
     id: 105,
-    detailId: 105,
-    name: "영주 부석사",
-    address: "경상북도 영주시 부석면 부석사로 345",
-    contact: "054-633-3464",
-    image: "images/color/gold_5.jpg",
+    detailId: 17,
+    name: "경기전",
+    address: "전라북도 전주시 완산구 태조로 44",
+    contact: "063-281-2790",
+    image: "images/places/gyungijeon.jpg",
     category: "culture"
   },
-  // beige 색상 (어스 베이지)
   {
     id: 106,
-    detailId: 106,
-    name: "안동 하회마을",
-    address: "경상북도 안동시 풍천면 하회종가길",
-    contact: "054-852-3588",
-    image: "images/color/beige_1.jpg",
+    detailId: 34,
+    name: "전동성당",
+    address: "전라북도 전주시 완산구 태조로 51",
+    contact: "063-284-3222",
+    image: "images/places/jeondong.jpg",
     category: "culture"
   },
   {
     id: 107,
-    detailId: 107,
-    name: "수원 화성",
-    address: "경기도 수원시 팔달구 정조로 825",
-    contact: "031-290-3600",
-    image: "images/color/beige_2.jpg",
+    detailId: 38,
+    name: "동궁과 월지",
+    address: "경상북도 경주시 원화로 102",
+    contact: "054-750-8655",
+    image: "images/places/donggung.jpg",
     category: "culture"
   },
   {
     id: 108,
-    detailId: 108,
-    name: "경주 대릉원",
+    detailId: 37,
+    name: "대릉원",
     address: "경상북도 경주시 황남동 183",
     contact: "054-750-8650",
-    image: "images/color/beige_3.jpg",
+    image: "images/places/daereungwon.jpg",
     category: "culture"
   },
   {
     id: 109,
-    detailId: 109,
-    name: "순천 낙안읍성",
-    address: "전라남도 순천시 낙안면 충민길 30",
-    contact: "061-749-8831",
-    image: "images/color/beige_4.jpg",
+    detailId: 28,
+    name: "오죽헌",
+    address: "강원도 강릉시 율곡로 3139번길 24",
+    contact: "033-660-3301",
+    image: "images/places/ojukheon.jpg",
     category: "culture"
   },
   {
     id: 110,
-    detailId: 110,
-    name: "서천 신성리 갈대밭",
-    address: "충청남도 서천군 한산면 신성리",
-    contact: "041-950-4114",
-    image: "images/color/beige_5.jpg",
-    category: "culture"
-  },
-  // brown 색상 (테라코타 브라운)
-  {
-    id: 111,
-    detailId: 111,
-    name: "대전 계족산 황토길",
-    address: "대전광역시 대덕구 장동 산 29-1",
-    contact: "042-608-6551",
-    image: "images/color/brown_1.jpg",
-    category: "culture"
-  },
-  {
-    id: 112,
-    detailId: 112,
-    name: "무안 황토 갯벌랜드",
-    address: "전라남도 무안군 해제면 만송로 36-11",
-    contact: "061-450-5114",
-    image: "images/color/brown_2.jpg",
-    category: "culture"
-  },
-  {
-    id: 113,
-    detailId: 113,
-    name: "고창 고창읍성",
-    address: "전라북도 고창군 고창읍 읍내리",
-    contact: "063-560-2714",
-    image: "images/color/brown_3.jpg",
-    category: "culture"
-  },
-  {
-    id: 114,
-    detailId: 114,
-    name: "하동 최참판댁",
-    address: "경상남도 하동군 악양면 평사리길 66-7",
-    contact: "055-880-2950",
-    image: "images/color/brown_4.jpg",
-    category: "culture"
-  },
-  {
-    id: 115,
-    detailId: 115,
-    name: "영주 무섬마을",
-    address: "경상북도 영주시 문수면 수도리",
-    contact: "054-638-7930",
-    image: "images/color/brown_5.jpg",
+    detailId: 39,
+    name: "향일암",
+    address: "전라남도 여수시 돌산읍 향일암로 60",
+    contact: "061-644-4742",
+    image: "images/places/hyangilam.jpg",
     category: "culture"
   }
 ];
 
-// 식당 (red, neon, yellow) - 활기/먹거리/야경 명소
+// 식당/시장
 const restaurantData = [
-  // red 색상 (파이어리 레드)
   {
     id: 201,
-    detailId: 201,
-    name: "정읍 내장산",
-    address: "전라북도 정읍시 내장산로 936",
-    contact: "063-538-7875",
-    image: "images/color/red_1.jpg",
+    detailId: 33,
+    name: "자갈치 시장",
+    address: "부산광역시 중구 자갈치해안로 52",
+    contact: "051-245-2594",
+    image: "images/places/jagalchi.jpg",
     category: "restaurant"
   },
   {
     id: 202,
-    detailId: 202,
-    name: "영광 불갑사",
-    address: "전라남도 영광군 불갑면 불갑사로 450",
-    contact: "061-350-5600",
-    image: "images/color/red_2.jpg",
+    detailId: 19,
+    name: "속초 중앙시장",
+    address: "강원도 속초시 중앙로 147번길 16",
+    contact: "033-632-5765",
+    image: "images/places/sokcho_market.jpg",
     category: "restaurant"
   },
   {
     id: 203,
-    detailId: 203,
-    name: "창덕궁 후원",
-    address: "서울특별시 종로구 율곡로 99",
-    contact: "02-3668-2300",
-    image: "images/color/red_3.jpg",
+    detailId: 26,
+    name: "신포국제시장",
+    address: "인천광역시 중구 신포로27번길 11-5",
+    contact: "032-772-5812",
+    image: "images/places/sinpo.jpg",
     category: "restaurant"
   },
   {
     id: 204,
-    detailId: 204,
-    name: "고창 선운사",
-    address: "전라북도 고창군 아산면 선운사로 250",
-    contact: "063-561-1422",
-    image: "images/color/red_4.jpg",
+    detailId: 35,
+    name: "남부시장",
+    address: "전라북도 전주시 완산구 풍남문3길 27",
+    contact: "063-284-1344",
+    image: "images/places/nambu.jpg",
     category: "restaurant"
   },
   {
     id: 205,
-    detailId: 205,
-    name: "단양강 잔도",
-    address: "충청북도 단양군 적성면 애곡리",
-    contact: "043-420-2114",
-    image: "images/color/red_5.jpg",
+    detailId: 11,
+    name: "안목해변 커피거리",
+    address: "강원도 강릉시 창해로14번길",
+    contact: "033-640-5420",
+    image: "images/places/anmok.jpg",
     category: "restaurant"
   },
-  // neon 색상 (일렉트릭 네온)
   {
     id: 206,
-    detailId: 206,
-    name: "DDP (동대문디자인플라자)",
-    address: "서울특별시 중구 을지로 281",
-    contact: "02-2153-0000",
-    image: "images/color/neon_1.jpg",
+    detailId: 21,
+    name: "차이나타운",
+    address: "인천광역시 중구 차이나타운로 12",
+    contact: "032-760-7114",
+    image: "images/places/chinatown.jpg",
     category: "restaurant"
   },
   {
     id: 207,
-    detailId: 207,
-    name: "부산 더베이 101",
-    address: "부산광역시 해운대구 동백로 52",
-    contact: "051-726-8888",
-    image: "images/color/neon_2.jpg",
+    detailId: 0,
+    name: "제주 동문시장",
+    address: "제주특별자치도 제주시 관덕로14길 20",
+    contact: "064-752-3001",
+    image: "images/places/dongmun_market.jpg",
     category: "restaurant"
   },
   {
     id: 208,
-    detailId: 208,
-    name: "대구 이월드 83타워",
-    address: "대구광역시 달서구 두류공원로 200",
-    contact: "053-620-0001",
-    image: "images/color/neon_3.jpg",
-    category: "restaurant"
-  },
-  {
-    id: 209,
-    detailId: 209,
-    name: "경주 동궁과 월지",
-    address: "경상북도 경주시 원화로 102",
-    contact: "054-750-8655",
-    image: "images/color/neon_4.jpg",
-    category: "restaurant"
-  },
-  {
-    id: 210,
-    detailId: 210,
-    name: "여수 낭만포차",
-    address: "전라남도 여수시 중앙동 해안가",
-    contact: "061-659-1800",
-    image: "images/color/neon_5.jpg",
-    category: "restaurant"
-  },
-  // yellow 색상 (선샤인 옐로우)
-  {
-    id: 211,
-    detailId: 211,
-    name: "신안 선도",
-    address: "전라남도 신안군 지도읍 선도리",
-    contact: "061-240-8114",
-    image: "images/color/yellow_1.jpg",
-    category: "restaurant"
-  },
-  {
-    id: 212,
-    detailId: 212,
-    name: "구례 산수유마을",
-    address: "전라남도 구례군 산동면 좌사리",
-    contact: "061-780-2450",
-    image: "images/color/yellow_2.jpg",
-    category: "restaurant"
-  },
-  {
-    id: 213,
-    detailId: 213,
-    name: "장성 황룡강",
-    address: "전라남도 장성군 황룡면 황룡리",
-    contact: "061-390-7224",
-    image: "images/color/yellow_3.jpg",
-    category: "restaurant"
-  },
-  {
-    id: 214,
-    detailId: 214,
-    name: "부산 대저 생태공원",
-    address: "부산광역시 강서구 대저1동",
-    contact: "051-970-3975",
-    image: "images/color/yellow_4.jpg",
-    category: "restaurant"
-  },
-  {
-    id: 215,
-    detailId: 215,
-    name: "이천 산수유 마을",
-    address: "경기도 이천시 백사면 도립리",
-    contact: "031-644-2114",
-    image: "images/color/yellow_5.jpg",
+    detailId: 0,
+    name: "광장시장",
+    address: "서울특별시 종로구 창경궁로 88",
+    contact: "02-2267-0291",
+    image: "images/places/gwangjang.jpg",
     category: "restaurant"
   }
 ];
 
-// 자연 (forest, sky, mint, white, fog, black) - 자연경관
+// 자연 (산, 바다, 공원 등)
 const natureData = [
-  // forest 색상 (딥 포레스트 그린)
   {
     id: 301,
-    detailId: 301,
-    name: "담양 죽녹원",
-    address: "전라남도 담양군 담양읍 죽녹원로 119",
-    contact: "061-380-3149",
-    image: "images/color/forest_1.jpg",
+    detailId: 8,
+    name: "한라산",
+    address: "제주특별자치도 제주시 1100로 2070-61",
+    contact: "064-713-9950",
+    image: "images/places/hallasan.jpg",
     category: "nature"
   },
   {
     id: 302,
-    detailId: 302,
-    name: "보성 대한다원",
-    address: "전라남도 보성군 보성읍 녹차로 763-67",
-    contact: "061-852-4540",
-    image: "images/color/forest_2.jpg",
+    detailId: 18,
+    name: "설악산",
+    address: "강원도 속초시 설악산로 833",
+    contact: "033-636-7700",
+    image: "images/places/seoraksan.jpg",
     category: "nature"
   },
   {
     id: 303,
-    detailId: 303,
-    name: "삼척 도계 이끼폭포",
-    address: "강원도 삼척시 도계읍 무건리",
-    contact: "033-570-3545",
-    image: "images/color/forest_3.jpg",
+    detailId: 7,
+    name: "성산일출봉",
+    address: "제주특별자치도 서귀포시 성산읍 성산리 1",
+    contact: "064-783-0959",
+    image: "images/places/seongsan.jpg",
     category: "nature"
   },
   {
     id: 304,
-    detailId: 304,
-    name: "제주 비자림",
-    address: "제주특별자치도 제주시 구좌읍 비자숲길 55",
-    contact: "064-710-7912",
-    image: "images/color/forest_4.jpg",
+    detailId: 4,
+    name: "해운대 해수욕장",
+    address: "부산광역시 해운대구 해운대해변로 264",
+    contact: "051-749-7601",
+    image: "images/places/haeundae.jpg",
     category: "nature"
   },
   {
     id: 305,
-    detailId: 305,
-    name: "울산 태화강 십리대숲",
-    address: "울산광역시 중구 태화동",
-    contact: "052-229-6142",
-    image: "images/color/forest_5.jpg",
+    detailId: 5,
+    name: "광안리 해수욕장",
+    address: "부산광역시 수영구 광안해변로 219",
+    contact: "051-610-4742",
+    image: "images/places/gwangalli.jpg",
     category: "nature"
   },
-  // sky 색상 (클리어 스카이)
   {
     id: 306,
-    detailId: 306,
-    name: "포항 스페이스워크",
-    address: "경상북도 포항시 북구 환호공원길 30",
-    contact: "054-270-5855",
-    image: "images/color/sky_1.jpg",
+    detailId: 9,
+    name: "협재 해수욕장",
+    address: "제주특별자치도 제주시 한림읍 협재리 2497-1",
+    contact: "064-728-3981",
+    image: "images/places/hyeopjae.jpg",
     category: "nature"
   },
   {
     id: 307,
-    detailId: 307,
-    name: "부산 블루라인파크",
-    address: "부산광역시 해운대구 청사포로 116",
-    contact: "051-701-5548",
-    image: "images/color/sky_2.jpg",
+    detailId: 10,
+    name: "경포대",
+    address: "강원도 강릉시 경포로 365",
+    contact: "033-640-5420",
+    image: "images/places/gyeongpodae.jpg",
     category: "nature"
   },
   {
     id: 308,
-    detailId: 308,
-    name: "강릉 안목해변",
-    address: "강원도 강릉시 창해로14번길",
-    contact: "033-640-5420",
-    image: "images/color/sky_3.jpg",
+    detailId: 27,
+    name: "정동진",
+    address: "강원도 강릉시 강동면 정동진리",
+    contact: "033-640-4414",
+    image: "images/places/jeongdongjin.jpg",
     category: "nature"
   },
   {
     id: 309,
-    detailId: 309,
-    name: "영덕 블루로드",
-    address: "경상북도 영덕군 강구면 강구항로",
-    contact: "054-730-6114",
-    image: "images/color/sky_4.jpg",
+    detailId: 15,
+    name: "오동도",
+    address: "전라남도 여수시 오동도로 222",
+    contact: "061-659-1819",
+    image: "images/places/odongdo.jpg",
     category: "nature"
   },
   {
     id: 310,
-    detailId: 310,
-    name: "제주 협재해수욕장",
-    address: "제주특별자치도 제주시 한림읍 협재리",
-    contact: "064-728-3981",
-    image: "images/color/sky_5.jpg",
+    detailId: 23,
+    name: "계족산 황톳길",
+    address: "대전광역시 대덕구 장동 산 29-1",
+    contact: "042-608-6551",
+    image: "images/places/gyeryongsan.jpg",
     category: "nature"
   },
-  // mint 색상 (에메랄드 민트)
   {
     id: 311,
-    detailId: 311,
-    name: "삼척 장호항",
-    address: "강원도 삼척시 근덕면 장호리",
-    contact: "033-570-3843",
-    image: "images/color/mint_1.jpg",
+    detailId: 29,
+    name: "만장굴",
+    address: "제주특별자치도 제주시 구좌읍 만장굴길 182",
+    contact: "064-710-7903",
+    image: "images/places/manjanggul.jpg",
     category: "nature"
   },
   {
     id: 312,
-    detailId: 312,
-    name: "제주 월정리",
-    address: "제주특별자치도 제주시 구좌읍 월정리",
-    contact: "064-728-7973",
-    image: "images/color/mint_2.jpg",
+    detailId: 24,
+    name: "한강 공원",
+    address: "서울특별시 영등포구 여의동로 330",
+    contact: "02-3780-0561",
+    image: "images/places/hangang.jpg",
     category: "nature"
   },
   {
     id: 313,
-    detailId: 313,
-    name: "남해 상주 은모래비치",
-    address: "경상남도 남해군 상주면 상주리",
-    contact: "055-860-8631",
-    image: "images/color/mint_3.jpg",
+    detailId: 30,
+    name: "속초 해수욕장",
+    address: "강원도 속초시 해오름로 186",
+    contact: "033-639-2027",
+    image: "images/places/sokcho_beach.jpg",
     category: "nature"
   },
   {
     id: 314,
-    detailId: 314,
-    name: "울진 죽변 하트해변",
-    address: "경상북도 울진군 죽변면 죽변리",
-    contact: "054-789-6903",
-    image: "images/color/mint_4.jpg",
+    detailId: 32,
+    name: "영금정",
+    address: "강원도 속초시 영금정로 43",
+    contact: "033-639-2690",
+    image: "images/places/yeonggeumjeong.jpg",
     category: "nature"
   },
   {
     id: 315,
-    detailId: 315,
-    name: "원주 소금산",
-    address: "강원도 원주시 지정면 소금산길 12",
-    contact: "033-766-3399",
-    image: "images/color/mint_5.jpg",
+    detailId: 14,
+    name: "여수 밤바다",
+    address: "전라남도 여수시 중앙동 해안가",
+    contact: "061-659-1800",
+    image: "images/places/yeosu_night.jpg",
     category: "nature"
   },
-  // white 색상 (퓨어 화이트)
   {
     id: 316,
-    detailId: 316,
-    name: "인제 자작나무 숲",
-    address: "강원도 인제군 인제읍 원대리",
-    contact: "033-460-8036",
-    image: "images/color/white_1.jpg",
-    category: "nature"
-  },
-  {
-    id: 317,
-    detailId: 317,
-    name: "무주 덕유산",
-    address: "전라북도 무주군 설천면 삼공리",
-    contact: "063-322-3174",
-    image: "images/color/white_2.jpg",
-    category: "nature"
-  },
-  {
-    id: 318,
-    detailId: 318,
-    name: "대관령 양떼목장",
-    address: "강원도 평창군 대관령면 대관령마루길 483-32",
-    contact: "033-335-1966",
-    image: "images/color/white_3.jpg",
-    category: "nature"
-  },
-  {
-    id: 319,
-    detailId: 319,
-    name: "청송 얼음골",
-    address: "경상북도 청송군 주왕산면 주왕산로",
-    contact: "054-873-0014",
-    image: "images/color/white_4.jpg",
-    category: "nature"
-  },
-  {
-    id: 320,
-    detailId: 320,
-    name: "이호테우 해변",
-    address: "제주특별자치도 제주시 이호일동",
-    contact: "064-728-3984",
-    image: "images/color/white_5.jpg",
-    category: "nature"
-  },
-  // fog 색상 (미스틱 포그)
-  {
-    id: 321,
-    detailId: 321,
-    name: "춘천 소양강 스카이워크",
-    address: "강원도 춘천시 영서로 2663",
-    contact: "033-240-1695",
-    image: "images/color/fog_1.jpg",
-    category: "nature"
-  },
-  {
-    id: 322,
-    detailId: 322,
-    name: "양평 두물머리",
-    address: "경기도 양평군 양서면 양수리",
-    contact: "031-770-1001",
-    image: "images/color/fog_2.jpg",
-    category: "nature"
-  },
-  {
-    id: 323,
-    detailId: 323,
-    name: "옥천 용암사",
-    address: "충청북도 옥천군 옥천읍 용암리",
-    contact: "043-730-3561",
-    image: "images/color/fog_3.jpg",
-    category: "nature"
-  },
-  {
-    id: 324,
-    detailId: 324,
-    name: "청송 주산지",
-    address: "경상북도 청송군 주왕산면 주산지리",
-    contact: "054-870-6114",
-    image: "images/color/fog_4.jpg",
-    category: "nature"
-  },
-  {
-    id: 325,
-    detailId: 325,
-    name: "화순 세량지",
-    address: "전라남도 화순군 화순읍 세량리",
-    contact: "061-379-3502",
-    image: "images/color/fog_5.jpg",
-    category: "nature"
-  },
-  // black 색상 (볼케이노 블랙)
-  {
-    id: 326,
-    detailId: 326,
-    name: "제주 주상절리대",
-    address: "제주특별자치도 서귀포시 중문동",
-    contact: "064-738-1521",
-    image: "images/color/black_1.jpg",
-    category: "nature"
-  },
-  {
-    id: 327,
-    detailId: 327,
-    name: "철원 한탄강",
-    address: "강원도 철원군 동송읍 장흥리",
-    contact: "033-450-5558",
-    image: "images/color/black_2.jpg",
-    category: "nature"
-  },
-  {
-    id: 328,
-    detailId: 328,
-    name: "제주 돌문화공원",
-    address: "제주특별자치도 제주시 조천읍 남조로 2023",
-    contact: "064-710-7731",
-    image: "images/color/black_3.jpg",
-    category: "nature"
-  },
-  {
-    id: 329,
-    detailId: 329,
-    name: "울릉도 해안산책로",
-    address: "경상북도 울릉군 울릉읍 도동리",
-    contact: "054-790-6114",
-    image: "images/color/black_4.jpg",
-    category: "nature"
-  },
-  {
-    id: 330,
-    detailId: 330,
-    name: "우도 검멀레 해변",
-    address: "제주특별자치도 제주시 우도면 연평리",
-    contact: "064-728-4353",
-    image: "images/color/black_5.jpg",
+    detailId: 20,
+    name: "송도 센트럴파크",
+    address: "인천광역시 연수구 컨벤시아대로 160",
+    contact: "032-832-1234",
+    image: "images/places/songdo.jpg",
     category: "nature"
   }
 ];
 
-// 레져 (rainbow, pink, lilac) - 체험/테마/꽃축제
+// 레져 (테마파크, 케이블카 등)
 const leisureData = [
-  // rainbow 색상 (비비드 레인보우)
   {
     id: 401,
-    detailId: 401,
-    name: "제주 도두동 무지개도로",
-    address: "제주특별자치도 제주시 도두동",
-    contact: "064-728-2114",
-    image: "images/color/rainbow_1.jpg",
+    detailId: 25,
+    name: "월미도 테마파크",
+    address: "인천광역시 중구 월미로 136",
+    contact: "032-765-4169",
+    image: "images/places/wolmido.jpg",
     category: "leisure"
   },
   {
     id: 402,
-    detailId: 402,
-    name: "부산 장림포구",
-    address: "부산광역시 사하구 장림동",
-    contact: "051-220-4000",
-    image: "images/color/rainbow_2.jpg",
+    detailId: 40,
+    name: "여수 해상케이블카",
+    address: "전라남도 여수시 돌산읍 돌산로 3600-1",
+    contact: "061-664-7301",
+    image: "images/places/yeosu_cablecar.jpg",
     category: "leisure"
   },
   {
     id: 403,
-    detailId: 403,
-    name: "사천 무지개 해안도로",
-    address: "경상남도 사천시 삼천포대교로",
-    contact: "055-831-2114",
-    image: "images/color/rainbow_3.jpg",
+    detailId: 22,
+    name: "엑스포 과학공원",
+    address: "대전광역시 유성구 대덕대로 480",
+    contact: "042-866-5114",
+    image: "images/places/expo.jpg",
     category: "leisure"
   },
   {
     id: 404,
-    detailId: 404,
-    name: "인천 송월동 동화마을",
-    address: "인천광역시 중구 송월동3가",
-    contact: "032-760-6484",
-    image: "images/color/rainbow_4.jpg",
+    detailId: 2,
+    name: "남산타워",
+    address: "서울특별시 용산구 남산공원길 105",
+    contact: "02-3455-9277",
+    image: "images/places/namsan.jpg",
     category: "leisure"
   },
   {
     id: 405,
-    detailId: 405,
-    name: "가평 쁘띠프랑스",
-    address: "경기도 가평군 청평면 호반로 1063",
-    contact: "031-584-8200",
-    image: "images/color/rainbow_5.jpg",
+    detailId: 41,
+    name: "유성온천",
+    address: "대전광역시 유성구 봉명동 온천로 일대",
+    contact: "042-611-2114",
+    image: "images/places/yuseong.jpg",
     category: "leisure"
   },
-  // pink 색상 (로맨틱 핑크)
   {
     id: 406,
-    detailId: 406,
-    name: "합천 황매산",
-    address: "경상남도 합천군 가회면 황매산로",
-    contact: "055-930-3756",
-    image: "images/color/pink_1.jpg",
+    detailId: 18,
+    name: "설악 케이블카",
+    address: "강원도 속초시 설악산로 1085",
+    contact: "033-636-4300",
+    image: "images/places/seorak_cable.jpg",
     category: "leisure"
   },
   {
     id: 407,
-    detailId: 407,
-    name: "제주 휴애리",
-    address: "제주특별자치도 서귀포시 남원읍 신례동로 256",
-    contact: "064-732-2114",
-    image: "images/color/pink_2.jpg",
+    detailId: 0,
+    name: "제주 아쿠아플라넷",
+    address: "제주특별자치도 서귀포시 성산읍 섭지코지로 95",
+    contact: "064-780-0900",
+    image: "images/places/aquaplanet.jpg",
     category: "leisure"
   },
   {
     id: 408,
-    detailId: 408,
-    name: "경주 보문단지",
-    address: "경상북도 경주시 보문로 446-48",
-    contact: "054-745-7601",
-    image: "images/color/pink_3.jpg",
-    category: "leisure"
-  },
-  {
-    id: 409,
-    detailId: 409,
-    name: "양주 나리공원",
-    address: "경기도 양주시 광적면 효촌리",
-    contact: "031-8082-4545",
-    image: "images/color/pink_4.jpg",
-    category: "leisure"
-  },
-  {
-    id: 410,
-    detailId: 410,
-    name: "강진 백련사",
-    address: "전라남도 강진군 도암면 백련사길 145",
-    contact: "061-432-0837",
-    image: "images/color/pink_5.jpg",
-    category: "leisure"
-  },
-  // lilac 색상 (라일락 퍼플)
-  {
-    id: 411,
-    detailId: 411,
-    name: "신안 퍼플섬",
-    address: "전라남도 신안군 안좌면 반월도",
-    contact: "061-240-8114",
-    image: "images/color/lilac_1.jpg",
-    category: "leisure"
-  },
-  {
-    id: 412,
-    detailId: 412,
-    name: "고성 하늬라벤더팜",
-    address: "강원도 고성군 간성읍 흘리리",
-    contact: "033-681-0005",
-    image: "images/color/lilac_2.jpg",
-    category: "leisure"
-  },
-  {
-    id: 413,
-    detailId: 413,
-    name: "성주 성밖숲",
-    address: "경상북도 성주군 성주읍 경산리",
-    contact: "054-930-8371",
-    image: "images/color/lilac_3.jpg",
-    category: "leisure"
-  },
-  {
-    id: 414,
-    detailId: 414,
-    name: "태안 팜카밀레",
-    address: "충청남도 태안군 남면 연꽃길 178",
-    contact: "041-675-3636",
-    image: "images/color/lilac_4.jpg",
-    category: "leisure"
-  },
-  {
-    id: 415,
-    detailId: 415,
-    name: "정읍 구절초 지방정원",
-    address: "전라북도 정읍시 산내면 매죽리",
-    contact: "063-539-5696",
-    image: "images/color/lilac_5.jpg",
+    detailId: 0,
+    name: "롯데월드 어드벤처",
+    address: "서울특별시 송파구 올림픽로 240",
+    contact: "02-411-2000",
+    image: "images/places/lotteworld.jpg",
     category: "leisure"
   }
 ];
 
-// 쇼핑 (indigo, silver, gray) - 마을/도시/전망대
+// 쇼핑 (한옥마을, 문화마을 등)
 const shoppingData = [
-  // indigo 색상 (인디고 블루)
   {
     id: 501,
-    detailId: 501,
-    name: "울릉도 해안",
-    address: "경상북도 울릉군 울릉읍 도동리",
-    contact: "054-790-6114",
-    image: "images/color/indigo_1.jpg",
+    detailId: 3,
+    name: "북촌한옥마을",
+    address: "서울특별시 종로구 계동길 37",
+    contact: "02-2148-4160",
+    image: "images/places/bukchon.jpg",
     category: "shopping"
   },
   {
     id: 502,
-    detailId: 502,
-    name: "나주 천연염색 박물관",
-    address: "전라남도 나주시 다시면 백호로 379",
-    contact: "061-335-0071",
-    image: "images/color/indigo_2.jpg",
+    detailId: 16,
+    name: "전주 한옥마을",
+    address: "전라북도 전주시 완산구 기린대로 99",
+    contact: "063-282-1330",
+    image: "images/places/hanok_village.jpg",
     category: "shopping"
   },
   {
     id: 503,
-    detailId: 503,
-    name: "영양 반딧불이 공원",
-    address: "경상북도 영양군 수비면 수하리",
-    contact: "054-680-5332",
-    image: "images/color/indigo_3.jpg",
+    detailId: 6,
+    name: "감천문화마을",
+    address: "부산광역시 사하구 감내2로 203",
+    contact: "051-291-1444",
+    image: "images/places/gamcheon.jpg",
     category: "shopping"
   },
   {
     id: 504,
-    detailId: 504,
-    name: "동해 추암 촛대바위",
-    address: "강원도 동해시 추암동",
-    contact: "033-530-2801",
-    image: "images/color/indigo_4.jpg",
+    detailId: 31,
+    name: "아바이마을",
+    address: "강원도 속초시 청호동 1017",
+    contact: "033-639-2690",
+    image: "images/places/abai.jpg",
     category: "shopping"
   },
   {
     id: 505,
-    detailId: 505,
-    name: "부산 광안대교",
-    address: "부산광역시 수영구 광안해변로",
-    contact: "051-610-4742",
-    image: "images/color/indigo_5.jpg",
+    detailId: 0,
+    name: "명동 쇼핑거리",
+    address: "서울특별시 중구 명동길 일대",
+    contact: "02-3210-0101",
+    image: "images/places/myeongdong.jpg",
     category: "shopping"
   },
-  // silver 색상 (실버리 쉬머)
   {
     id: 506,
-    detailId: 506,
-    name: "정선 민둥산",
-    address: "강원도 정선군 남면 민둥산로",
-    contact: "033-560-2114",
-    image: "images/color/silver_1.jpg",
+    detailId: 0,
+    name: "해운대 시장",
+    address: "부산광역시 해운대구 구남로41번길 22",
+    contact: "051-746-3001",
+    image: "images/places/haeundae_market.jpg",
     category: "shopping"
   },
   {
     id: 507,
-    detailId: 507,
-    name: "서울 하늘공원",
-    address: "서울특별시 마포구 하늘공원로 95",
-    contact: "02-300-5500",
-    image: "images/color/silver_2.jpg",
+    detailId: 0,
+    name: "서면 지하상가",
+    address: "부산광역시 부산진구 서면로 지하 68",
+    contact: "051-803-3001",
+    image: "images/places/seomyeon.jpg",
     category: "shopping"
   },
   {
     id: 508,
-    detailId: 508,
-    name: "울산 간월재",
-    address: "울산광역시 울주군 상북면 등억리",
-    contact: "052-229-7631",
-    image: "images/color/silver_3.jpg",
-    category: "shopping"
-  },
-  {
-    id: 509,
-    detailId: 509,
-    name: "제주 새별오름",
-    address: "제주특별자치도 제주시 애월읍 봉성리",
-    contact: "064-728-2114",
-    image: "images/color/silver_4.jpg",
-    category: "shopping"
-  },
-  {
-    id: 510,
-    detailId: 510,
-    name: "포천 명성산",
-    address: "경기도 포천시 영북면 산정리",
-    contact: "031-538-2114",
-    image: "images/color/silver_5.jpg",
-    category: "shopping"
-  },
-  // gray 색상 (앤티크 그레이)
-  {
-    id: 511,
-    detailId: 511,
-    name: "원주 뮤지엄 산",
-    address: "강원도 원주시 지정면 오크밸리2길 260",
-    contact: "033-730-9000",
-    image: "images/color/gray_1.jpg",
-    category: "shopping"
-  },
-  {
-    id: 512,
-    detailId: 512,
-    name: "설악산 울산바위",
-    address: "강원도 속초시 설악산로 833",
-    contact: "033-636-7700",
-    image: "images/color/gray_2.jpg",
-    category: "shopping"
-  },
-  {
-    id: 513,
-    detailId: 513,
-    name: "익산 미륵사지",
-    address: "전라북도 익산시 금마면 미륵사지로 362",
-    contact: "063-290-6799",
-    image: "images/color/gray_3.jpg",
-    category: "shopping"
-  },
-  {
-    id: 514,
-    detailId: 514,
-    name: "낙산공원 성곽길",
-    address: "서울특별시 종로구 낙산길 41",
-    contact: "02-743-7985",
-    image: "images/color/gray_4.jpg",
-    category: "shopping"
-  },
-  {
-    id: 515,
-    detailId: 515,
-    name: "강화 고인돌",
-    address: "인천광역시 강화군 하점면 부근리",
-    contact: "032-930-7070",
-    image: "images/color/gray_5.jpg",
+    detailId: 0,
+    name: "제주 올레시장",
+    address: "제주특별자치도 제주시 관덕로14길 12",
+    contact: "064-752-3001",
+    image: "images/places/olle_market.jpg",
     category: "shopping"
   }
 ];
 
-// 전체 데이터 통합
-const allData = {
+// 전체 데이터 통합 (기존)
+const allDataOriginal = {
+  accommodation: accommodationData,
   culture: cultureData,
   restaurant: restaurantData,
   nature: natureData,
   leisure: leisureData,
   shopping: shoppingData
+};
+
+// 검색 탭 카테고리별 데이터 통합
+const allData = {
+  전체: [...accommodationData, ...cultureData, ...restaurantData, ...natureData, ...leisureData, ...shoppingData],
+  지역: [...natureData, ...cultureData],
+  즐길거리: [...leisureData, ...restaurantData, ...shoppingData],
+  숙소: [...accommodationData]
 };
 
 // 지역명 매핑
@@ -874,20 +589,31 @@ const regionNames = {
 // ===== DOM 요소 =====
 const spotList = document.getElementById("spotList");
 const noResults = document.getElementById("noResults");
-const categoryTabs = document.querySelectorAll(".category-tab");
+const searchTabs = document.querySelectorAll(".search-container .tab");
 const pagination = document.getElementById("pagination");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const pageInfo = document.getElementById("pageInfo");
 
 // ===== 상태 관리 =====
-let currentCategory = "culture";
+let currentCategory = "전체";
 let currentPage = 1;
+let currentKeyword = "";
 const itemsPerPage = 8;
 
 // ===== 카드 렌더링 =====
 function renderSpots() {
-  const data = allData[currentCategory] || [];
+  let data = allData[currentCategory] || [];
+  
+  // 검색어로 필터링
+  if (currentKeyword) {
+    const keyword = currentKeyword.toLowerCase();
+    data = data.filter(spot => 
+      spot.name.toLowerCase().includes(keyword) ||
+      spot.address.toLowerCase().includes(keyword)
+    );
+  }
+  
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
   // 페이지 범위 조정
@@ -921,7 +647,7 @@ function renderSpots() {
 
     card.innerHTML = `
       <div class="spot-card-image">
-        <img src="../../${spot.image}" alt="${spot.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23e0e0e0%22 width=%22200%22 height=%22200%22 rx=%2220%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22 font-family=%22sans-serif%22 font-size=%2214%22%3E관광지%3C/text%3E%3Ctext x=%2250%25%22 y=%2265%25%22 text-anchor=%22middle%22 fill=%22%23999%22 font-family=%22sans-serif%22 font-size=%2214%22%3E이미지%3C/text%3E%3C/svg%3E'">
+        <img src="${spot.image}" alt="${spot.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23e0e0e0%22 width=%22200%22 height=%22200%22 rx=%2220%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22 font-family=%22sans-serif%22 font-size=%2214%22%3E관광지%3C/text%3E%3Ctext x=%2250%25%22 y=%2265%25%22 text-anchor=%22middle%22 fill=%22%23999%22 font-family=%22sans-serif%22 font-size=%2214%22%3E이미지%3C/text%3E%3C/svg%3E'">
       </div>
       <div class="spot-card-info">
         <div class="spot-name">${spot.name}</div>
@@ -948,16 +674,22 @@ function updatePagination(totalPages) {
   nextBtn.disabled = currentPage >= totalPages;
 }
 
-// ===== 탭 클릭 이벤트 =====
-categoryTabs.forEach(tab => {
+// ===== 검색 탭 클릭 이벤트 =====
+searchTabs.forEach(tab => {
   tab.addEventListener("click", () => {
     // 활성 탭 변경
-    categoryTabs.forEach(t => t.classList.remove("active"));
+    searchTabs.forEach(t => t.classList.remove("active"));
     tab.classList.add("active");
 
-    // 카테고리 변경 및 페이지 초기화
-    currentCategory = tab.dataset.category;
+    // 카테고리 변경 및 페이지, 검색어 초기화
+    currentCategory = tab.innerText;
     currentPage = 1;
+    currentKeyword = "";
+    
+    // 검색창 초기화
+    const keywordInput = document.getElementById("keyword");
+    if (keywordInput) keywordInput.value = "";
+    
     renderSpots();
   });
 });
@@ -990,18 +722,31 @@ spotList.addEventListener("click", (e) => {
     e.stopPropagation();
     const spotId = parseInt(addBtn.dataset.spotId);
     const category = addBtn.dataset.category;
-    const data = allData[category] || [];
+    const data = allDataOriginal[category] || [];
     const selectedSpot = data.find(s => s.id === spotId);
 
     if (selectedSpot) {
-      // 관광지 데이터 구조 설정
-      const placeData = {
-        type: category,
-        originalId: selectedSpot.id,
-        image: selectedSpot.image,
-        location: selectedSpot.address,
-        contact: selectedSpot.contact
-      };
+      // 카테고리별 데이터 구조 설정
+      let placeData;
+      if (category === "accommodation") {
+        // 호텔/숙박 데이터
+        placeData = {
+          type: "hotel",
+          hotelId: selectedSpot.id,
+          image: selectedSpot.image,
+          location: selectedSpot.address,
+          contact: selectedSpot.contact
+        };
+      } else {
+        // 기타 관광지 데이터
+        placeData = {
+          type: category,
+          originalId: selectedSpot.id,
+          image: selectedSpot.image,
+          location: selectedSpot.address,
+          contact: selectedSpot.contact
+        };
+      }
 
       // 캘린더 모달 열기
       calendarModal.open(selectedSpot.name, placeData, (scheduleData) => {
@@ -1014,23 +759,53 @@ spotList.addEventListener("click", (e) => {
   // 카드 클릭 시 상세 페이지로 이동
   const card = e.target.closest(".spot-card");
   if (card) {
+    const category = card.dataset.category;
     const detailId = card.dataset.detailId;
-    window.location.href = `../place/place-detail.html?id=${detailId}`;
+
+    // 숙박(accommodation)은 hotel-detail.html로, 나머지는 place-detail.html로 이동
+    if (category === "accommodation") {
+      window.location.href = `hotel-detail.html?id=${detailId}`;
+    } else if (detailId && detailId !== "0") {
+      window.location.href = `../place/place-detail.html?id=${detailId}`;
+    } else {
+      alert("상세 페이지가 준비 중입니다.");
+    }
   }
 });
 
 // ===== URL 파라미터 처리 =====
 const params = new URLSearchParams(window.location.search);
-const categoryParam = params.get("category");
+const categoryParam = params.get("type");
 if (categoryParam && allData[categoryParam]) {
   currentCategory = categoryParam;
-  categoryTabs.forEach(tab => {
+  searchTabs.forEach(tab => {
     tab.classList.remove("active");
-    if (tab.dataset.category === categoryParam) {
+    if (tab.innerText === categoryParam) {
       tab.classList.add("active");
     }
   });
 }
+
+// ===== 검색 이벤트 처리 (searchbar.js에서 발생) =====
+document.addEventListener('hotelSearch', (e) => {
+  const { keyword, type } = e.detail;
+  
+  // 카테고리 변경
+  if (type && allData[type]) {
+    currentCategory = type;
+    searchTabs.forEach(tab => {
+      tab.classList.remove("active");
+      if (tab.innerText === type) {
+        tab.classList.add("active");
+      }
+    });
+  }
+  
+  // 검색어 설정 및 렌더링
+  currentKeyword = keyword;
+  currentPage = 1;
+  renderSpots();
+});
 
 // ===== 초기 렌더링 =====
 setTimeout(() => {
