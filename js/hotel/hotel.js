@@ -462,6 +462,7 @@ function renderSpots() {
     card.dataset.spotId = spot.id;
     card.dataset.category = spot.category;
     card.dataset.detailId = spot.detailId || spot.id;
+    const isAccommodation = spot.category === "accommodation";
 
     card.innerHTML = `
       <div class="spot-card-image">
@@ -472,10 +473,16 @@ function renderSpots() {
         <div class="spot-address">${spot.address}</div>
         <div class="spot-contact">${spot.contact}</div>
       </div>
+      ${isAccommodation ? `
+      <button class="detail-view-btn" data-detail-id="${spot.detailId || spot.id}">
+        <span class="detail-text">상세보기</span>
+      </button>
+      ` : `
       <button class="add-schedule-btn" data-spot-id="${spot.id}" data-category="${spot.category}">
         <span class="add-icon">+</span>
         <span class="add-text">일정에 추가</span>
       </button>
+      `}
     `;
 
     spotList.appendChild(card);
@@ -617,6 +624,19 @@ nextBtn.addEventListener("click", async () => {
 
 // ===== 카드 클릭 이벤트 (상세 페이지 이동) =====
 spotList.addEventListener("click", (e) => {
+  // 숙소 상세보기 버튼 클릭 시
+  const detailBtn = e.target.closest(".detail-view-btn");
+  if (detailBtn) {
+    e.stopPropagation();
+    e.preventDefault();
+    const card = e.target.closest(".spot-card");
+    const detailId = detailBtn.dataset.detailId || (card ? card.dataset.detailId : null);
+    if (detailId) {
+      window.location.href = `hotel-detail.html?id=${detailId}`;
+    }
+    return;
+  }
+
   // 일정 추가 버튼 클릭 시
   const addBtn = e.target.closest(".add-schedule-btn");
   if (addBtn) {

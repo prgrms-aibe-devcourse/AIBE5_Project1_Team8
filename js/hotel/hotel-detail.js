@@ -71,6 +71,18 @@ function mapAccommodationDocToHotel(docData, hotelId) {
     docData?.description ||
     "숙소 상세 설명이 준비 중입니다.";
 
+  // DB의 boolean 필드 정규화: null/undefined -> false, true/"true"/1 -> true
+  const toBool = (v) => {
+    if (v == null) return false; // null/undefined
+    if (typeof v === "boolean") return v;
+    if (typeof v === "number") return v === 1;
+    if (typeof v === "string") {
+      const s = v.trim().toLowerCase();
+      return s === "true" || s === "1" || s === "y" || s === "yes";
+    }
+    return Boolean(v);
+  };
+
   return {
     id: docData?.id || docData?.contentid || hotelId,
     name,
@@ -81,11 +93,11 @@ function mapAccommodationDocToHotel(docData, hotelId) {
     basePrice,
     desc,
     // 픽토그램은 DB에 없을 수 있으니 안전 기본값
-    parking: Boolean(docData?.parking ?? false),
-    pet: Boolean(docData?.pet ?? false),
-    wifi: Boolean(docData?.wifi ?? false),
-    noSmoking: Boolean(docData?.noSmoking ?? false),
-    breakfast: Boolean(docData?.breakfast ?? false),
+    parking: toBool(docData?.parking),
+    pet: toBool(docData?.pet),
+    wifi: toBool(docData?.wifi),
+    noSmoking: toBool(docData?.noSmoking),
+    breakfast: toBool(docData?.breakfast),
   };
 }
 
@@ -181,7 +193,7 @@ function updatePictograms() {
   } else {
     noSmokingInfo.classList.add("unavailable");
     noSmokingInfo.classList.remove("available");
-    document.getElementById("noSmokingStatus").textContent = "흡연가능";
+    document.getElementById("noSmokingStatus").textContent = "흡연 불가";
   }
 
   // 조식제공
@@ -199,11 +211,15 @@ function updatePictograms() {
 // 상세 정보 버튼 클릭 - 픽토그램 토글
 let isPictogramVisible = false;
 
-detailBtn.addEventListener("click", () => {
-  isPictogramVisible = !isPictogramVisible;
-  pictogramSection.style.display = isPictogramVisible ? "block" : "none";
-  detailBtn.textContent = isPictogramVisible ? "상세 정보 닫기" : "상세 정보";
-});
+if (detailBtn && pictogramSection) {
+  detailBtn.addEventListener("click", () => {
+    isPictogramVisible = !isPictogramVisible;
+    pictogramSection.style.display = isPictogramVisible ? "block" : "none";
+    detailBtn.textContent = isPictogramVisible ? "상세 정보 닫기" : "상세 정보";
+  });
+} else {
+  console.warn("pictogram toggle elements missing:", { detailBtn, pictogramSection });
+}
 
 // 일정추가 버튼 클릭 - 캘린더 모달 열기
 const addScheduleBtn = document.getElementById("addScheduleBtn");
@@ -367,6 +383,14 @@ window.goToPage = goToPage;
 
     renderHotelInfo();
     updatePictograms();
+
+    // 픽토그램 섹션이 안 보인다는 이슈가 많아서: 기본으로 열어둠
+    if (pictogramSection && detailBtn) {
+      isPictogramVisible = true;
+      pictogramSection.style.display = "block";
+      detailBtn.textContent = "상세 정보 닫기";
+    }
+
     renderReviews();
   } catch (e) {
     console.error("hotel-detail init failed:", e);

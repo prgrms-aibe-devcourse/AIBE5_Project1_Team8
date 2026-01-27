@@ -1,23 +1,5 @@
 /* ===== CSS Variables ===== */
 /* 색상 변수는 style.css의 :root에서 상속됨 */
-:root {
-  --bg-main: var(--bg-color);
-  --bg-card: #ffffff;
-  --bg-header: #c4c4c4;
-  --bg-item: var(--beige-bg);
-  --text-primary: var(--primary-text);
-  --text-secondary: var(--secondary-text);
-  --text-light: #999999;
-  --border-color: #e0e0e0;
-  --success: #4caf50;
-  --danger: var(--btn-red);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: var(--border-radius-lg);
-  --transition: all 0.3s ease;
-}
 
 /* ===== Reset & Base ===== */
 .hotel-detail-scope * {
@@ -27,6 +9,29 @@
 }
 
 .hotel-detail-scope {
+  /* 메인(style.css) 변수에 맞춰 상세 페이지 변수 매핑 */
+  --bg-main: var(--bg-color);
+  --bg-header: var(--beige-bg);
+  --bg-card: var(--beige-bg);
+  --bg-item: var(--alt-white);
+
+  --text-primary: var(--primary-text);
+  --text-secondary: var(--secondary-text);
+
+  --border-color: #e3ddd7;
+
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: var(--border-radius-lg);
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.10);
+
+  --transition: all 0.25s ease;
+
+  --success: #2e7d32;
+  --danger: #c62828;
+
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   background: var(--bg-main);
   color: var(--text-primary);
@@ -97,7 +102,8 @@
 
 /* ===== Page Header ===== */
 .hotel-detail-scope .page-header {
-  padding: 2rem;
+  padding: 0 2rem 2rem;
+  padding-top: 20px; /* 나의 일정 페이지와 동일한 상단 마진 */
 }
 
 .hotel-detail-scope .header-banner {
@@ -219,9 +225,9 @@
 }
 
 .hotel-detail-scope .btn-booking:hover {
-  background: var(--text-primary);
+  background: var(--navy-blue);
   color: white;
-  border-color: var(--text-primary);
+  border-color: var(--navy-blue);
 }
 
 .hotel-detail-scope .btn-detail {
@@ -239,9 +245,9 @@
 }
 
 .hotel-detail-scope .btn-detail:hover {
-  background: var(--text-primary);
+  background: var(--navy-blue);
   color: white;
-  border-color: var(--text-primary);
+  border-color: var(--navy-blue);
 }
 
 /* ===== Pictogram Section ===== */
