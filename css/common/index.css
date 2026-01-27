@@ -236,40 +236,56 @@ main {
 
 .title-bookmark {
     position: absolute;
-    bottom: calc(50% + 210px + 24px);
-    left: 0;
-    padding: 15px 25px 15px 30px;
-    background-color: rgba(255, 255, 255, 0.9);
+    /* 위치 조정: 카드 안쪽으로 살짝 띄움 */
+    top: 30px;
+    left: 30px;
+    bottom: auto;
+    /* 기존 bottom 속성 초기화 */
+
+    padding: 12px 25px;
+    background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
+
+    /* 사이트 공통 스타일 적용 */
     border: 1px solid rgba(255, 255, 255, 0.5);
-    border-left: none;
-    border-radius: 0 16px 16px 0;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    /* 완전 둥근 형태 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
     z-index: 20;
     opacity: 0;
-    transform: translateX(-100%);
+    transform: translateY(-20px);
+    /* 위에서 아래로 떨어지듯 등장 */
     transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .refresh-btn {
     position: absolute;
-    top: calc(50% + 210px + 24px);
-    right: 0;
-    padding: 15px 30px 15px 25px;
-    background-color: rgba(255, 255, 255, 0.9);
+    /* 위치 조정: 카드 안쪽으로 띄움 */
+    bottom: 30px;
+    right: 30px;
+    top: auto;
+    /* 기존 top 속성 초기화 */
+
+    padding: 12px 25px;
+    background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
+
     border: 1px solid rgba(255, 255, 255, 0.5);
-    border-right: none;
-    border-radius: 16px 0 0 16px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    /* 완전 둥근 형태 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
     z-index: 20;
     cursor: pointer;
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 600;
     color: #555;
+
     opacity: 0;
-    transform: translateX(100%);
+    transform: translateY(20px);
     transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.1s;
+
     display: flex;
     align-items: center;
     gap: 8px;
@@ -277,40 +293,61 @@ main {
 
 .refresh-btn:hover {
     background-color: #fff;
-    padding-right: 40px;
+    transform: translateY(-2px);
+    /* 살짝 떠오르는 효과 */
+    padding-right: 25px;
+    /* 기존의 늘어나는 효과 제거 또는 유지 선택 */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .search-btn {
     position: absolute;
-    top: calc(50% + 210px + 24px);
-    left: 0;
-    padding: 15px 40px 15px 30px;
-    background-color: #FF8C00;
-    color: #FFFFFF;
-    border-radius: 0 16px 16px 0;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    /* 위치 조정: 카드 안쪽으로 띄움 */
+    bottom: 30px;
+    left: 30px;
+    top: auto;
+    /* 기존 top 속성 초기화 */
+
+    padding: 12px 30px;
+
+    /* [중요] 사이트 공통 네이비 색상 변수 사용 (#2f4157) */
+    background-color: var(--navy-blue);
+    color: #ffffff;
+
+    border-radius: 30px;
+    /* 완전 둥근 형태 */
+    box-shadow: 0 4px 15px rgba(47, 65, 87, 0.3);
+    /* 그림자 색상도 네이비 톤으로 */
+
     z-index: 20;
     cursor: pointer;
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 600;
+
     opacity: 0;
     transform: translateX(-100%);
     transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.1s;
+
     display: flex;
     align-items: center;
 }
 
 .search-btn:hover {
-    background-color: #E67E00;
-    padding-left: 40px;
+    /* 호버 시 살짝 밝아지거나 진해지는 효과 */
+    background-color: #1a2533;
+    transform: translateY(-3px);
+    padding-left: 30px;
+    /* 기존의 늘어나는 효과 제거 */
+    box-shadow: 0 6px 20px rgba(47, 65, 87, 0.5);
 }
 
-/* Active states for interactive card */
+/* 활성화 상태 (Active State) - 등장 애니메이션용 */
 .interactive-card.active .title-bookmark,
 .interactive-card.active .refresh-btn,
 .interactive-card.active .search-btn {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
+    /* 제자리로 이동 */
 }
 
 .result-title {
@@ -537,7 +574,7 @@ main {
     gap: 30px;
     position: relative;
     margin: 0 auto;
-    
+
 }
 
 #map {
