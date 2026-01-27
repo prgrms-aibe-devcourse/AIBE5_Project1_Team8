@@ -19,7 +19,7 @@
 
         .search-container .tab {
             background: var(--beige-bg);
-            border: none;
+            border: var(--border-gray);
             padding: 10px 30px;
             border-radius: var(--border-radius-lg);
             cursor: pointer;
@@ -46,7 +46,7 @@
             padding: 12px 18px;
             padding-right: 120px;
             font-size: 16px;
-            border: none;
+            border: var(--border-gray);
             border-radius: 30px;
             background-color: var(--beige-bg);
             outline: none;

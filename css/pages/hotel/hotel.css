@@ -72,6 +72,7 @@ body {
 /* ===== Spot Card ===== */
 .spot-card {
   background: var(--beige-bg);
+  border: var(--border-gray);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-sm);
   padding: 1.5rem;
