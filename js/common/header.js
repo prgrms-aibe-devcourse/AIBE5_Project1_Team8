@@ -153,14 +153,14 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="header-inner">
     <div class="logo" onclick="location.href='/'">LOGO</div>
 
-    <nav class="nav">
-      <a href="/index.html">홈</a>
-      <a href="/pages/search.html?tab=place">지역/명소</a>
-      <a href="/pages/search.html?tab=hotel">호텔/숙소</a>
-      <a href="/pages/support.html">고객센터</a>
-      <a href="/pages/schedule.html">나의 일정</a>
-      <a href="/pages/mypage.html">마이 페이지</a>
-    </nav>
+      <!-- 메뉴 -->
+      <nav class="nav">
+        <a href="/index.html">홈</a>
+        <a href="/pages/hotel/hotel.html">관광지</a>
+        <a href="/pages/support.html">고객센터</a>
+        <a href="/pages/schedule.html">나의 일정</a>
+        <a href="/pages/mypage.html">마이 페이지</a>
+      </nav>
     <span class="header-divider"></span>
 
     <div class="auth"></div>
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 로그아웃 이벤트
         authArea.querySelector('.logout-btn').addEventListener('click', () => {
-          // 로그아웃 확인하는 confirm
+            // 로그아웃 확인하는 confirm
             if (confirm('로그아웃 하시겠습니까?')) {
                 localStorage.removeItem('auth_user');
                 localStorage.removeItem('auth_isLoggedIn');
