@@ -1,4 +1,4 @@
-import { reservations, reviews, userData } from './data.js';
+// import { reservations, reviews, userData } from './data.js';
 import { compressImage } from '../common/image-utils.js';
 import { checkAuth } from '../auth/auth-guard.js';
 import { db } from '../common/firebase-config.js';
@@ -7,16 +7,26 @@ import {
     getDoc,
     updateDoc,
     deleteDoc,
+    getDocs, 
+    collection, 
+    query, where,
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { showToast } from '../common/toast.js';
+
+
+
 
 // 로그인 여부 확인
 if (checkAuth()) {
     document.addEventListener('DOMContentLoaded', async () => {
         const loggedInUser = JSON.parse(localStorage.getItem('auth_user'));
+        const loggedInUserId = loggedInUser.uid;
+        let myReservations = [];
+        let myReviews = [];
+
         /* =====================
         사용자 프로필 렌더링
-    ===================== */
+         ===================== */
         function renderProfile(data) {
             document.querySelector('.mypage-name').textContent = data.name;
             document.querySelector('.profile-name').textContent = data.name;
@@ -32,103 +42,112 @@ if (checkAuth()) {
         if (loggedInUser) {
             renderProfile(loggedInUser);
         }
-        /* =====================
+
+    
+    async function fetchData() {
+        // 1. 내 예약
+        const reservations = collection(db, "reservations");
+        const reservationsQuery = query( reservations, where("userId", "==", loggedInUserId));
+        const reservationsSnapshot = await getDocs(reservationsQuery);
+        myReservations = reservationsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        // console.log("내 예약 데이터 확인:", myReservations); // ✅ 확인용
+
+        // 2. 내 리뷰
+        const reviews = collection(db, "review_for_mypage_test");
+        const reviewsQuery = query(reviews, where("userId", "==", loggedInUserId) );
+        const reviewsSnapshot = await getDocs(reviewsQuery);
+        myReviews = reviewsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        // console.log("내 리뷰 데이터 확인:", myReviews); // ✅ 확인용
+
+        // 3. 렌더링
+        renderReservations();
+        renderReservationPage([
+            ...document.querySelectorAll('.mypage-reservation-item'),
+        ]);
+        renderReviews();
+    }
+
+
+
+    /* =====================
         예약 리스트 렌더링
     ===================== */
-        function renderReservations() {
-            const reservationList = document.querySelector(
-                '.mypage-reservation-list',
+    function renderReservations() {
+        const reservationList = document.querySelector('.mypage-reservation-list');
+        reservationList.innerHTML = '';
+
+        //YYYY-MM-DD 문자열 변환
+        const formatDate = (timestamp) => {
+            if (!timestamp) return '';
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            return date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        };
+
+        myReservations.forEach((r) => {
+            // 완료 항목에서 후기 존재 여부 체크
+            const hasReview = myReviews.some(
+                (review) => review.contentId === r.contentId
             );
-            reservationList.innerHTML = '';
 
-            reservations.forEach((r) => {
-                const hasReview = reviews.some(
-                    (review) => review.contentId === r.contentId,
-                ); // 완료 항목에서 리뷰 존재 여부 체크
-                console.log(hasReview);
+            const checkIn = formatDate(r.checkIn);
+            const checkOut = formatDate(r.checkOut);
+            const date = formatDate(r.date);
 
-                const li = document.createElement('li');
-                li.className = `mypage-reservation-item ${r.type}`;
-                li.innerHTML = `
-                <div class="reservation-top">
-                    <div class="reservation-left">
-                        <img class="reservation-img" src="${r.img}" />
-                        <div class="reservation-info">
-                            <p class="reservation-title">${r.title}</p>
-                            <p class="reservation-date">${r.checkIn} ~ ${
-                                r.checkOut
-                            }</p>
-                        </div>
+            const li = document.createElement('li');
+            li.className = `mypage-reservation-item ${r.type}`;
+            li.innerHTML = `
+            <div class="reservation-top">
+                <div class="reservation-left">
+                    <img class="reservation-img" src="${r.img}" />
+                    <div class="reservation-info">
+                        <p class="reservation-title">${r.title}</p>
+                        <p class="reservation-date">${checkIn} ~ ${checkOut}</p>
                     </div>
-                    <div class="reservation-right">
-                        ${
-                            r.type === 'upcoming'
-                                ? `<div class="d-day"></div>`
-                                : ''
-                        }
-                        <div class="reservation-actions">
-                            ${
-                                r.type === 'completed' && !hasReview
-                                    ? `<button class="reservation-btn review-btn" onclick="location.href='./review.html'">후기 작성</button>`
-                                    : ''
-                            }
-                            <button class="reservation-btn detail-btn">상세보기</button>
-                        </div>
-                    </div>
-                </div>
                 </div>
                 <div class="reservation-right">
-                ${r.type === "upcoming" ? `<div class="d-day"></div>` : ""}
-                <div class="reservation-actions">
-                    ${
-                    r.type === "completed" && !hasReview
-                        ? `<button class="reservation-btn review-btn">후기 작성</button>`
-                        : ``
+                    ${r.type === 'upcoming' ? `<div class="d-day"></div>` : ''}
+                    <div class="reservation-actions">
+                        ${r.type === 'completed' && !hasReview
+                        ? `<button class="reservation-btn review-btn" onclick="location.href='./review.html?contentId=${r.contentId}'">후기 작성</button>`
+                        : ''
                     }
-                    <button class="reservation-btn detail-btn">상세보기</button>
-                </div>
+                        <button class="reservation-btn detail-btn">상세보기</button>
+                    </div>
                 </div>
             </div>
             <div class="reservation-detail">
-                <p><strong>예약 일자</strong> ${r.date.toLocaleDateString()}</p>
+                <p><strong>예약 일자</strong> ${date}</p>
                 <p><strong>숙소 주소</strong> ${r.address}</p>
                 <p><strong>숙소 연락처</strong> ${r.phone}</p>
-                <p><strong>체크인</strong> ${r.checkIn.toLocaleString()}</p>
-                <p><strong>체크아웃</strong> ${r.checkOut.toLocaleString()}</p>
+                <p><strong>체크인</strong> ${checkIn}</p>
+                <p><strong>체크아웃</strong> ${checkOut}</p>
             </div>
             `;
-                reservationList.appendChild(li);
+            reservationList.appendChild(li);
+        });
+
+        // D-Day 계산
+        document.querySelectorAll('.mypage-reservation-item.upcoming').forEach((item) => {
+            const checkInText = item.querySelector('.reservation-date').textContent.split('~')[0].trim();
+            const checkInDate = new Date(checkInText);
+            const today = new Date();
+            const diff = Math.ceil((checkInDate - today) / (1000 * 60 * 60 * 24));
+            item.querySelector('.d-day').textContent = `D-${diff}`;
+        });
+
+        // 상세보기 버튼
+        reservationList.querySelectorAll('.detail-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const item = btn.closest('.mypage-reservation-item');
+                item.classList.toggle('open');
+                btn.textContent = item.classList.contains('open') ? '접기' : '상세보기';
             });
+        });
+    }
 
-            // D-Day 계산 (시작일 기준)
-            document
-                .querySelectorAll('.mypage-reservation-item.upcoming')
-                .forEach((item) => {
-                    const checkInDateText =
-                        item.querySelector('.reservation-date').textContent;
-                    const [year, month, day] = checkInDateText.split('-'); // 시간은 무시
-                    const checkIn = new Date(year, month - 1, day);
-                    const today = new Date();
-                    const diff = Math.ceil(
-                        (checkIn - today) / (1000 * 60 * 60 * 24),
-                    );
-                    item.querySelector('.d-day').textContent = `D-${diff}`;
-                });
+        fetchData(); 
 
-            // 상세보기 버튼
-            reservationList.querySelectorAll('.detail-btn').forEach((btn) => {
-                btn.addEventListener('click', () => {
-                    const item = btn.closest('.mypage-reservation-item');
-                    item.classList.toggle('open');
-                    btn.textContent = item.classList.contains('open')
-                        ? '접기'
-                        : '상세보기';
-                });
-            });
-        }
-        renderReservations(); // 예약 리스트 렌더링 호출
-
-        /* =====================
+    /* =====================
         예약 탭 필터 + 페이지네이션
     ===================== */
         const tabs = document.querySelectorAll('.reservation-tab');
@@ -183,33 +202,39 @@ if (checkAuth()) {
                         (idx === 2 && item.classList.contains('completed')),
                 );
 
-                renderReservationPage(filteredItems); // 💡 필터된 항목만 페이지네이션
+                renderReservationPage(filteredItems); // 필터된 항목만 페이지네이션
             });
         });
 
-        // 초기 로드 시 전체 페이지네이션
-        renderReservationPage([
-            ...document.querySelectorAll('.mypage-reservation-item'),
-        ]);
-
+        
         /* ===================== 
         후기 리스트 렌더링 + 최신순 정렬 + 삭제(모달) + 페이지네이션
-    ===================== */
+        ===================== */
         function renderReviews() {
             const reviewList = document.querySelector('.mypage-review-list');
             const sortSelect = document.getElementById('sortSelect');
-            const reviewDeleteModal =
-                document.getElementById('reviewDeleteModal');
+            const reviewDeleteModal = document.getElementById('reviewDeleteModal');
             const modalCancel = reviewDeleteModal.querySelector('.cancel');
             const modalConfirm = reviewDeleteModal.querySelector('.confirm');
 
             reviewList.innerHTML = '';
 
+            // Firestore Timestamp → YYYY-MM-DD
+            const formatDate = (timestamp) => {
+                if (!timestamp) return '';
+                const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+                return date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            };
+
             // DOM에 리뷰 li 생성
-            reviews.forEach((r) => {
+            myReviews.forEach((r) => {
                 const li = document.createElement('li');
                 li.className = 'mypage-review-item';
-                li.dataset.date = r.date; // 날짜 데이터 저장
+                li.dataset.date = formatDate(r.date); // UI용
+                li.dataset.timestamp = r.date.toDate ? r.date.toDate().getTime() : new Date(r.date).getTime(); // 정렬용
+                li.dataset.id = r.id; // 항목 아이디 (리뷰 삭제 활용)
+                const reviewDate = formatDate(r.date);
+
                 li.innerHTML = `
                 <div class="review-left">
                     ${r.img ? `<img src="${r.img}" alt="리뷰 이미지" />` : ''}
@@ -217,21 +242,16 @@ if (checkAuth()) {
                 <div class="review-center">
                     <div class="review-header">
                         <span class="review-title">${r.title}</span>
-                        <span class="review-date">${r.date}</span>
+                        <span class="review-date">${reviewDate}</span>
                     </div>
-                    <p class="review-rating">${'⭐'.repeat(r.rating)}</p>
-                    <p class="review-content">${r.content}</p>
+                    <p class="review-rating">${'⭐'.repeat(r.rating || 0)}</p>
+                    <p class="review-content">${r.content || ''}</p>
                 </div>
                 <div class="review-right">
                     <button class="review-action-btn danger">삭제</button>
                 </div>
-                <p class="review-rating">${"⭐".repeat(r.rating)}</p>
-                <p class="review-content">${r.content}</p>
-            </div>
-            <div class="review-right">
-                <button class="review-action-btn danger">삭제</button>
-            </div>
-            `;
+                `;
+
                 reviewList.appendChild(li);
             });
 
@@ -247,8 +267,7 @@ if (checkAuth()) {
 
                     items.forEach((item, idx) => {
                         item.style.display =
-                            idx >= (currentPage - 1) * perPage &&
-                            idx < currentPage * perPage
+                            idx >= (currentPage - 1) * perPage && idx < currentPage * perPage
                                 ? 'flex'
                                 : 'none';
                     });
@@ -276,14 +295,26 @@ if (checkAuth()) {
                 };
             }
 
-            // 초기 배열 가져오기 & 최신순 정렬
+            // 초기 배열 & 최신순 정렬
             let reviewItems = [...reviewList.children];
-            reviewItems.sort(
-                (a, b) => new Date(b.dataset.date) - new Date(a.dataset.date),
-            );
+            reviewItems.sort((a, b) => b.dataset.timestamp - a.dataset.timestamp);
             reviewItems.forEach((item) => reviewList.appendChild(item));
 
             const reviewPagination = setupReviewPagination(reviewItems);
+            sortSelect.addEventListener('change', () => {
+                reviewItems.sort((a, b) => {
+                    if (sortSelect.value === '별점순') {
+                        return b.querySelector('.review-rating').textContent.length -
+                            a.querySelector('.review-rating').textContent.length;
+                    } else {
+                        return (b.dataset.timestamp - a.dataset.timestamp);
+                    }
+                });
+
+                reviewItems.forEach((item) => reviewList.appendChild(item));
+                reviewPagination.setItems(reviewItems);
+            });
+
 
             // 삭제 이벤트 (모달 방식)
             let targetToDelete = null;
@@ -300,46 +331,34 @@ if (checkAuth()) {
                 reviewDeleteModal.classList.add('hidden');
             });
 
-            modalConfirm.addEventListener('click', () => {
+            modalConfirm.addEventListener('click', async () => {
                 if (targetToDelete) {
-                    targetToDelete.remove();
-                    reviewItems = reviewItems.filter(
-                        (i) => i !== targetToDelete,
-                    );
-                    reviewPagination.setItems(reviewItems);
+                    try {
+                        // Firestore에서 삭제
+                        const reviewId = targetToDelete.dataset.id; // li에 id 저장했다고 가정
+                        await deleteDoc(doc(db, "review_for_mypage_test", reviewId));
+
+                        // UI 반영
+                        targetToDelete.remove();
+                        reviewItems = reviewItems.filter((i) => i !== targetToDelete);
+                        reviewPagination.setItems(reviewItems);
+
+                    } catch (error) {
+                        console.error("리뷰 삭제 실패:", error);
+                        alert("리뷰 삭제 중 오류가 발생했습니다.");
+                    }
                 }
                 targetToDelete = null;
                 reviewDeleteModal.classList.add('hidden');
             });
-
-            // 정렬 필터 이벤트
-            sortSelect.addEventListener('change', () => {
-                reviewItems.sort((a, b) => {
-                    if (sortSelect.value === '별점순') {
-                        return (
-                            b.querySelector('.review-rating').textContent
-                                .length -
-                            a.querySelector('.review-rating').textContent.length
-                        );
-                    } else {
-                        // 최신순
-                        return (
-                            new Date(b.dataset.date) - new Date(a.dataset.date)
-                        );
-                    }
-                });
-
-                reviewItems.forEach((item) => reviewList.appendChild(item));
-                reviewPagination.setItems(reviewItems);
-            });
         }
-
-        // 렌더링 호출
+        // 호출
         renderReviews();
+
 
         /* =====================
         프로필 수정
-    ===================== */
+        ===================== */
         const profileBtn = document.querySelector('.profile-btn');
         const profileInfo = document.querySelector('.profile-info');
         const profileImg = document.querySelector('.profile-img');
@@ -487,12 +506,6 @@ if (checkAuth()) {
         /* =====================
         비밀번호 수정 모달
     ===================== */
-    async function updateUserPassword(newPassword) {
-        const userRef = doc(db, "users", currentUserDocId);
-        await updateDoc(userRef, {
-            password: newPassword,
-        });
-    }
 
         // 비밀번호 변경 확인 모달
         const passwordModal = document.getElementById('passwordModal');
@@ -526,6 +539,17 @@ if (checkAuth()) {
 
         /* =====================
     비밀번호 수정 로직 (Firestore 연동)
+===================== */
+        async function handlePasswordChange() {
+            const currentPass = passwordInputs[0].value; // 현재 비밀번호
+            const newPass = passwordInputs[1].value; // 새로운 비밀번호
+            const newPassConfirm = passwordInputs[2].value; // 새로운 비밀번호 확인
+
+            // 1. 빈 칸 검사
+            if (!currentPass || !newPass || !newPassConfirm) {
+                showToast('모든 항목을 입력해주세요.', 'error');
+                return;
+            }
 
             // 2. 새로운 비밀번호 일치 여부 확인 (이게 핵심!)
             if (newPass !== newPassConfirm) {
