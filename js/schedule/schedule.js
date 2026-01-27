@@ -38,7 +38,7 @@ if (checkAuth()) {
     /* ================= Firebase에서 일정 데이터 가져오기 ================= */
     async function loadSchedulesFromFirebase() {
         try {
-            const { db } = await import('../common/firebase-Config.js');
+            const { db } = await import('../common/firebase-config.js');
             const { collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
             const userId = loggedInUser?.username || loggedInUser?.uid;

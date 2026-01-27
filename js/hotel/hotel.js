@@ -12,7 +12,7 @@ let shoppingData = [];        // 쇼핑 (시장, 쇼핑몰 등)
 // ===== Firebase에서 데이터 가져오기 =====
 async function loadDataFromFirebase() {
   try {
-    const { db } = await import('../common/firebase-Config.js');
+    const { db } = await import('../common/firebase-config.js');
     const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
     
     // 배열 초기화
