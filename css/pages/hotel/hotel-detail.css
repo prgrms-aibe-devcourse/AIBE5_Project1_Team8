@@ -110,6 +110,7 @@
   max-width: 800px;
   margin: 0 auto;
   background: var(--bg-header);
+  border: var(--border-gray);
   border-radius: var(--radius-lg);
   padding: 3rem 2rem;
   text-align: center;
@@ -132,6 +133,7 @@
 .hotel-detail-scope .hotel-detail-card {
   background: var(--bg-card);
   border-radius: var(--radius-md);
+  border: var(--border-gray);
   box-shadow: var(--shadow-sm);
   padding: 2rem;
   display: flex;
@@ -176,6 +178,7 @@
   background: var(--bg-item);
   padding: 0.6rem 1rem;
   border-radius: var(--radius-sm);
+  border: var(--border-gray);
   font-size: 0.9rem;
   color: var(--text-primary);
 }
@@ -254,6 +257,7 @@
 .hotel-detail-scope .pictogram-section {
   background: var(--bg-card);
   border-radius: var(--radius-md);
+  border: var(--border-gray);
   box-shadow: var(--shadow-sm);
   padding: 2rem;
   margin-bottom: 2rem;
@@ -291,10 +295,14 @@
 
 .hotel-detail-scope .pictogram-item.available {
   background: #e8f5e9;
+  /* border: 2px solid #bfddc2; */
+  border: 1px solid #7fd1ae;
 }
 
 .hotel-detail-scope .pictogram-item.unavailable {
   background: #ffebee;
+  border: 1px solid #f1bab6
+  /* border: 2px solid #f5c8d0; */
 }
 
 .hotel-detail-scope .pictogram-icon {
@@ -345,6 +353,7 @@
 .hotel-detail-scope .description-box {
   background: var(--bg-card);
   border-radius: var(--radius-md);
+  border: var(--border-gray);
   box-shadow: var(--shadow-sm);
   padding: 2rem;
 }
@@ -364,12 +373,14 @@
   background: var(--bg-item);
   padding: 1.5rem;
   border-radius: var(--radius-sm);
+  border: var(--border-gray);
 }
 
 /* ===== Review Section ===== */
 .hotel-detail-scope .review-section {
   background: var(--bg-card);
   border-radius: var(--radius-md);
+  border: var(--border-gray);
   box-shadow: var(--shadow-sm);
   padding: 2rem;
 }
@@ -403,6 +414,7 @@
 .hotel-detail-scope .review-card {
   background: var(--bg-item);
   border-radius: var(--radius-md);
+  border: var(--border-gray);
   padding: 1.5rem;
 }
 
