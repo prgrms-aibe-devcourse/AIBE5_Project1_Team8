@@ -577,7 +577,7 @@ const place = places[placeId];
 
 if (!place) {
   alert("존재하지 않는 관광지입니다.");
-  location.href = "hotel.html";
+  location.href = "../hotel/hotel.html";
 }
 
 // DOM Elements

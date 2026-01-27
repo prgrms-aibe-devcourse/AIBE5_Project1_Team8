@@ -1,0 +1,156 @@
+body {
+    font-family:
+        'Montserrat',
+        'Pretendard',
+        -apple-system,
+        BlinkMacSystemFont,
+        system-ui,
+        sans-serif;
+}
+
+.auth-wrapper {
+    height: 100vh;
+    display: flex;
+    background: var(--beige-bg);
+}
+
+/* 좌/우 반 split + 투명도 차이 */
+.auth-left,
+.auth-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 왼쪽: 더 투명 */
+.auth-left {
+    background: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(6px);
+}
+
+/* 오른쪽: 덜 투명(조금 더 진함) */
+.auth-right {
+    background: rgba(255, 255, 255, 0.705);
+    backdrop-filter: blur(10px);
+}
+
+/* 텍스트 */
+.greeting-text {
+    font-size: 24px;
+    letter-spacing: 6px;
+    color: var(--alt-black);
+}
+
+/* 오른쪽 박스 */
+.auth-box {
+    width: 360px;
+    display: none; /* 기본 숨김 */
+}
+
+.auth-box.is-active {
+    display: block; /* 활성만 표시 */
+}
+
+.auth-title {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 30px;
+    font-weight: 500;
+    color: var(--alt-black);
+    letter-spacing: 4px;
+    
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.auth-label {
+    margin-top: 16px;
+    padding-left: 12px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--secondary-text);
+}
+
+.auth-input {
+    height: 44px;
+    border-radius: 22px;
+    border: none;
+    background-color: #ededed;
+    opacity: 0.7;
+    padding: 0 20px;
+    outline: none;
+}
+
+/* 버튼은 이미지 분위기 맞춰 회색 톤 */
+.primary-btn {
+    margin-top: 24px;
+    align-self: center;
+    padding: 12px 40px;
+    border-radius: 25px;
+    border: none;
+    background-color: var(--navy-blue);
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    color: var(--alt-white);
+}
+
+/* OR 구분선 */
+.switch-area {
+    margin: 26px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.switch-area .line {
+    flex: 1;
+    height: 1px;
+    background-color: #aaa;
+}
+
+.switch-area .or {
+    font-size: 12px;
+    color: #777;
+}
+
+/* 전환 텍스트 */
+.switch-text {
+    margin: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--alt-black);
+}
+
+.switch-link {
+    cursor: pointer;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+/* 모바일: 세로로 */
+@media (max-width: 900px) {
+    .auth-wrapper {
+        flex-direction: column;
+    }
+
+    .auth-left,
+    .auth-right {
+        flex: none;
+        width: 100%;
+    }
+
+    .auth-left {
+        height: 30vh;
+    }
+
+    .auth-right {
+        height: 70vh;
+    }
+}

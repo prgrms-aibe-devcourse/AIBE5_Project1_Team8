@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="전국 주요 관광지 숙소 - 서울, 부산, 제주, 강릉, 경주 등 인기 지역 호텔 예약">
+  <title>숙소 조회 | TravelKorea</title>
+
+  <!-- Common Styles -->
+  <link rel="stylesheet" href="../../css/common/style.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <!-- Accommodation Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/pages/accommodation/accommodation.css">
+  <link rel="stylesheet" href="../../css/common/calendar-modal.css">
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+  </header>
+
+  <main>
+    <!-- Header Banner -->
+    <div class="page-header" style="padding-top: 0;">
+      <div class="header-banner">
+        <h1 class="page-title">숙소 조회</h1>
+        <p class="page-subtitle">전국 주요 관광지의 인기 숙소를 찾아보세요</p>
+      </div>
+    </div>
+
+    <!-- Region Tabs -->
+    <section class="category-tabs-section">
+      <div class="container">
+        <div class="category-tabs">
+          <button class="category-tab active" data-region="seoul">서울</button>
+          <button class="category-tab" data-region="busan">부산</button>
+          <button class="category-tab" data-region="jeju">제주</button>
+          <button class="category-tab" data-region="gangneung">강릉</button>
+          <button class="category-tab" data-region="gyeongju">경주</button>
+          <button class="category-tab" data-region="yeosu">여수</button>
+          <button class="category-tab" data-region="jeonju">전주</button>
+          <button class="category-tab" data-region="sokcho">속초</button>
+          <button class="category-tab" data-region="incheon">인천</button>
+          <button class="category-tab" data-region="daejeon">대전</button>
+          <button class="category-tab" data-region="daegu">대구</button>
+          <button class="category-tab" data-region="gwangju">광주</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <!-- Hotel List -->
+      <section class="hotel-list" id="hotelList">
+        <!-- Cards will be rendered here -->
+      </section>
+
+      <!-- No Results -->
+      <div class="no-results" id="noResults" style="display: none;">
+        <div class="no-results-icon">🏨</div>
+        <h3>등록된 숙소가 없습니다</h3>
+        <p>다른 지역을 선택해보세요</p>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" id="pagination">
+        <button class="page-btn prev" id="prevBtn">&lt;</button>
+        <span class="page-info" id="pageInfo">페이지</span>
+        <button class="page-btn next" id="nextBtn">&gt;</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="../../js/common/header.js"></script>
+  <script src="../../js/common/script.js"></script>
+  <script src="../../js/common/calendar-modal.js"></script>
+  <!-- Hotel Data (전역 변수로 호텔 데이터 로드) -->
+  <script src="../../js/common/hotel-data.js"></script>
+  <script src="../../js/accommodation/accommodation.js"></script>
+</body>
+
+</html>

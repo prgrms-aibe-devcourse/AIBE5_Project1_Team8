@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>Auth</title>
+
+  <link rel="stylesheet" href="../../css/common/style.css" />
+  <link rel="stylesheet" href="../../css/common/toast.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  />
+
+  <link rel="stylesheet" href="../../css/pages/auth/auth.css" />
+
+</head>
+
+<body>
+  <div class="auth-wrapper" id="authWrap">
+    <!-- LEFT: 고정 -->
+    <section class="auth-left" aria-label="greeting">
+      <h2 class="greeting-text">GREETING</h2>
+    </section>
+
+    <!-- RIGHT: 로그인/회원가입만 바꿔치기 -->
+    <section class="auth-right" aria-label="auth">
+      <!-- LOGIN -->
+      <div class="auth-box auth-login is-active" id="loginBox">
+        <h2 class="auth-title">Login</h2>
+
+        <form class="auth-form">
+          <label class="auth-label">Username</label>
+          <input class="auth-input" type="text" autocomplete="username" />
+
+          <label class="auth-label">Password</label>
+          <input class="auth-input" type="password" autocomplete="current-password" />
+
+          <button type="button" class="primary-btn">Sign in</button>
+        </form>
+
+        <div class="switch-area" aria-hidden="true">
+          <span class="line"></span>
+          <span class="or">OR</span>
+          <span class="line"></span>
+        </div>
+
+        <p class="switch-text">
+          <span class="switch-link" id="goRegister">Register</span>
+        </p>
+      </div>
+
+      <!-- REGISTER -->
+      <div class="auth-box auth-register" id="registerBox">
+        <h2 class="auth-title">Register</h2>
+
+        <form class="auth-form">
+          <label class="auth-label">Name</label>
+          <input class="auth-input" type="text" autocomplete="name" />
+
+          <label class="auth-label">Email</label>
+          <input class="auth-input" type="email" autocomplete="email" />
+
+          <label class="auth-label">Username</label>
+          <input class="auth-input" type="text" autocomplete="username" />
+
+          <label class="auth-label">Password</label>
+          <input class="auth-input" type="password" autocomplete="new-password" />
+
+          <label class="auth-label">Password Confirm</label>
+          <input class="auth-input" type="password" autocomplete="new-password" />
+
+          <button type="button" class="primary-btn">Continue</button>
+        </form>
+
+        <p class="switch-text">
+          이미 계정이 있나요?&nbsp;
+          <span class="switch-link" id="goLogin">Sign in</span>
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="../../js/auth/auth.js"></script>
+  
+</body>
+</html>

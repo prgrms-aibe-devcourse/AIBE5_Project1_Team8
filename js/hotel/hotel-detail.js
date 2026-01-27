@@ -329,20 +329,22 @@ detailBtn.addEventListener("click", () => {
 
 // 일정추가 버튼 클릭 - 캘린더 모달 열기
 const addScheduleBtn = document.getElementById("addScheduleBtn");
-addScheduleBtn.addEventListener("click", () => {
-  const placeData = {
-    type: "hotel",
-    hotelId: hotelId,
-    image: hotel.image,
-    location: hotel.address,
-    contact: hotel.contact,
-    price: hotel.price
-  };
+if (addScheduleBtn) {
+  addScheduleBtn.addEventListener("click", () => {
+    const placeData = {
+      type: "hotel",
+      hotelId: hotelId,
+      image: hotel.image,
+      location: hotel.address,
+      contact: hotel.contact,
+      price: hotel.price
+    };
 
-  calendarModal.open(hotel.name, placeData, (scheduleData) => {
-    console.log("일정이 추가되었습니다:", scheduleData);
+    calendarModal.open(hotel.name, placeData, (scheduleData) => {
+      console.log("일정이 추가되었습니다:", scheduleData);
+    });
   });
-});
+}
 
 // 예약 버튼 클릭 - 예약 페이지로 이동
 bookingBtn.addEventListener("click", () => {

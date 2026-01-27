@@ -1,13 +1,16 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
     --bg-color: #fffffa; /* 흰색 배경 */
     --beige-bg: #F4EFEB; /* 박스 배경 */
     --primary-text: #333333; /* 글씨 색상*/
     --secondary-text: #666666; /* 글씨 색상 */
+    --alt-white: #fafafa; /* #ffffff 대체 흰색 */
+    --alt-black: #121212; /* #000000 대체 검은색 */
     --navy-blue: #2f4157; /* 버튼 색상 등등 */
-    --btn-red: #b93920; /* 로그인 버튼, 삭제 버튼 등 색상상 */
-    --border-radius-lg: 30px; /* 모서리 둥글기 값값 */
+    --btn-red: #b93920; /* 로그인 버튼, 삭제 버튼 등 색상 */
+    --border-radius-lg: 30px; /* 모서리 둥글기 값 */
 }
 
 * {
