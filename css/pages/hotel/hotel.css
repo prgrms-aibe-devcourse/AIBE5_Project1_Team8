@@ -183,6 +183,33 @@ body {
   font-size: 0.8rem;
 }
 
+/* Detail View Button (숙소 전용) */
+.detail-view-btn {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: var(--navy-blue);
+  border: 1px solid var(--navy-blue);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #fff;
+  font-size: 0.85rem;
+  transition: var(--transition);
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  z-index: 2;
+}
+
+.detail-view-btn:hover {
+  filter: brightness(0.92);
+}
+
+.detail-text {
+  font-size: 0.8rem;
+}
+
 /* ===== No Results ===== */
 .no-results {
   text-align: center;

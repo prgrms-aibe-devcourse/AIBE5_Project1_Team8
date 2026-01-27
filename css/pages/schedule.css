@@ -38,10 +38,10 @@ body {
   padding: 24px 0;
   border-radius: 20px;
 
-  background: rgba(17, 24, 39, 0.3);;
+  background: var(--beige-bg);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 
-  color:white;
+  color:var(--primary-text);
   text-align: center;
   font-size: 26px;
   font-weight: 300; /* 얇게 */
