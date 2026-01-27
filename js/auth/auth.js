@@ -1,150 +1,160 @@
-import { showToast } from "../common/toast.js";
+// ------------------------------------------------
+// Firebase 설정 및 모듈 가져오기
+// ------------------------------------------------
+import { db } from '../common/firebase-config.js';
+import {
+    collection,
+    addDoc,
+    getDocs,
+    query,
+    where,
+    serverTimestamp,
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { showToast } from '../common/toast.js';
 
-const dummyUsers = [
-  {
-    name: "Alex Kim",
-    email: "alex.kim@test.com",
-    username: "alex01",
-    password: "password123!"
-  },
-  {
-    name: "Jamie Lee",
-    email: "jamie.lee@test.com",
-    username: "jamie02",
-    password: "qwerty789!"
-  }
-];
-
-// 로그인 후 돌아갈 페이지를 URL에서 읽기
+// 로그인 후 돌아갈 페이지 설정
 const urlParams = new URLSearchParams(window.location.search);
-const redirectPage = urlParams.get("redirect") || "../index.html";
+const redirectPage = urlParams.get('redirect') || '/index.html';
 
-const loginBox = document.getElementById("loginBox");
-const registerBox = document.getElementById("registerBox");
+const loginBox = document.getElementById('loginBox');
+const registerBox = document.getElementById('registerBox');
+const goRegister = document.getElementById('goRegister');
+const goLogin = document.getElementById('goLogin');
 
-const goRegister = document.getElementById("goRegister");
-const goLogin = document.getElementById("goLogin");
-
+// 화면 전환 함수
 function showLogin() {
-  loginBox.classList.add("is-active");
-  registerBox.classList.remove("is-active");
+    loginBox.classList.add('is-active');
+    registerBox.classList.remove('is-active');
 }
-
 function showRegister() {
-  registerBox.classList.add("is-active");
-  loginBox.classList.remove("is-active");
+    registerBox.classList.add('is-active');
+    loginBox.classList.remove('is-active');
 }
 
-goRegister.addEventListener("click", showRegister);
-goLogin.addEventListener("click", showLogin);
+goRegister.addEventListener('click', showRegister);
+goLogin.addEventListener('click', showLogin);
 
-const loginBtn = document.querySelector(".auth-login .primary-btn");
+// ------------------------------------------------
+// 2. 로그인 로직 (Firestore 조회)
+// ------------------------------------------------
+const loginBtn = document.querySelector('.auth-login .primary-btn');
 
-loginBtn.addEventListener("click", () => {
-  const usernameInput = document.querySelector(".auth-login input[type='text']");
-  const pwInput = document.querySelector(".auth-login input[type='password']");
+loginBtn.addEventListener('click', async () => {
+    const usernameInput = document.querySelector(
+        ".auth-login input[type='text']",
+    );
+    const pwInput = document.querySelector(
+        ".auth-login input[type='password']",
+    );
 
-  const inputUsername = usernameInput.value.trim();
-  const inputPw = pwInput.value.trim();
+    const inputUsername = usernameInput.value.trim();
+    const inputPw = pwInput.value.trim();
 
-  const matchedUser = dummyUsers.find(
-    user => user.username === inputUsername && user.password === inputPw
-  );
+    if (!inputUsername || !inputPw) {
+        showToast('아이디와 비밀번호를 입력해주세요.', 'error');
+        return;
+    }
 
-  if (matchedUser) {
-    const authPayload = {
-      username: matchedUser.username,
-      loggedInAt: new Date().toISOString()
-    };
-    localStorage.setItem("auth_user", JSON.stringify(authPayload));
-    localStorage.setItem("auth_isLoggedIn", "true");
-    showToast("로그인 성공하였습니다", "success", 2000);
-    //window.location.replace(redirectPage); // replace로 히스토리 제거 - 일단 주석처리
-    setTimeout(() => {
-      window.location.href = redirectPage;
-    }, 800);
-  } else {
-    showToast("로그인에 실패했습니다", "error", 2000);
-  }
+    try {
+        // Firestore에서 아이디와 비밀번호가 일치하는 사용자 찾기
+        const q = query(
+            collection(db, 'users'),
+            where('username', '==', inputUsername),
+            where('password', '==', inputPw),
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            // 로그인 성공
+            const userDoc = querySnapshot.docs[0];
+            const userData = userDoc.data();
+
+            // 세션 유지용 데이터 저장 -> localStorage (마이페이지/리뷰에서 사용)
+            const authPayload = {
+                uid: userDoc.id, // Firestore 문서 ID
+                username: userData.username,
+                name: userData.name, // 실제 이름
+                email: userData.email, // 이메일
+                phone: userData.phone || '010-0000-0000', // 전화번호 필드가 있다면 추가
+                profileImg: userData.profileImg || "/images/default_profile.png",
+                loggedInAt: new Date().toISOString(),
+            };
+
+            localStorage.setItem('auth_user', JSON.stringify(authPayload));
+            localStorage.setItem('auth_isLoggedIn', 'true');
+
+            showToast(`${userData.name}님, 반가워요!`, 'success', 1800);
+            setTimeout(() => {
+                // 인코딩된 주소를 다시 일반 주소로 변환해서 이동합니다.
+                window.location.href = decodeURIComponent(redirectPage);
+            }, 800);
+        } else {
+            showToast('아이디 또는 비밀번호가 일치하지 않습니다.', 'error');
+        }
+    } catch (error) {
+        console.error('로그인 에러:', error);
+        showToast('로그인 중 오류가 발생했습니다.', 'error');
+    }
 });
 
-// ===============================
-// Register validation + create user
-// ===============================
+// ------------------------------------------------
+// 3. 회원가입 로직 (Firestore 저장)
+// ------------------------------------------------
+const registerBtn = document.querySelector('.auth-register .primary-btn');
 
-const registerBtn = document.querySelector(".auth-register .primary-btn");
+registerBtn.addEventListener('click', async () => {
+    const inputs = document.querySelectorAll('.auth-register .auth-input');
+    const name = inputs[0].value.trim();
+    const email = inputs[1].value.trim();
+    const username = inputs[2].value.trim();
+    const password = inputs[3].value;
+    const passwordConfirm = inputs[4].value;
 
-registerBtn.addEventListener("click", () => {
-  // REGISTER 폼 input 5개 (NAME, EMAIL, USERNAME(ID), PASSWORD, PASSWORD CONFIRM)
-  const inputs = document.querySelectorAll(".auth-register .auth-input");
-  const nameInput = inputs[0];
-  const emailInput = inputs[1];
-  const usernameInput = inputs[2];
-  const pwInput = inputs[3];
-  const pwConfirmInput = inputs[4];
+    // 기본 유효성 검사 (우현님 기존 로직 활용)
+    if (!name || !email || !username || !password || !passwordConfirm) {
+        showToast('모든 항목을 입력해주세요.', 'error');
+        return;
+    }
 
-  const name = nameInput.value.trim();
-  const email = emailInput.value.trim();
-  const username = usernameInput.value.trim();
-  const password = pwInput.value;
-  const passwordConfirm = pwConfirmInput.value;
+    if (password !== passwordConfirm) {
+        showToast('비밀번호 확인이 일치하지 않습니다.', 'error');
+        return;
+    }
 
-  // 1) 빈 값 체크
-  if (!name || !email || !username || !password || !passwordConfirm) {
-    showToast("모든 항목을 입력해주세요.", "error", 2000);
-    return;
-  }
+    try {
+        // [중요] 중복 아이디 체크
+        const q = query(
+            collection(db, 'users'),
+            where('username', '==', username),
+        );
+        const checkSnapshot = await getDocs(q);
 
-  // 2) 이메일 형식 체크 (input type="email" 기본 검증 활용)
-  if (!emailInput.checkValidity()) {
-    showToast("이메일 형식이 올바르지 않습니다.", "error", 2000);
-    emailInput.focus();
-    return;
-  }
+        if (!checkSnapshot.empty) {
+            showToast('이미 사용 중인 Username입니다.', 'error');
+            return;
+        }
 
-  // 3) Username 형식 체크: 4~20자, 영문/숫자/_/-, 공백 금지, 첫 글자 영문
-  const usernamePattern = /^[a-zA-Z][a-zA-Z0-9_-]{3,19}$/;
-  if (!usernamePattern.test(username)) {
-    showToast("Username은 4~20자 영문/숫자/_/-만 가능하며, 첫 글자는 영문이어야 합니다.", "error", 2500);
-    usernameInput.focus();
-    return;
-  }
+        // Firestore에 사용자 생성
+        await addDoc(collection(db, 'users'), {
+            name,
+            email,
+            username,
+            password, // 주의: 실제 서비스에선 암호화 필요 -> 해시함수 등.
+            createdAt: serverTimestamp(),
+        });
 
-  // 4) Username 중복 체크
-  const usernameExists = dummyUsers.some(user => user.username.toLowerCase() === username.toLowerCase());
-  if (usernameExists) {
-    showToast("이미 사용 중인 Username입니다.", "error", 2000);
-    usernameInput.focus();
-    return;
-  }
+        showToast(
+            '회원가입이 완료되었습니다! 로그인해주세요.',
+            'success',
+            2000,
+        );
 
-  // 5) 비밀번호 최소 조건: 8자 이상
-  if (password.length < 8) {
-    showToast("비밀번호는 8자 이상이어야 합니다.", "error", 2000);
-    pwInput.focus();
-    return;
-  }
-
-  // 6) 비밀번호 확인 일치
-  if (password !== passwordConfirm) {
-    showToast("비밀번호 확인이 일치하지 않습니다.", "error", 2000);
-    pwConfirmInput.focus();
-    return;
-  }
-
-  // 통과: 더미 계정에 추가(메모리 상)
-  // 해당 계정으로 로그인 시 크롬에서 경고(비밀번호 노출) 나와서, 일단 주석 처리
-  // dummyUsers.push({ name, email, username, password }); 
-
-  showToast("회원가입이 완료되었습니다.", "success", 2000);
-
-  // 폼 비우기
-  nameInput.value = "";
-  emailInput.value = "";
-  usernameInput.value = "";
-  pwInput.value = "";
-  pwConfirmInput.value = "";
-
-  // 로그인 화면으로 전환
-  showLogin();
+        // 폼 초기화 및 화면 전환
+        inputs.forEach((input) => (input.value = ''));
+        showLogin();
+    } catch (error) {
+        console.error('회원가입 에러:', error);
+        showToast('회원가입 처리 중 오류가 발생했습니다.', 'error');
+    }
 });

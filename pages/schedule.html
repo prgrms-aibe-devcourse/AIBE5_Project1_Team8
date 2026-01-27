@@ -1,77 +1,79 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>나의 일정</title>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>나의 일정</title>
+        <link rel="stylesheet" href="../css/common/style.css" />
+        <link rel="stylesheet" href="../css/pages/schedule.css" />
+        <!-- 폰트 불러오기 -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
+            rel="stylesheet"
+        />
 
-    <link rel="stylesheet" href="../css/common/style.css" />
-    <link rel="stylesheet" href="../css/pages/schedule.css" />
-    <!-- 폰트 불러오기 -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+        <link
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            rel="stylesheet"
+        />
+        <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+        <link rel="stylesheet" href="../css/common/chatbot.css" />
+        <script src="../js/common/chatbot.js" defer></script>
+    </head>
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <link rel="stylesheet" href="../css/common/chatbot.css">
-    <script src="../js/common/chatbot.js" defer></script>
-</head>
+    <body>
+        <!-- 헤더 영역 -->
+        <header class="header"></header>
 
-<body>
-    <!-- 헤더 영역 -->
-    <header class="header">
-    </header>
+        <!-- 메인 영역 -->
+        <main class="schedule-container">
+            <!-- 배너 -->
+            <div class="schedule-banner">
+                <span class="nickname">닉네임</span>님의 일정
+            </div>
 
-    <!-- 메인 영역 -->
-    <main class="schedule-container">
-        <!-- 배너 -->
-        <div class="schedule-banner">
-            <span class="nickname">닉네임</span>님의 일정
+            <!-- 카드 1 : 달력 -->
+            <section class="card">
+                <div class="calendar-header">
+                    <button id="prevMonth">‹</button>
+                    <h3 id="monthTitle"></h3>
+                    <button id="nextMonth">›</button>
+                </div>
+                <div class="calendar-week">
+                    <div>일</div>
+                    <div>월</div>
+                    <div>화</div>
+                    <div>수</div>
+                    <div>목</div>
+                    <div>금</div>
+                    <div>토</div>
+                </div>
+                <div class="calendar-grid" id="calendar"></div>
+            </section>
+
+            <!-- 카드 2 : 일정 -->
+            <section class="card">
+                <h3 id="selectedDateTitle">날짜를 선택해주세요</h3>
+                <hr class="schedule-divider" />
+                <ul class="schedule-list" id="scheduleList"></ul>
+            </section>
+        </main>
+
+        <!-- 삭제 확인 모달 -->
+        <div class="modal-overlay" id="deleteModal">
+            <div class="modal">
+                <p class="modal-title">선택하신 일정을 삭제하시겠습니까?</p>
+                <div class="modal-actions">
+                    <button class="btn-cancel">취소</button>
+                    <button class="btn-confirm">삭제</button>
+                </div>
+            </div>
         </div>
 
-        <!-- 카드 1 : 달력 -->
-        <section class="card">
-            <div class="calendar-header">
-                <button id="prevMonth">‹</button>
-                <h3 id="monthTitle"></h3>
-                <button id="nextMonth">›</button>
-            </div>
-            <div class="calendar-week">
-                <div>일</div>
-                <div>월</div>
-                <div>화</div>
-                <div>수</div>
-                <div>목</div>
-                <div>금</div>
-                <div>토</div>
-            </div>
-            <div class="calendar-grid" id="calendar"></div>
-        </section>
-
-        <!-- 카드 2 : 일정 -->
-        <section class="card">
-            <h3 id="selectedDateTitle">날짜를 선택해주세요</h3>
-            <hr class="schedule-divider">
-            <ul class="schedule-list" id="scheduleList"></ul>
-        </section>
-
-    </main>
-
-    <!-- 삭제 확인 모달 -->
-    <div class="modal-overlay" id="deleteModal">
-        <div class="modal">
-            <p class="modal-title">선택하신 일정을 삭제하시겠습니까?</p>
-            <div class="modal-actions">
-                <button class="btn-cancel">취소</button>
-                <button class="btn-confirm">삭제</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="../js/common/header.js"></script>
-    <script src="../js/schedule/schedule.js"></script>
-    <script src="../js/schedule/delete-schedule.js"></script>
-</body>
-
+        <script src="../js/common/header.js"></script>
+        <script type="module" src="../js/schedule/schedule.js"></script>
+        <script src="../js/schedule/delete-schedule.js"></script>
+    </body>
 </html>
