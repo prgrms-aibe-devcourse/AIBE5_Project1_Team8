@@ -5,8 +5,8 @@ if (checkAuth()) {
     // 1. localStorage에서 유저 정보 가져오기
     const loggedInUser = JSON.parse(localStorage.getItem('auth_user'));
 
-    // 2. DOM이 로드된 후 닉네임 표시
-    document.addEventListener('DOMContentLoaded', () => {
+    // 2. DOM이 로드된 후 닉네임 표시 및 일정 로드
+    document.addEventListener('DOMContentLoaded', async () => {
         if (loggedInUser && loggedInUser.name) {
             const nicknameEl = document.querySelector('.nickname');
             if (nicknameEl) {
@@ -14,8 +14,8 @@ if (checkAuth()) {
             }
         }
 
-        // 기존 캘린더 초기 렌더링 호출을 DOMContentLoaded 안으로 이동
-        renderCalendar();
+        // Firebase에서 일정 데이터 로드
+        await loadSchedulesFromFirebase();
     });
 
     /* ================= DOM 요소 가져오기 ================= */
@@ -31,25 +31,74 @@ if (checkAuth()) {
     let selectedDate = null; // 선택된 날짜 (yyyy-mm-dd)
 
     /* ================= 일정 데이터 ================= */
-    // 날짜별 일정 목록
-    const schedules = {
-        '2026-01-20': [
-            { title: '월미도 문화의거리', type: 'tour' },
-            { title: '개항장 루프탑 카페거리', type: 'tour' },
-        ],
-        '2026-01-22': [
-            { title: '여의도 한강공원', type: 'tour' },
-            { title: '북촌 한옥마을', type: 'tour' },
-            { title: '익선동 한옥거리', type: 'tour' },
-        ],
-        '2026-03-20': [
-            { title: '제주 신라호텔', type: 'stay' },
-            { title: '성산일출봉', type: 'tour' },
-            { title: '섭지코지', type: 'tour' },
-        ],
-        '2026-03-21': [{ title: '제주 신라호텔', type: 'stay' }],
-        '2026-03-22': [{ title: '제주 신라호텔', type: 'stay' }],
-    };
+    // 날짜별 일정 목록 (Firebase에서 동적으로 로드)
+    let schedules = {};
+    window.schedules = schedules; // 전역 접근을 위한 참조
+
+    /* ================= Firebase에서 일정 데이터 가져오기 ================= */
+    async function loadSchedulesFromFirebase() {
+        try {
+            const { db } = await import('../common/firebase-Config.js');
+            const { collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
+            const userId = loggedInUser?.username || loggedInUser?.uid;
+            if (!userId) {
+                console.warn('사용자 ID를 찾을 수 없습니다.');
+                schedules = {};
+                renderCalendar();
+                return;
+            }
+
+            // 사용자별 일정 가져오기
+            const schedulesRef = collection(db, 'schedules');
+            const q = query(schedulesRef, where('userId', '==', userId));
+            const querySnapshot = await getDocs(q);
+
+            // 일정 데이터 초기화
+            schedules = {};
+            window.schedules = schedules; // 전역 참조 업데이트
+
+            // Firebase 데이터를 날짜별로 그룹화
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const scheduleItem = {
+                    id: doc.id, // Firebase 문서 ID
+                    title: data.name || '',
+                    type: data.type === 'hotel' ? 'stay' : 'tour', // hotel -> stay, 나머지 -> tour
+                    startDate: data.startDate,
+                    endDate: data.endDate,
+                    ...data // 기타 데이터 (image, location, contact 등)
+                };
+
+                // 시작일부터 종료일까지 모든 날짜에 일정 추가
+                const start = new Date(data.startDate);
+                const end = new Date(data.endDate);
+
+                for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+                    const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                    
+                    if (!schedules[dateStr]) {
+                        schedules[dateStr] = [];
+                    }
+                    schedules[dateStr].push(scheduleItem);
+                }
+            });
+
+            console.log('Firebase에서 일정 로드 완료:', schedules);
+            window.schedules = schedules; // 전역 참조 업데이트
+            renderCalendar();
+            
+            // 선택된 날짜가 있으면 일정 리스트도 업데이트
+            if (selectedDate) {
+                renderSchedule();
+            }
+        } catch (error) {
+            console.error('일정 데이터 로드 실패:', error);
+            schedules = {};
+            window.schedules = schedules; // 전역 참조 업데이트
+            renderCalendar();
+        }
+    }
 
     /* ================= 캘린더 렌더링 ================= */
     function renderCalendar() {
@@ -118,15 +167,13 @@ if (checkAuth()) {
           <span class="schedule-title">${item.title}</span>
         `;
 
-            // 일정 삭제 버튼 이벤트
-            if (item.type === 'tour') {
-                const delBtn = document.createElement('button');
-                delBtn.textContent = '삭제';
-                delBtn.className = 'delete-btn';
-                delBtn.onclick = () => openDeleteModal(selectedDate, index); // 일정 제거 모달창 열기
+            // 일정 삭제 버튼 이벤트 (모든 타입에 대해 삭제 가능)
+            const delBtn = document.createElement('button');
+            delBtn.textContent = '삭제';
+            delBtn.className = 'delete-btn';
+            delBtn.onclick = () => openDeleteModal(selectedDate, index, item.id); // 일정 제거 모달창 열기 (Firebase 문서 ID 전달)
 
-                li.appendChild(delBtn);
-            }
+            li.appendChild(delBtn);
 
             scheduleList.appendChild(li);
         });
@@ -142,6 +189,8 @@ if (checkAuth()) {
         renderCalendar();
     };
 
-    /* ================= 최초 렌더링 ================= */
-    renderCalendar();
+    // 전역에서 함수들 접근 가능하도록
+    window.loadSchedulesFromFirebase = loadSchedulesFromFirebase;
+    window.renderCalendar = renderCalendar;
+    window.renderSchedule = renderSchedule;
 }

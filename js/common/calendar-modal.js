@@ -316,8 +316,18 @@ class CalendarModal {
     this.onConfirm = null;
   }
 
-  confirm() {
+  async confirm() {
     if (!this.startDate) return;
+
+    // 로그인 상태 확인
+    const isLoggedIn = localStorage.getItem('auth_isLoggedIn') === 'true';
+    const userData = JSON.parse(localStorage.getItem('auth_user') || 'null');
+
+    if (!isLoggedIn || !userData) {
+      alert('일정을 추가하려면 로그인이 필요합니다.');
+      window.location.href = '../../pages/auth/index.html';
+      return;
+    }
 
     // 종료일이 없으면 시작일과 동일하게 설정
     if (!this.endDate) {
@@ -325,38 +335,65 @@ class CalendarModal {
     }
 
     const scheduleData = {
-      id: Date.now(),
       name: this.placeName,
       startDate: this.formatDateISO(this.startDate),
       endDate: this.formatDateISO(this.endDate),
+      userId: userData.username || userData.id, // 사용자 ID
+      createdAt: new Date().toISOString(),
       ...this.placeData
     };
 
-    // 기존 일정에 추가
-    const schedules = JSON.parse(localStorage.getItem("mySchedules")) || [];
+    try {
+      // Firebase에 저장
+      const { db } = await import('../common/firebase-Config.js');
+      const { collection, addDoc, query, where, getDocs, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
-    // 중복 체크 (같은 이름, 같은 기간)
-    const exists = schedules.some(s =>
-      s.name === scheduleData.name &&
-      s.startDate === scheduleData.startDate &&
-      s.endDate === scheduleData.endDate
-    );
+      // 중복 체크 (같은 사용자, 같은 이름, 같은 기간)
+      const schedulesRef = collection(db, 'schedules');
+      const q = query(
+        schedulesRef,
+        where('userId', '==', scheduleData.userId),
+        where('name', '==', scheduleData.name),
+        where('startDate', '==', scheduleData.startDate),
+        where('endDate', '==', scheduleData.endDate)
+      );
 
-    if (exists) {
-      alert("이미 같은 기간에 동일한 일정이 있습니다.");
-      return;
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        alert("이미 같은 기간에 동일한 일정이 있습니다.");
+        return;
+      }
+
+      // Firebase에 일정 추가
+      const docRef = await addDoc(collection(db, 'schedules'), {
+        ...scheduleData,
+        createdAt: serverTimestamp()
+      });
+
+      console.log('일정이 Firebase에 저장되었습니다:', docRef.id);
+
+      // 로컬 스토리지에도 백업 저장 (선택사항)
+      const localSchedules = JSON.parse(localStorage.getItem("mySchedules")) || [];
+      localSchedules.push({
+        id: docRef.id,
+        ...scheduleData
+      });
+      localStorage.setItem("mySchedules", JSON.stringify(localSchedules));
+
+      if (this.onConfirm) {
+        this.onConfirm({
+          id: docRef.id,
+          ...scheduleData
+        });
+      }
+
+      alert(`"${this.placeName}" 일정이 추가되었습니다!\n기간: ${this.formatDate(this.startDate)}${this.endDate && this.startDate.getTime() !== this.endDate.getTime() ? ` ~ ${this.formatDate(this.endDate)}` : ""}`);
+
+      this.close();
+    } catch (error) {
+      console.error('일정 저장 실패:', error);
+      alert('일정 저장 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
-
-    schedules.push(scheduleData);
-    localStorage.setItem("mySchedules", JSON.stringify(schedules));
-
-    if (this.onConfirm) {
-      this.onConfirm(scheduleData);
-    }
-
-    alert(`"${this.placeName}" 일정이 추가되었습니다!\n기간: ${this.formatDate(this.startDate)}${this.endDate && this.startDate.getTime() !== this.endDate.getTime() ? ` ~ ${this.formatDate(this.endDate)}` : ""}`);
-
-    this.close();
   }
 }
 
