@@ -1,7 +1,7 @@
 // Firebase에서 한국 관광공사 API 기반 데이터를 가져와 필터별로 정리하는 모듈
 
 // Firebase 설정 파일 import
-import { db } from '../common/firebase-Config.js';
+import { db } from '../common/firebase-config.js';
 import { 
   collection, 
   getDocs, 

@@ -345,7 +345,7 @@ class CalendarModal {
 
     try {
       // Firebase에 저장
-      const { db } = await import('../common/firebase-Config.js');
+      const { db } = await import('./firebase-config.js');
       const { collection, addDoc, query, where, getDocs, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
       // 중복 체크 (같은 사용자, 같은 이름, 같은 기간)

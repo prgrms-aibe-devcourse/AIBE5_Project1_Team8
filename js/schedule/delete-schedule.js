@@ -30,7 +30,7 @@ document.querySelector(".btn-confirm").onclick = async () => {
     try {
       // Firebase에서 삭제
       if (scheduleId) {
-        const { db } = await import('../common/firebase-Config.js');
+        const { db } = await import('../common/firebase-config.js');
         const { doc, deleteDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
         
         await deleteDoc(doc(db, 'schedules', scheduleId));
