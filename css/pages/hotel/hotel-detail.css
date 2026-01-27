@@ -136,6 +136,7 @@
 .hotel-detail-scope .hotel-detail-card {
   background: var(--beige-bg);
   border-radius: 15px;
+  border: var(--border-gray);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   padding: 30px;
   display: flex;
