@@ -9,87 +9,154 @@ let natureData = [];          // 자연 (산, 바다, 공원 등)
 let leisureData = [];         // 레저 (테마파크, 액티비티 등)
 let shoppingData = [];        // 쇼핑 (시장, 쇼핑몰 등)
 
-// ===== Firebase에서 데이터 가져오기 =====
+// ===== 페이지네이션 상태 관리 =====
+const BATCH_SIZE = 64; // 한번에 가져올 문서 수
+let lastAccommodationDoc = null;
+let lastTourItemDoc = null;
+let hasMoreAccommodations = true;
+let hasMoreTourItems = true;
+
+// ===== Firebase에서 데이터 가져오기 (64개씩) =====
 async function loadDataFromFirebase() {
   try {
     const { db } = await import('../common/firebase-config.js');
-    const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+    const { collection, query, getDocs, limit, startAfter, orderBy } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
     
-    // 배열 초기화
-    accommodationData = [];
-    cultureData = [];
-    restaurantData = [];
-    natureData = [];
-    leisureData = [];
-    shoppingData = [];
-    
-    // 1. accommodations 컬렉션에서 숙박 데이터 가져오기
-    try {
-      const accommodationsCollection = collection(db, 'accommodations');
-      const accommodationsSnapshot = await getDocs(accommodationsCollection);
-      
-      accommodationsSnapshot.forEach((doc) => {
-        const data = {
-          id: doc.id,
-          ...doc.data()
-        };
-        
-        // 데이터 형식 변환
-        const formattedData = formatFirebaseData(data, 'accommodation');
-        accommodationData.push(formattedData);
-      });
-      
-      console.log(`Accommodations 로드 완료: ${accommodationData.length}개`);
-    } catch (error) {
-      console.warn('accommodations 컬렉션 로드 실패:', error);
+    // 배열 초기화 (초기 로드 시에만)
+    if (lastAccommodationDoc === null) {
+      accommodationData = [];
+      cultureData = [];
+      restaurantData = [];
+      natureData = [];
+      leisureData = [];
+      shoppingData = [];
+      hasMoreAccommodations = true;
+      hasMoreTourItems = true;
     }
     
-    // 2. tour_items 컬렉션에서 관광지 데이터 가져오기
-    try {
-      const tourItemsCollection = collection(db, 'tour_items');
-      const tourItemsSnapshot = await getDocs(tourItemsCollection);
-      
-      tourItemsSnapshot.forEach((doc) => {
-        const data = {
-          id: doc.id,
-          ...doc.data()
-        };
+    // 1. accommodations 컬렉션에서 숙박 데이터 가져오기 (64개씩)
+    if (hasMoreAccommodations) {
+      try {
+        let accommodationsQuery = query(
+          collection(db, 'accommodations'),
+          orderBy('__name__'), // 문서 ID로 정렬
+          limit(BATCH_SIZE)
+        );
         
-        // category에 따라 분류
-        const category = data.category || inferCategoryFromData(data);
-        const formattedData = formatFirebaseData(data, category);
-        
-        switch (category) {
-          case 'culture':
-            cultureData.push(formattedData);
-            break;
-          case 'restaurant':
-            restaurantData.push(formattedData);
-            break;
-          case 'nature':
-            natureData.push(formattedData);
-            break;
-          case 'leisure':
-            leisureData.push(formattedData);
-            break;
-          case 'shopping':
-            shoppingData.push(formattedData);
-            break;
-          default:
-            // category가 없으면 culture로 기본 설정
-            cultureData.push(formattedData);
+        if (lastAccommodationDoc) {
+          accommodationsQuery = query(
+            collection(db, 'accommodations'),
+            orderBy('__name__'),
+            startAfter(lastAccommodationDoc),
+            limit(BATCH_SIZE)
+          );
         }
-      });
-      
-      console.log(`Tour items 로드 완료:`, {
-        culture: cultureData.length,
-        restaurant: restaurantData.length,
-        nature: natureData.length,
-        leisure: leisureData.length,
-        shopping: shoppingData.length
-      });
-    } catch (error) {
-      console.warn('tour_items 컬렉션 로드 실패:', error);
+        
+        const accommodationsSnapshot = await getDocs(accommodationsQuery);
+        
+        if (accommodationsSnapshot.empty) {
+          hasMoreAccommodations = false;
+        } else {
+          accommodationsSnapshot.forEach((doc) => {
+            const data = {
+              id: doc.id,
+              ...doc.data()
+            };
+            
+            // 데이터 형식 변환
+            const formattedData = formatFirebaseData(data, 'accommodation');
+            accommodationData.push(formattedData);
+            lastAccommodationDoc = doc;
+          });
+          
+          // 64개 미만이면 더 이상 없음
+          if (accommodationsSnapshot.size < BATCH_SIZE) {
+            hasMoreAccommodations = false;
+          }
+          
+          console.log(`Accommodations 로드 완료: ${accommodationData.length}개 (배치: ${accommodationsSnapshot.size}개)`);
+        }
+      } catch (error) {
+        console.warn('accommodations 컬렉션 로드 실패:', error);
+        hasMoreAccommodations = false;
+      }
+    }
+    
+    // 2. tour_items 컬렉션에서 관광지 데이터 가져오기 (64개씩)
+    if (hasMoreTourItems) {
+      try {
+        let tourItemsQuery = query(
+          collection(db, 'tour_items'),
+          orderBy('__name__'), // 문서 ID로 정렬
+          limit(BATCH_SIZE)
+        );
+        
+        if (lastTourItemDoc) {
+          tourItemsQuery = query(
+            collection(db, 'tour_items'),
+            orderBy('__name__'),
+            startAfter(lastTourItemDoc),
+            limit(BATCH_SIZE)
+          );
+        }
+        
+        const tourItemsSnapshot = await getDocs(tourItemsQuery);
+        
+        if (tourItemsSnapshot.empty) {
+          hasMoreTourItems = false;
+        } else {
+          tourItemsSnapshot.forEach((doc) => {
+            const data = {
+              id: doc.id,
+              ...doc.data()
+            };
+            
+            // category에 따라 분류
+            const category = data.category || inferCategoryFromData(data);
+            const formattedData = formatFirebaseData(data, category);
+            
+            switch (category) {
+              case 'culture':
+                cultureData.push(formattedData);
+                break;
+              case 'restaurant':
+                restaurantData.push(formattedData);
+                break;
+              case 'nature':
+                natureData.push(formattedData);
+                break;
+              case 'leisure':
+                leisureData.push(formattedData);
+                break;
+              case 'shopping':
+                shoppingData.push(formattedData);
+                break;
+              default:
+                // category가 없으면 culture로 기본 설정
+                cultureData.push(formattedData);
+            }
+            
+            lastTourItemDoc = doc;
+          });
+          
+          // 64개 미만이면 더 이상 없음
+          if (tourItemsSnapshot.size < BATCH_SIZE) {
+            hasMoreTourItems = false;
+          }
+          
+          console.log(`Tour items 로드 완료:`, {
+            culture: cultureData.length,
+            restaurant: restaurantData.length,
+            nature: natureData.length,
+            leisure: leisureData.length,
+            shopping: shoppingData.length,
+            batch: tourItemsSnapshot.size
+          });
+        }
+      } catch (error) {
+        console.warn('tour_items 컬렉션 로드 실패:', error);
+        hasMoreTourItems = false;
+      }
     }
     
     // allDataOriginal과 allData 업데이트
@@ -98,6 +165,38 @@ async function loadDataFromFirebase() {
   } catch (error) {
     console.error('Firebase 데이터 로드 실패:', error);
   }
+}
+
+// ===== 추가 데이터 로드 함수 =====
+async function loadMoreData() {
+  if (!hasMoreAccommodations && !hasMoreTourItems) {
+    console.log('더 이상 로드할 데이터가 없습니다.');
+    return false;
+  }
+
+  const beforeAccommodationCount = accommodationData.length;
+  const beforeTourCount = cultureData.length + restaurantData.length + natureData.length + leisureData.length + shoppingData.length;
+
+  // 추가 데이터 로드
+  await loadDataFromFirebase();
+
+  const afterAccommodationCount = accommodationData.length;
+  const afterTourCount = cultureData.length + restaurantData.length + natureData.length + leisureData.length + shoppingData.length;
+
+  const loadedAccommodations = afterAccommodationCount - beforeAccommodationCount;
+  const loadedTours = afterTourCount - beforeTourCount;
+
+  if (loadedAccommodations > 0 || loadedTours > 0) {
+    console.log(`추가 데이터 로드 완료: Accommodations ${loadedAccommodations}개, Tour items ${loadedTours}개`);
+    
+    // 데이터 구조 업데이트 및 화면 갱신
+    updateDataStructures();
+    renderSpots();
+    
+    return true;
+  }
+
+  return false;
 }
 
 // ===== Firebase 데이터를 앱 형식으로 변환 =====
@@ -212,6 +311,7 @@ const pagination = document.getElementById("pagination");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const pageInfo = document.getElementById("pageInfo");
+const loadMoreBtn = document.getElementById("loadMoreBtn");
 
 // ===== 상태 관리 =====
 let currentCategory = "전체";
@@ -222,17 +322,17 @@ const itemsPerPage = 8;
 // ===== 카드 렌더링 =====
 function renderSpots() {
   let data = allData[currentCategory] || [];
-  
-  // 검색어로 필터링
+
+  // 검색어가 없으면 필터링하지 않고 전체 표시, 있으면 이름/주소로 필터링
   if (currentKeyword) {
     const keyword = currentKeyword.toLowerCase();
-    data = data.filter(spot => 
-      spot.name.toLowerCase().includes(keyword) ||
-      spot.address.toLowerCase().includes(keyword)
+    data = data.filter(spot =>
+      (spot.name || '').toLowerCase().includes(keyword) ||
+      (spot.address || '').toLowerCase().includes(keyword)
     );
   }
-  
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+
+  const totalPages = Math.ceil(data.length / itemsPerPage) || 1;
 
   // 페이지 범위 조정
   if (currentPage > totalPages) currentPage = totalPages || 1;
@@ -242,7 +342,7 @@ function renderSpots() {
   const endIndex = startIndex + itemsPerPage;
   const pageData = data.slice(startIndex, endIndex);
 
-  // 결과가 없을 때
+  // 검색어가 있는데 매칭 없음 → "검색 결과가 없습니다" / 검색어 없음 → 전체 표시(데이터 없을 때만 noResults)
   if (pageData.length === 0) {
     spotList.style.display = "none";
     noResults.style.display = "block";
@@ -290,6 +390,16 @@ function updatePagination(totalPages) {
   pageInfo.textContent = `${currentPage} / ${totalPages} 페이지`;
   prevBtn.disabled = currentPage <= 1;
   nextBtn.disabled = currentPage >= totalPages;
+  
+  // 더 보기 버튼 표시/숨김
+  if (loadMoreBtn) {
+    if (hasMoreAccommodations || hasMoreTourItems) {
+      loadMoreBtn.style.display = 'block';
+      loadMoreBtn.disabled = false;
+    } else {
+      loadMoreBtn.style.display = 'none';
+    }
+  }
 }
 
 // ===== 검색 탭 클릭 이벤트 =====
@@ -330,6 +440,24 @@ nextBtn.addEventListener("click", () => {
     window.scrollTo({ top: 300, behavior: "smooth" });
   }
 });
+
+// ===== 더 보기 버튼 이벤트 =====
+if (loadMoreBtn) {
+  loadMoreBtn.addEventListener("click", async () => {
+    loadMoreBtn.disabled = true;
+    loadMoreBtn.textContent = '로딩 중...';
+    
+    const loaded = await loadMoreData();
+    
+    if (loaded) {
+      loadMoreBtn.textContent = '더 보기';
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    } else {
+      loadMoreBtn.textContent = '더 이상 없음';
+      loadMoreBtn.disabled = true;
+    }
+  });
+}
 
 
 // ===== 카드 클릭 이벤트 (상세 페이지 이동) =====
