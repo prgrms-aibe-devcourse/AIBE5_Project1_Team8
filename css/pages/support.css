@@ -1,286 +1,447 @@
-/* ============================================================
-   1. 변수 및 초기화 (Variables & Reset)
-   ============================================================ */
-
-:root {
-    --bg-color: #fffffa; /* 흰색 배경 */
-    --box-bg: #E5E5E5;    
-    --card-bg: #ffffff;
-    --beige-bg: #F4EFEB; /* 박스 배경 */
-    --primary-text: #333333; /* 글씨 색상*/
-    --secondary-text: #666666; /* 글씨 색상 */
-    --navy-blue: #2f4157; /* 버튼 색상 등등 */
-    --btn-red: #b93920; /* 로그인 버튼, 삭제 버튼 등 색상상 */
-    --border-radius-lg: 30px; /* 모서리 둥글기 값 */
-    --border-radius-sm: 12px;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Pretendard', -apple-system, sans-serif;
-}
-
-body {
-  background-color: var(--bg-color);
-  padding: 30px;
-  color: var(--primary-text);
-}
-
+/* ==================================================
+   1. CSS 변수 및 기본 초기화
+================================================== */
 .wrapper {
-  max-width: 850px;
-  margin: 0 auto;
+    max-width: 900px;
+    margin: 20px auto 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
-
-/* ============================================================
-   2. 레이아웃 및 공통 섹션 (Layout & Sections)
-   ============================================================ */
-header {
-  min-height: 80px;
-  margin-bottom: 40px;
-}
-
+/* ==================================================
+   2. 타이틀 & 섹션 레이아웃
+================================================== */
 .main-title-box {
-  background-color: #BDBDBD;
-  color: white;
-  text-align: center;
-  padding: 40px;
-  border-radius: 20px;
-  font-size: 26px;
-  font-weight: bold;
-  margin-bottom: 45px;
+    margin: 60px 0;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--navy-blue);
+    text-align: center;
 }
-
 .section-wrap {
-  margin-bottom: 50px;
+    position: relative;
+    margin-bottom: 40px;
 }
-
 .label {
-  display: block;
-  font-size: 14px;
-  font-weight: bold;
-  color: #444;
-  margin-bottom: 15px;
-  padding-left: 5px;
+    display: block;
+    margin-bottom: 12px;
+    padding-left: 5px;
+    font-size: 16px;
+    font-weight: 700;;
+    font-size: 20px;
+    color: var(--navy-blue);
 }
 
-/* [핵심] 가로 정렬을 위한 그레이 박스 */
-.gray-box {
-  background-color: var(--box-bg);
-  border-radius: var(--border-radius-lg);
-  padding: 30px;
-  display: flex;
-  flex-direction: row; /* 가로 나열 */
-  align-items: center;
-  gap: 15px;
-  position: relative;
+/* ==================================================
+   3. 카드 공통
+================================================== */
+#supportInfo{
+    border: var(--border-gray);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* FAQ나 내역 섹션처럼 세로 나열이 필요한 경우를 위한 클래스 */
-.section-wrap:not(:nth-of-type(1)) .gray-box {
-  flex-direction: column;
-  align-items: stretch;
-}
-
-/* ============================================================
-   3. 카드 및 버튼 (Cards & Buttons)
-   ============================================================ */
-.card {
-  background: var(--card-bg);
-  border-radius: var(--border-radius-sm);
-  border: none;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
-.card:active {
-  transform: scale(0.98);
-}
-
-/* 고객센터 상단 버튼 3개 */
+.faq-item,
+.inquiry-item,
 .card-info {
-  flex: 1;
-  height: 50px;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 500;
+    background: #FFFFFF;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+.card {
+    width: 100%;
+    padding: 22px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    background: #FFFFFF;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary-text);
+}
+.card-info {
+    justify-content: center;
 }
 
-/* 1:1 문의하기 버튼 (가로 나열 포함) */
-.btn-absolute {
-  flex: 0.7;
-  height: 50px;
-  background-color: var(--navy-blue);
-  color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: var(--border-radius-sm);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.gray-box {
+    border: var(--border-gray);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 30px;
+    background-color: var(--beige-bg);
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+/* 고객센터 정보 카드 가로 배치 */
+.section-wrap .gray-box {
+    display: flex;          /* 가로로 정렬 */
+    gap: 20px;              /* 카드 사이 간격 */
+    flex-wrap: wrap;        /* 화면이 좁으면 자동 줄 바꿈 */
 }
 
-/* 목록형 카드 */
-.flex-between {
-  justify-content: space-between;
-  padding: 18px 25px;
-  font-size: 14px;
-  margin-bottom: 10px;
+.section-wrap .gray-box .card-info {
+    flex: 1;                /* 카드가 균등하게 넓이 차지 */
+    text-align: center;     /* 텍스트 가운데 정렬 */
 }
-
-/* ============================================================
-   4. 탭 및 FAQ (Tabs & FAQ)
-   ============================================================ */
+/* ==================================================
+   4. 아코디언
+================================================== */
+.faq-answer-box,
+.inquiry-content-box {
+    display: none;
+    background: #FAFAFA;
+    border-top: 1px solid #F0F0F0;
+}
+.faq-trigger.active + .faq-answer-box,
+.inquiry-trigger.active + .inquiry-content-box {
+    display: block;
+}
+.faq-answer,
+.inquiry-detail {
+    padding: 30px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #555;
+}
+.reply-box {
+    margin-top: 20px;
+    padding: 20px;
+    background: #FFFFFF;
+    border: var(--border-gray);
+    border-radius: 12px;
+    border-left: 5px solid var(--navy-blue);
+}
+.icon-down {
+    color: #bbb;
+    transition: transform 0.3s;
+}
+.faq-trigger.active .icon-down {
+    transform: rotate(180deg);
+}
+/* ==================================================
+   5. 탭 & 상태 배지
+================================================== */
 .tabs-row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
 }
-
 .tab {
-  background: white;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-size: 13px;
-  cursor: pointer;
-  font-weight: 600;
+    padding: 10px 22px;
+    border:  1px solid var(--navy-blue);
+    border-radius: 20px;
+    background: var(--beige-bg);
+    font-size: 13px;
+    font-weight: normal;
+    color: var(--secondary-text);
+    cursor: pointer;
+    transition: all 0.2s;
 }
-
 .tab.active {
-  background-color: #BDBDBD;
-  color: white;
+    background: var(--navy-blue);
+    color: #FFFFFF;
 }
-
-/* 언더라인 탭 */
-.underlines {
-  border-bottom: 1px solid #CCC;
-  margin-bottom: 20px;
-}
-
-.tab-under {
-  background: none;
-  border: none;
-  padding: 10px 15px;
-  font-size: 13px;
-  cursor: pointer;
-  color: #999;
-}
-
-.tab-under.active {
-  color: #333;
-  font-weight: bold;
-  border-bottom: 2px solid #333;
-  margin-bottom: -1px;
-}
-
-/* FAQ 상세 */
-.faq-container {
-  flex-direction: column !important;
-  padding: 0;
-}
-
-.faq-question {
-  width: 100%;
-  padding: 18px 25px;
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-}
-
-.faq-answer {
-  padding: 20px 25px;
-  background-color: #FBFBFB;
-  border-top: 1px solid #F0F0F0;
-  color: var(--secondary-text);
-  font-size: 13px;
-  line-height: 1.6;
-}
-
 .status-frame {
-  background: white;
-  border: 1px solid #DDD;
-  padding: 5px 15px;
-  border-radius: 12px;
-  font-size: 11px;
-  min-width: 80px;
-  text-align: center;
+    min-width: 80px;
+    padding: 6px 14px;
+    border-radius: 12px;
+    background: #EEEEEE;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
 }
-
-/* ============================================================
-   5. 모달 (Modal - Inquiry)
-   ============================================================ */
+.status-frame.completed {
+    background: var(--navy-blue);
+    color: #FFFFFF;
+}
+/* ==================================================
+   6. 모달
+================================================== */
 .modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
-  justify-content: center;
-  align-items: center;
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
 }
-
-.modal-content.wireframe-style {
-  background-color: #EAEAEA;
-  width: 90%;
-  max-width: 550px;
-  padding: 40px;
-  border-radius: 20px;
-  position: relative;
+.modal-content {
+    width: 90%;
+    max-width: 500px;
+    padding: 40px;
+    background: #EAEAEA;
+    border-radius: 20px;
+    position: relative;
 }
-
 .modal-header {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+.modal-tag {
+    font-weight: 800;
+    color: var(--navy-blue);
+}
+.close-modal {
+    border: none;
+    background: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+/* ==================================================
+   7. 입력 요소
+================================================== */
+.round-input,
+.modal-sub-select {
+    width: 100%;
+    border: none;
+    outline: none;
+    text-align: center;
+}
+.round-input {
+    padding: 18px;
+    margin-bottom: 15px;
+    border-radius: 30px;
+    font-size: 14px;
+}
+.modal-sub-select {
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 20px;
+    text-align-last: center;
+}
+.modal-textarea {
+    height: 180px;
+    padding-top: 20px;
+    resize: none;
+    border-radius: 20px;
+}
+.char-count {
+    margin: -10px 0 15px;
+    padding-right: 10px;
+    text-align: right;
+    font-size: 12px;
+    color: var(--secondary-text);
+}
+/* ==================================================
+   8. 버튼
+================================================== */
+.btn-save {
+    width: 100%;
+    margin-top: 10px;
+    padding: 18px;
+    border: none;
+    border-radius: 35px;
+    background: var(--navy-blue);
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+}
+.btn-group-top {
+    position: absolute;
+    top: -20px;
+    right: 5px;
+    z-index: 10;
+    display: flex;
+    gap: 8px;
+}
+.btn-primary,
+.btn-sub {
+    padding: 10px 18px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-primary {
+    border: none;
+    background-color: var(--navy-blue);
+    color: #FFFFFF;
+}
+.btn-sub {
+    background-color: #FFFFFF;
+    color: var(--navy-blue);
+    border: 1px solid var(--navy-blue);
+}
+.btn-sub:hover {
+    background-color: #F0F0F0;
+}
+
+/* 검색 버튼 */
+.btn-search {
+    position: absolute;
+    top: 50%;
+    right: 5px;                  /* 입력창 오른쪽 끝 */
+    transform: translateY(-50%);
+    padding: 10px 18px;
+    border-radius: 25px;
+    border: none;
+    background-color: var(--navy-blue);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-search:hover {
+    background-color: #1f2c44; /* 살짝 진하게 */
+}
+
+
+/* ==================================================
+   9. 검색
+================================================== */
+.search-box-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+.search-input {
+    width: 100%;
+    padding: 15px 50px 15px 25px;
+    border-radius: 25px;
+    border: 2px solid #eee;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+.search-input:focus {
+    border-color: var(--navy-blue);
+}
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    color: var(--secondary-text);
+    font-size: 18px;
+    pointer-events: none;
+}
+.no-result {
+    display: none;
+    padding: 40px 0;
+    text-align: center;
+    font-size: 14px;
+    color: var(--secondary-text);
+}
+/* ==================================================
+   10. 필터링 표시
+================================================== */
+.item-hidden {
+    display: none !important;
+}
+/* ==================================================
+   11. 이미지 미리보기
+================================================== */
+.img-preview {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.preview-item {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+.preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+.preview-remove {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 50%;
+    background: #FF5C5C;
+    color: #FFFFFF;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* ==================================================
+   12. 토스트 메시지
+================================================== */
+.toast-container {
+    position: fixed;
+    bottom: 30px;
+    right: -400px;
+    z-index: 10000;
+    padding: 16px 24px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #FFFFFF;
+    opacity: 0;
+    box-shadow: -4px 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.toast-container.show {
+    right: 20px;
+    opacity: 1;
+}
+.toast-info    { background-color: var(--primary-text); }
+.toast-success { background-color: #00AE38; }
+.toast-error   { background-color: #FA5C5C; }
+
+
+/* ================= 배너 ================= */
+.support-banner {
+  width: 100%;
+  padding: 24px 0;
+  border-radius: 20px;
+  background: var(--beige-bg);
+  border: var(--border-gray);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  color: var(--primary-text);
+  text-align: center;
+  font-size: 26px;
+  font-weight: 300;
+  letter-spacing: 0.5px;
   margin-bottom: 25px;
 }
 
-.modal-tag {
-  font-weight: bold;
-  color: #555;
+.support-banner .name {
+  font-weight: normal; /*nomal==400*/
 }
 
-.close-modal {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
+/* supportInfo 부모 flex */
+#supportInfo {
+    display: flex;           /* 가로 배치 */
+    gap: 50px;               /* 카드 사이 간격 */
+    justify-content: center; /* 가운데 정렬 */
+    flex-wrap: wrap;         /* 화면 좁으면 자동 줄 바꿈 */
+    padding: 30px;
+    background-color: var(--beige-bg);
+    border-radius: 15px;
 }
 
-.round-input, .modal-sub-select {
-  width: 100%;
-  border: none;
-  border-radius: 50px;
-  background: white;
-  padding: 15px;
-  margin-bottom: 15px;
-  text-align: center;
-  outline: none;
-}
-
-.modal-row {
-  display: flex;
-  gap: 15px;
-}
-
-.modal-textarea.round-input {
-  height: 180px;
-  border-radius: 25px;
-  resize: none;
-}
-
-.btn-save {
-  background: white;
-  border: none;
-  padding: 10px 40px;
-  border-radius: 50px;
-  font-weight: bold;
-  cursor: pointer;
+/* 카드 스타일 */
+#supportInfo .card-support-info {
+    flex: 0 0 48%;           /* 한 줄에 두 카드 */
+    max-width: 360px;        /* 카드 최대 너비 */
+    padding: 20px;
+    background: #fff;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    font-weight: 600;
 }
