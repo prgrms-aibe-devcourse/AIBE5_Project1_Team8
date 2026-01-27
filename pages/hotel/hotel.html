@@ -68,15 +68,11 @@
       <!-- Pagination -->
       <div class="pagination" id="pagination">
         <button class="page-btn prev" id="prevBtn">&lt;</button>
-        <span class="page-info" id="pageInfo">페이지</span>
+        <div class="page-info-container">
+          <input type="number" class="page-input" id="pageInput" min="1" value="1">
+          <span class="page-total" id="pageTotal">/ 1 페이지</span>
+        </div>
         <button class="page-btn next" id="nextBtn">&gt;</button>
-      </div>
-
-      <!-- Load More Button -->
-      <div class="load-more-container" style="text-align: center; margin-top: 20px;">
-        <button class="load-more-btn" id="loadMoreBtn" style="display: none; padding: 12px 24px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 500;">
-          더 보기
-        </button>
       </div>
     </div>
   </main>
