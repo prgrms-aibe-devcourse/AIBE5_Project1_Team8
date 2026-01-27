@@ -222,17 +222,17 @@ const itemsPerPage = 8;
 // ===== 카드 렌더링 =====
 function renderSpots() {
   let data = allData[currentCategory] || [];
-  
-  // 검색어로 필터링
+
+  // 검색어가 없으면 필터링하지 않고 전체 표시, 있으면 이름/주소로 필터링
   if (currentKeyword) {
     const keyword = currentKeyword.toLowerCase();
-    data = data.filter(spot => 
-      spot.name.toLowerCase().includes(keyword) ||
-      spot.address.toLowerCase().includes(keyword)
+    data = data.filter(spot =>
+      (spot.name || '').toLowerCase().includes(keyword) ||
+      (spot.address || '').toLowerCase().includes(keyword)
     );
   }
-  
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+
+  const totalPages = Math.ceil(data.length / itemsPerPage) || 1;
 
   // 페이지 범위 조정
   if (currentPage > totalPages) currentPage = totalPages || 1;
@@ -242,7 +242,7 @@ function renderSpots() {
   const endIndex = startIndex + itemsPerPage;
   const pageData = data.slice(startIndex, endIndex);
 
-  // 결과가 없을 때
+  // 검색어가 있는데 매칭 없음 → "검색 결과가 없습니다" / 검색어 없음 → 전체 표시(데이터 없을 때만 noResults)
   if (pageData.length === 0) {
     spotList.style.display = "none";
     noResults.style.display = "block";
