@@ -76,13 +76,26 @@ if (checkAuth()) {
                         </div>
                     </div>
                 </div>
-                <div class="reservation-detail">
-                    <p><strong>예약 일자</strong> ${r.date}</p>
-                    <p><strong>숙소 주소</strong> ${r.address}</p>
-                    <p><strong>숙소 연락처</strong> ${r.phone}</p>
-                    <p><strong>체크인</strong> ${r.checkIn}</p>
-                    <p><strong>체크아웃</strong> ${r.checkOut}</p>
                 </div>
+                <div class="reservation-right">
+                ${r.type === "upcoming" ? `<div class="d-day"></div>` : ""}
+                <div class="reservation-actions">
+                    ${
+                    r.type === "completed" && !hasReview
+                        ? `<button class="reservation-btn review-btn">후기 작성</button>`
+                        : ``
+                    }
+                    <button class="reservation-btn detail-btn">상세보기</button>
+                </div>
+                </div>
+            </div>
+            <div class="reservation-detail">
+                <p><strong>예약 일자</strong> ${r.date.toLocaleDateString()}</p>
+                <p><strong>숙소 주소</strong> ${r.address}</p>
+                <p><strong>숙소 연락처</strong> ${r.phone}</p>
+                <p><strong>체크인</strong> ${r.checkIn.toLocaleString()}</p>
+                <p><strong>체크아웃</strong> ${r.checkOut.toLocaleString()}</p>
+            </div>
             `;
                 reservationList.appendChild(li);
             });
@@ -212,6 +225,12 @@ if (checkAuth()) {
                 <div class="review-right">
                     <button class="review-action-btn danger">삭제</button>
                 </div>
+                <p class="review-rating">${"⭐".repeat(r.rating)}</p>
+                <p class="review-content">${r.content}</p>
+            </div>
+            <div class="review-right">
+                <button class="review-action-btn danger">삭제</button>
+            </div>
             `;
                 reviewList.appendChild(li);
             });
@@ -468,6 +487,12 @@ if (checkAuth()) {
         /* =====================
         비밀번호 수정 모달
     ===================== */
+    async function updateUserPassword(newPassword) {
+        const userRef = doc(db, "users", currentUserDocId);
+        await updateDoc(userRef, {
+            password: newPassword,
+        });
+    }
 
         // 비밀번호 변경 확인 모달
         const passwordModal = document.getElementById('passwordModal');
@@ -501,17 +526,6 @@ if (checkAuth()) {
 
         /* =====================
     비밀번호 수정 로직 (Firestore 연동)
-===================== */
-        async function handlePasswordChange() {
-            const currentPass = passwordInputs[0].value; // 현재 비밀번호
-            const newPass = passwordInputs[1].value; // 새로운 비밀번호
-            const newPassConfirm = passwordInputs[2].value; // 새로운 비밀번호 확인
-
-            // 1. 빈 칸 검사
-            if (!currentPass || !newPass || !newPassConfirm) {
-                showToast('모든 항목을 입력해주세요.', 'error');
-                return;
-            }
 
             // 2. 새로운 비밀번호 일치 여부 확인 (이게 핵심!)
             if (newPass !== newPassConfirm) {

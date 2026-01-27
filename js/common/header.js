@@ -42,6 +42,20 @@ function injectHeaderStyles() {
       }
 
       /* 로고 */
+      .logo-image {
+        height: 40px;
+        width: auto;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+      }
+
+      .logo-image img {
+        height: 100%;
+        width: auto;
+        object-fit: contain;
+      }
+
       .logo {
         font-size: 20px;
         font-weight: 700;
