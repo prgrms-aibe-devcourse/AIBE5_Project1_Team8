@@ -2,14 +2,7 @@ import { getBookingPanelHTML } from "./hotel-booking-template.js";
 import { ensureBookingPanelBaseStyle } from "./hotel-booking-style.js";
 
 import { db } from '../common/firebase-config.js';
-import {
-    collection,
-    addDoc,
-    getDocs,
-    query,
-    where,
-    serverTimestamp,
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 
 function closeBookingPanel() {
@@ -39,7 +32,7 @@ function onPanelRootClick(e) {
   if (overlay || closeBtn) closeBookingPanel();
 }
 
-export function openBookingPanel(bookingData) {
+export function openBookingPanel(bookingData,userReservationInfo) {
   const root = document.getElementById("booking-panel-root");
   if (!root) return;
   if (root.querySelector(".booking-panel")) {
@@ -75,7 +68,7 @@ export function openBookingPanel(bookingData) {
   if (loc) loc.textContent = bookingData.addr ?? "";
   if (sLoc) sLoc.textContent = bookingData.addr ?? "";
 
-  initBookingPanel(root, bookingData, {
+  initBookingPanel(root, bookingData, userReservationInfo, {
     onClose: closeBookingPanel
   });
 }
@@ -92,7 +85,7 @@ function getNights(checkIn, checkOut) {
   return nights > 0 ? nights : 0;
 }
 
-export function initBookingPanel(root, bookingData, { onClose } = {}) {
+export function initBookingPanel(root, bookingData, userReservationInfo, { onClose } = {}) {
   // root는 booking-panel-root(또는 패널 컨테이너) 안쪽을 넘겨줘야 함
   if (!root) return;
 
@@ -130,6 +123,11 @@ export function initBookingPanel(root, bookingData, { onClose } = {}) {
   const agreeAll = root.querySelector("#agreeAll");
   const agreeTerms = root.querySelector("#agreeTerms");
   const agreePrivacy = root.querySelector("#agreePrivacy");
+
+  const hasIntersection = (oldRes, newRes) => {
+    if(oldRes.checkOut <= newRes.checkIn || newRes.checkOut <= oldRes.checkIn) return false;
+    return true;
+  };
 
   // 방어: 필수 요소 없으면 종료 (패널 HTML이 바뀌면 여기서 바로 잡힘)
   if (!bookingForm || !checkInInput || !checkOutInput || !roomTypeSelect || !guestCountSelect) {
@@ -227,6 +225,7 @@ export function initBookingPanel(root, bookingData, { onClose } = {}) {
 
     const checkIn = new Date(checkInInput.value);
     const checkOut = new Date(checkOutInput.value);
+    const newReservation = {checkIn, checkOut};
     const roomType = roomTypeSelect.value;
     const nights = getNights(checkIn, checkOut);
     
@@ -241,6 +240,19 @@ export function initBookingPanel(root, bookingData, { onClose } = {}) {
     const loggedInUser = JSON.parse(localStorage.getItem('auth_user'));
     const loggedInUserId = loggedInUser.uid;
     const loggedInUsername = loggedInUser.username;
+
+    const overlappingRes = userReservationInfo.find((oldRes) => {
+      return hasIntersection(oldRes, newReservation);
+    });
+
+    if (overlappingRes) {
+      const start = overlappingRes.checkIn.toLocaleDateString('ko-KR');
+      const end = overlappingRes.checkOut.toLocaleDateString('ko-KR');
+      alert(`해당 기간에 이미 [${overlappingRes.title}] 예약이 있습니다.\n` +
+            `체크인: ${start}\n` +
+            `체크아웃: ${end}`);
+      return; // 예약 중단
+    }
 
     const scheduleData = {
       contact: bookingData.tel,
