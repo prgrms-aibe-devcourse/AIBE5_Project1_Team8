@@ -165,3 +165,21 @@ registerBtn.addEventListener('click', async () => {
         showToast('회원가입 처리 중 오류가 발생했습니다.', 'error');
     }
 });
+
+// ------------------------------------------------
+// 4. 로그인 창 닫기 버튼
+// ------------------------------------------------
+
+const closeBtn = document.getElementById("closeBtn");
+
+if (closeBtn) {
+  closeBtn.addEventListener("click", () => {
+    // 1. 이전 페이지가 있다면 뒤로 가기
+    if (document.referrer) {
+      window.history.back();
+    } else {
+      // 2. 뒤로 갈 곳이 없다면(주소창에 직접 입력 등) 메인으로 이동
+      window.location.href = "/index.html";
+    }
+  });
+}
