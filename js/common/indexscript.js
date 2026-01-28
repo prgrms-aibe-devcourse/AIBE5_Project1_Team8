@@ -265,6 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
             map.closePopup();
             titleEl.innerText = INITIAL_TITLE;
             descEl.innerText = INITIAL_DESC;
+            currentLocation = null;
         });
 
         // Show/Hide Reset Button based on map movement
