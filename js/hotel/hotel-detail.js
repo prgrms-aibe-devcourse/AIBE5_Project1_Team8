@@ -55,6 +55,22 @@ function mapAccommodationDocToHotel(docData, hotelId) {
     docData?.firstimage2 ||
     "";
 
+  // 좌표(Leaflet): KTO 기준 mapx=경도, mapy=위도
+  const latRaw =
+    docData?.lat ??
+    docData?.latitude ??
+    docData?.mapy ??
+    docData?.gpsy ??
+    null;
+  const lngRaw =
+    docData?.lng ??
+    docData?.longitude ??
+    docData?.mapx ??
+    docData?.gpsx ??
+    null;
+  const lat = latRaw != null ? Number(latRaw) : null;
+  const lng = lngRaw != null ? Number(lngRaw) : null;
+
   // 가격 필드가 다양할 수 있어서 여러 후보를 시도
   const basePriceRaw =
     docData?.basePrice ?? docData?.price ?? docData?.roomPrice ?? docData?.minPrice;
@@ -100,6 +116,8 @@ function mapAccommodationDocToHotel(docData, hotelId) {
     address,
     contact,
     image,
+    lat: Number.isFinite(lat) ? lat : null,
+    lng: Number.isFinite(lng) ? lng : null,
     price: priceText,
     basePrice: basePrice || randomPrice,
     desc,
@@ -110,6 +128,33 @@ function mapAccommodationDocToHotel(docData, hotelId) {
     noSmoking: toBool(docData?.noSmoking),
     breakfast: toBool(docData?.breakfast),
   };
+}
+
+function renderLeafletMap({ lat, lng, name }) {
+  const section = document.getElementById("detailMapSection");
+  const mapEl = document.getElementById("detailMap");
+  if (!section || !mapEl) return;
+
+  if (!Number.isFinite(lat) || !Number.isFinite(lng) || typeof window.L === "undefined") {
+    section.style.display = "none";
+    return;
+  }
+
+  section.style.display = "block";
+
+  if (mapEl._leaflet_id) {
+    try {
+      mapEl._leaflet_id = null;
+      mapEl.innerHTML = "";
+    } catch (_) {}
+  }
+
+  const map = window.L.map(mapEl, { scrollWheelZoom: false }).setView([lat, lng], 14);
+  window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; OpenStreetMap contributors",
+  }).addTo(map);
+  window.L.marker([lat, lng]).addTo(map).bindPopup(name || "위치").openPopup();
+  setTimeout(() => map.invalidateSize(), 0);
 }
 
 // 리뷰 데이터(현재는 기존 구조 유지)
@@ -159,6 +204,9 @@ function renderHotelInfo() {
   hotelPrice.textContent = hotel.price;
   hotelDesc.textContent = hotel.desc;
   if(modalHotelName) modalHotelName.textContent = hotel.name;
+
+  // 지도 렌더링 (좌표 없으면 섹션 숨김)
+  renderLeafletMap({ lat: hotel.lat, lng: hotel.lng, name: hotel.name });
 }
 
 // 픽토그램 상태 업데이트
