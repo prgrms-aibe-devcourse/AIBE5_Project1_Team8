@@ -1,6 +1,16 @@
 import { getBookingPanelHTML } from "./hotel-booking-template.js";
 import { ensureBookingPanelBaseStyle } from "./hotel-booking-style.js";
 
+import { db } from '../common/firebase-config.js';
+import {
+    collection,
+    addDoc,
+    getDocs,
+    query,
+    where,
+    serverTimestamp,
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
 
 function closeBookingPanel() {
   const root = document.getElementById("booking-panel-root");
@@ -282,50 +292,59 @@ export function initBookingPanel(root, bookingData, { onClose } = {}) {
     return isValid;
   }
 
-  bookingForm.addEventListener("submit", function (e) {
+  bookingForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    const checkIn = checkInInput.value;
-    const checkOut = checkOutInput.value;
+    const checkIn = new Date(checkInInput.value);
+    const checkOut = new Date(checkOutInput.value);
     const roomType = roomTypeSelect.value;
     const nights = getNights(checkIn, checkOut);
-
-    const basePrice = (bookingData.basePrice || 0) * roomPrices[roomType];
+    
+    let randomSeed = bookingData.hotelId; // hotelId로 random 부여 (호텔 하나에는 계속 같은 값이 나오게)
+    if (checkIn instanceof Date && !isNaN(checkIn)) {
+      checkIn.setHours(15+(randomSeed%2), 0, 0, 0);
+      checkOut.setHours(11+((randomSeed>>>1)%2), 0, 0, 0);
+    }  
+    const basePrice = (bookingData.basePrice || 0) * roomPrices[roomType]; 
     const totalPrice = basePrice * nights;
 
+    const loggedInUser = JSON.parse(localStorage.getItem('auth_user'));
+    const loggedInUserId = loggedInUser.uid;
+
     const reservationData = {
-      userPk: 1,
-      reservationNumber: "RES" + Date.now(),
-      accomodation: {
-        //...bookingData,
-        contentId: bookingData.hotelId,
-        title: bookingData.hotelName,
-        addr: bookingData.addr,
-        tel: bookingData.tel,
-        imgUrl: bookingData.image,
-        checkIn,
-        checkOut,
-        nights,
-        roomType,
-        guestCount: guestCountSelect.value,
-        basePrice,
-        totalPrice
-      },
-      reserver: {
-        name: root.querySelector("#guestName")?.value || "",
-        nameEn: root.querySelector("#guestNameEn")?.value || "",
-        email: root.querySelector("#email")?.value || "",
-        tel: root.querySelector("#phone")?.value || "",
-        reservedAt: new Date().toISOString(),
-        paymentMethod: root.querySelector('input[name="payment"]:checked')?.value || "card",
-        reserverRequest: root.querySelector("#reserverRequest")?.value || "",
-      }
+      userId: loggedInUserId,
+      // 타 사용자의 예약과 ms 단위까지 일치한다면, username과 reservationNumber를 묶어서 key로 사용 가능?
+      reservationNumber: "RES" + Date.now(), 
+      /* About type 
+      "upcoming": 이용 전 (예약 취소 가능) 
+      "confirmed": 예약 확정 (이용 중을 포함한 취소 불가 기간) - 이건 하지말까요?
+      "completed": 이용 완료 (리뷰 가능)
+      */
+      type: "upcoming",       
+      contentId: bookingData.hotelId,
+      title: bookingData.hotelName,
+      address: bookingData.addr,
+      phone: bookingData.tel,
+      img: bookingData.image,
+      checkIn: checkIn,
+      checkOut: checkOut,
+      nights: nights,
+      roomType: roomType,
+      guestCount: Number(guestCountSelect.value) || 1,
+      basePrice: basePrice,
+      totalPrice: totalPrice,
+      // 예약자 관련
+      res_name: root.querySelector("#guestName")?.value || "",
+      res_nameEn: root.querySelector("#guestNameEn")?.value || "",
+      res_email: root.querySelector("#email")?.value || "",
+      res_tel: root.querySelector("#phone")?.value || "",
+      date: new Date(), // 결제 일자
+      res_paymentMethod: root.querySelector('input[name="payment"]:checked')?.value || "card",
+      res_reserverRequest: root.querySelector("#reserverRequest")?.value || "",
     };
 
-    const reservations = JSON.parse(localStorage.getItem("myReservations")) || []; // Array that contains objects
-    reservations.push(reservationData);
-    localStorage.setItem("myReservations", JSON.stringify(reservations));
+    await addDoc(collection(db,'reservations'), reservationData);
 
     alert(
       `예약이 완료되었습니다!\n\n` +
@@ -338,8 +357,6 @@ export function initBookingPanel(root, bookingData, { onClose } = {}) {
       `예약 확인 이메일이 발송됩니다.`
     );
 
-    // 패널 UX에 맞게: sessionStorage 정리 후 닫기
-    sessionStorage.removeItem("bookingData");
     onClose?.();
   });
 
