@@ -378,6 +378,40 @@
     justify-content: center;
 }
 /* ==================================================
+   11-1. 이미지 업로드 버튼
+================================================== */
+.image-upload-wrapper {
+    margin-top: 10px;
+}
+.img-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: 1px solid var(--navy-blue);
+    border-radius: 20px;
+    background: #FFFFFF;
+    color: var(--navy-blue);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.img-upload-btn:hover {
+    background: var(--navy-blue);
+    color: #FFFFFF;
+}
+.img-upload-btn:active {
+    transform: scale(0.98);
+}
+.img-icon {
+    font-size: 16px;
+}
+.img-text {
+    font-weight: 600;
+}
+/* ==================================================
    12. 토스트 메시지
 ================================================== */
 .toast-container {
