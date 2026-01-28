@@ -97,7 +97,7 @@ export function getBookingPanelHTML() {
                     </div>
                     <div class="form-group">
                       <label class="required">이메일</label>
-                      <input type="email" id="email" placeholder="example@email.com" required>
+                      <input type="text" id="email" placeholder="example@email.com" required>
                       <span class="error-message">이메일을 입력해주세요</span>
                     </div>
                   </div>
@@ -210,10 +210,6 @@ export function getBookingPanelHTML() {
 
                 <button type="submit" form="bookingForm" class="btn-submit" id="submitBtn">
                   결제하기
-                </button>
-
-                <button type="button" class="btn-schedule" id="scheduleBtn">
-                  일정에 담기
                 </button>
               </div>
             </div>

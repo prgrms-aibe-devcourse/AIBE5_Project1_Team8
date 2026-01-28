@@ -294,7 +294,7 @@ export function initBookingPanel(root, bookingData, { onClose } = {}) {
 
   bookingForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    //if (!validateForm()) return;
 
     const checkIn = new Date(checkInInput.value);
     const checkOut = new Date(checkOutInput.value);
