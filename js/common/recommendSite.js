@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>
                     </div>
-                    <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?q=80&w=1000&auto=format&fit=crop');">
+                    <div class="slide" style="background-image: url('https://media.tel-co.net/uploads/View_B_01_b932377a99.jpg');">
                         <div class="overlay">
                             <h2>추천 여행지</h2>
                             <div class="content-center">
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>
                     </div>
-                    <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1000&auto=format&fit=crop');">
+                    <div class="slide" style="background-image: url('https://i.namu.wiki/i/XO6E06_qrvaiZnbaLsHC-Ov1z4WI8vRqSn_R9IqHobEgHD2gYLLN3Ldi3zvnFLRYcLTQmWpRuAdsfH_2IrNNPQ.webp');">
                         <div class="overlay">
                             <h2>추천 여행지</h2>
                             <div class="content-center">
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>
                     </div>
-                    <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1000&auto=format&fit=crop');">
+                    <div class="slide" style="background-image: url('https://gangwon.to/upload/board/BDMAIN03/792f049a-6d93-4943-8384-c83680b9887b.jpg');">
                         <div class="overlay">
                             <h2>추천 여행지</h2>
                             <div class="content-center">
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>
                     </div>
-                    <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?q=80&w=1000&auto=format&fit=crop');">
+                    <div class="slide" style="background-image: url('https://img.seoul.co.kr/img/upload/2023/05/05/SSC_20230505100531.jpg');">
                         <div class="overlay">
                             <h2>추천 여행지</h2>
                             <div class="content-center">
