@@ -301,6 +301,18 @@
   font-weight: 600;
 }
 
+.cancel-btn{
+  background: transparent;
+  color: var(--navy-blue);
+  border: 1px solid var(--btn-red);
+  color: var(--btn-red);
+}
+
+.cancel-btn:hover {
+  background: rgba(47, 65, 87, 0.08);
+}
+
+
 /* 완료 */
 .mypage-reservation-item.completed .reservation-actions {
   display: flex;
@@ -565,4 +577,17 @@
 .modal-content input[type="password"]:focus { /* 포커스 강조 */
   border-color: var(--navy-blue);
   box-shadow: 0 0 6px rgba(47, 65, 87, 0.2);
+}
+
+.reservation-cancel-btn {
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease,
+              transform 0.15s ease,
+              box-shadow 0.15s ease;
+  background: var(--btn-red);
+  color: #ffffff;
 }
