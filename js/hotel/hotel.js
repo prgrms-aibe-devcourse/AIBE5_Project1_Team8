@@ -158,8 +158,22 @@ async function loadDataFromFirebase() {
               ...doc.data()
             };
             
-            // category에 따라 분류
-            const category = data.category || inferCategoryFromData(data);
+            // category에 따라 분류 (contentTypeID 우선 확인)
+            let category = data.category;
+            if (!category) {
+              // contentTypeID를 먼저 확인 (14, 15, 28, 38, 39는 즐길거리로 분류)
+              const contentTypeId = data.contentTypeId || data.contentTypeID || data.contenttypeid;
+              if (contentTypeId) {
+                const contentTypeIdStr = String(contentTypeId);
+                if (['14', '15', '28', '38', '39'].includes(contentTypeIdStr)) {
+                  category = 'leisure';
+                } else {
+                  category = inferCategoryFromData(data);
+                }
+              } else {
+                category = inferCategoryFromData(data);
+              }
+            }
             const formattedData = formatFirebaseData(data, category);
             
             switch (category) {
@@ -221,7 +235,22 @@ async function loadDataFromFirebase() {
                   id: doc.id,
                   ...doc.data()
                 };
-                const category = data.category || inferCategoryFromData(data);
+                // category에 따라 분류 (contentTypeID 우선 확인)
+                let category = data.category;
+                if (!category) {
+                  // contentTypeID를 먼저 확인 (14, 15, 28, 38, 39는 즐길거리로 분류)
+                  const contentTypeId = data.contentTypeId || data.contentTypeID || data.contenttypeid;
+                  if (contentTypeId) {
+                    const contentTypeIdStr = String(contentTypeId);
+                    if (['14', '15', '28', '38', '39'].includes(contentTypeIdStr)) {
+                      category = 'leisure';
+                    } else {
+                      category = inferCategoryFromData(data);
+                    }
+                  } else {
+                    category = inferCategoryFromData(data);
+                  }
+                }
                 const formattedData = formatFirebaseData(data, category);
                 
                 switch (category) {
@@ -319,6 +348,15 @@ function formatFirebaseData(firebaseData, category) {
 
 // ===== 데이터에서 카테고리 추론 =====
 function inferCategoryFromData(data) {
+  // contentTypeID를 먼저 확인 (14, 15, 28, 38, 39는 즐길거리로 분류)
+  const contentTypeId = data.contentTypeId || data.contentTypeID || data.contenttypeid;
+  if (contentTypeId) {
+    const contentTypeIdStr = String(contentTypeId);
+    if (['14', '15', '28', '38', '39'].includes(contentTypeIdStr)) {
+      return 'leisure';
+    }
+  }
+  
   const title = (data.title || data.name || '').toLowerCase();
   
   if (title.includes('호텔') || title.includes('리조트') || title.includes('펜션') || 
@@ -632,6 +670,9 @@ spotList.addEventListener("click", (e) => {
     const card = e.target.closest(".spot-card");
     const detailId = detailBtn.dataset.detailId || (card ? card.dataset.detailId : null);
     if (detailId) {
+      // 현재 페이지와 카테고리를 sessionStorage에 저장
+      sessionStorage.setItem('hotelListPage', currentPage.toString());
+      sessionStorage.setItem('hotelListCategory', currentCategory);
       window.location.href = `hotel-detail.html?id=${detailId}`;
     }
     return;
@@ -709,6 +750,10 @@ spotList.addEventListener("click", (e) => {
     const category = card.dataset.category;
     const detailId = card.dataset.detailId;
 
+    // 현재 페이지와 카테고리를 sessionStorage에 저장
+    sessionStorage.setItem('hotelListPage', currentPage.toString());
+    sessionStorage.setItem('hotelListCategory', currentCategory);
+
     // 숙박(accommodation)은 hotel-detail.html로, 나머지는 place-detail.html로 이동
     if (category === "accommodation") {
       window.location.href = `hotel-detail.html?id=${detailId}`;
@@ -731,6 +776,9 @@ if (categoryParam && allData[categoryParam]) {
       tab.classList.add("active");
     }
   });
+  // URL 파라미터로 카테고리가 변경되면 저장된 페이지 정보 초기화
+  sessionStorage.removeItem('hotelListPage');
+  sessionStorage.removeItem('hotelListCategory');
 }
 
 // ===== 검색 이벤트 처리 (searchbar.js에서 발생) =====
@@ -759,8 +807,38 @@ document.addEventListener('hotelSearch', (e) => {
   // Firebase에서 모든 데이터 로드 (tour_items와 accommodations)
   await loadDataFromFirebase();
   
+  // URL 파라미터가 없을 때만 저장된 페이지와 카테고리 복원
+  const categoryParam = params.get("type");
+  if (!categoryParam) {
+    const savedPage = sessionStorage.getItem('hotelListPage');
+    const savedCategory = sessionStorage.getItem('hotelListCategory');
+    
+    if (savedPage) {
+      const pageNum = parseInt(savedPage, 10);
+      if (!isNaN(pageNum) && pageNum > 0) {
+        currentPage = pageNum;
+      }
+    }
+    
+    if (savedCategory && allData[savedCategory]) {
+      currentCategory = savedCategory;
+      // 탭 활성화
+      searchTabs.forEach(tab => {
+        tab.classList.remove("active");
+        if (tab.innerText === currentCategory) {
+          tab.classList.add("active");
+        }
+      });
+    }
+  }
+  
   // 초기 렌더링
   setTimeout(() => {
     renderSpots();
+    // 저장된 페이지로 스크롤
+    const savedPage = sessionStorage.getItem('hotelListPage');
+    if (savedPage && !categoryParam) {
+      window.scrollTo({ top: 300, behavior: "smooth" });
+    }
   }, 300);
 })();
