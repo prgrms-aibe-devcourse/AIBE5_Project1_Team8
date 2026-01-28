@@ -66,8 +66,8 @@ body {
 .spot-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  padding: 2rem 0;
+  gap: 1.5rem;
+  /* padding: 0rem 0; */
 }
 
 /* ===== Spot Card ===== */
@@ -76,7 +76,7 @@ body {
   border: var(--border-gray);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-sm);
-  padding: 1.5rem;
+  padding: 1rem;
   display: flex;
   align-items: center;
   gap: 1.5rem;
@@ -108,10 +108,11 @@ body {
 /* Card Image */
 .spot-card-image {
   flex-shrink: 0;
-  width: 140px;
-  height: 140px;
+  width: 150px;
+  height: 150px;
   background: #e8e8e8;
-  border-radius: var(--radius-md);
+  border: var(--border-gray);
+  border-radius: 12px;
   overflow: hidden;
   display: flex;
   align-items: center;
