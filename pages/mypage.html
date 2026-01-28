@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>마이 페이지</title>
+        <title>Tripial | 마이 페이지</title>
 
         <link rel="stylesheet" href="../css/common/style.css" />
         <link rel="stylesheet" href="../css/pages/mypage.css" />
@@ -100,6 +100,22 @@
                 <div class="modal-actions">
                     <button class="cancel">취소</button>
                     <button class="confirm">확인</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 예약 취소 모달 -->
+        <div id="cancelModal" class="modal hidden">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <h3>예약을 취소하시겠어요?</h3>
+                <p>
+                    예약 취소 시 환불은 업체 상황에 따라 <br> 1~3일 소요될 수 있습니다.
+                </p>
+
+                <div class="modal-actions">
+                    <button id="cancelNoBtn" class="reservation-btn">아니요</button>
+                    <button id="cancelYesBtn" class="reservation-cancel-btn">취소하기</button>
                 </div>
             </div>
         </div>

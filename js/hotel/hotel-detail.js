@@ -1,5 +1,7 @@
 import { openBookingPanel } from "./hotel-booking.js";
 
+import { checkAuth } from '../auth/auth-guard.js';
+
 // ===== Firebase에서 숙소 상세 조회 =====
 async function fetchHotelFromFirebase(hotelId) {
   const { db } = await import("../common/firebase-config.js");
@@ -61,9 +63,18 @@ function mapAccommodationDocToHotel(docData, hotelId) {
       ? basePriceRaw
       : parseInt(String(basePriceRaw ?? "").replace(/[^\d]/g, ""), 10) || 0;
 
+  const idInMapAccToHotel = docData?.id || docData?.contentid || hotelId;
+  //hotelId 기반 랜덤시드 만들기 (Knuth 상수 사용, 자동 unsigned 정수 변환) (호텔 하나에는 계속 같은 값이 나오게)
+  const randomSeed = (idInMapAccToHotel * 2654435761) >>> 0; 
+  let randomPrice = ((randomSeed % 18) + 8) * 10000; //80000~250000 사이 만 단위로 변환
+  // 다양한 예외 처리 (보정도 다양하게)
+  if (typeof randomPrice !== "number") randomPrice = 80000;
+  else if (!Number.isFinite(randomPrice)) randomPrice = 120000;  // NaN, +Infinity, -Infinity
+  else if (randomPrice < 80000 || randomPrice > 250000) randomPrice = 160000;
+
   const priceText =
     docData?.priceText ||
-    (basePrice ? `${basePrice.toLocaleString()}원~` : "가격 정보 없음");
+    (basePrice ? `${basePrice.toLocaleString()}원~` : `${randomPrice.toLocaleString()}원~`);
 
   const desc =
     docData?.desc ||
@@ -84,13 +95,13 @@ function mapAccommodationDocToHotel(docData, hotelId) {
   };
 
   return {
-    id: docData?.id || docData?.contentid || hotelId,
+    id: idInMapAccToHotel,
     name,
     address,
     contact,
     image,
     price: priceText,
-    basePrice,
+    basePrice: basePrice || randomPrice,
     desc,
     // 픽토그램은 DB에 없을 수 있으니 안전 기본값
     parking: toBool(docData?.parking),
@@ -244,7 +255,6 @@ if (addScheduleBtn) {
 // 예약 버튼 클릭 - 예약 페이지로 이동
 bookingBtn.addEventListener("click", () => {
   if (!hotel) return;
-  // 예약 데이터를 sessionStorage에 저장
   const bookingData = {
     hotelId: hotelId,
     hotelName: hotel.name,
@@ -254,10 +264,8 @@ bookingBtn.addEventListener("click", () => {
     tel: hotel.contact
   };
   
-  sessionStorage.setItem("bookingData", JSON.stringify(bookingData));
-  
-  // 예약 패널 열기
-  openBookingPanel(bookingData);
+  // 로그인 시에만 예약 패널 열기
+  if(checkAuth()) openBookingPanel(bookingData);
 });
 
 // 리뷰 페이지네이션

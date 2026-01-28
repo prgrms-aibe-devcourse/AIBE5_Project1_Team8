@@ -194,19 +194,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         searchBtn.addEventListener('click', () => {
-            // 검색창으로 부드럽게 스크롤
-            const searchContainer = document.querySelector('.search-container');
-            if (searchContainer) {
-                searchContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
 
-                // 스크롤 후 검색 입력창에 포커스
-                setTimeout(() => {
-                    const searchInput = document.getElementById('keyword');
-                    if (searchInput) {
-                        searchInput.focus();
-                    }
-                }, 500);
-            }
+            setTimeout(() => {
+                const searchInput = document.getElementById('keyword');
+                if (searchInput) {
+                    searchInput.focus();
+                }
+            }, 500);
         });
     }
 
@@ -267,6 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
             map.closePopup();
             titleEl.innerText = INITIAL_TITLE;
             descEl.innerText = INITIAL_DESC;
+            currentLocation = null;
         });
 
         // Show/Hide Reset Button based on map movement
@@ -284,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 4. Create Markers
         let currentLocation = null; // 현재 선택된 장소 저장
-        
+
         locations.forEach(loc => {
             const marker = L.marker([loc.lat, loc.lng]).addTo(map);
 
@@ -297,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Update text description
                 titleEl.innerText = loc.name;
                 descEl.innerText = loc.desc;
-                
+
                 // 현재 선택된 장소 저장
                 currentLocation = loc;
 
@@ -313,23 +312,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 map.flyTo(newCenterLatLng, targetZoom, { duration: 1.1 });
             });
         });
-        
+
         // 5. 일정에 추가 버튼 클릭 이벤트
         const addScheduleBtn = document.querySelector('.add-btn');
         if (addScheduleBtn) {
-            addScheduleBtn.addEventListener('click', function() {
+            addScheduleBtn.addEventListener('click', function () {
                 if (!currentLocation) {
                     alert('먼저 지도에서 여행지를 선택해주세요.');
                     return;
                 }
-                
+
                 // 장소 이름에서 번호 제거 (예: "1. 서울: 경복궁" -> "경복궁")
                 const fullName = currentLocation.name;
                 const colonIndex = fullName.lastIndexOf(':');
-                const placeName = colonIndex !== -1 
+                const placeName = colonIndex !== -1
                     ? fullName.substring(colonIndex + 1).trim().split(' (')[0]
                     : fullName;
-                
+
                 // 장소 데이터 구성
                 const placeData = {
                     type: 'recommended',
@@ -339,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     lat: currentLocation.lat,
                     lng: currentLocation.lng
                 };
-                
+
                 // 캘린더 모달 열기
                 if (typeof calendarModal !== 'undefined') {
                     calendarModal.open(placeName, placeData, (scheduleData) => {

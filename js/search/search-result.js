@@ -57,6 +57,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function inferCategoryFromData(data) {
+        // contentTypeID를 먼저 확인 (14, 15, 28, 38, 39는 즐길거리로 분류)
+        const contentTypeId = data.contentTypeId || data.contentTypeID || data.contenttypeid;
+        if (contentTypeId) {
+            const contentTypeIdStr = String(contentTypeId);
+            if (['14', '15', '28', '38', '39'].includes(contentTypeIdStr)) {
+                return 'leisure';
+            }
+        }
+        
         const t = (data.title || data.name || '').toLowerCase();
         if (/호텔|리조트|펜션|모텔|게스트하우스/.test(t)) return 'accommodation';
         if (/궁|사찰|유적|박물관|미술관/.test(t)) return 'culture';
@@ -196,7 +205,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                     } else {
                         snap.forEach(doc => {
                             const d = { id: doc.id, ...doc.data() };
-                            const cat = d.category || inferCategoryFromData(d);
+                            // contentTypeID를 먼저 확인 (14, 15, 28, 38, 39는 즐길거리로 분류)
+                            let cat = d.category;
+                            if (!cat) {
+                                const contentTypeId = d.contentTypeId || d.contentTypeID || d.contenttypeid;
+                                if (contentTypeId) {
+                                    const contentTypeIdStr = String(contentTypeId);
+                                    if (['14', '15', '28', '38', '39'].includes(contentTypeIdStr)) {
+                                        cat = 'leisure';
+                                    } else {
+                                        cat = inferCategoryFromData(d);
+                                    }
+                                } else {
+                                    cat = inferCategoryFromData(d);
+                                }
+                            }
                             const fd = formatFirebaseData(d, cat);
                             if (cat === 'culture') culture.push(fd);
                             else if (cat === 'restaurant') restaurant.push(fd);
@@ -228,7 +251,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                             if (!snap.empty) {
                                 snap.forEach(doc => {
                                     const d = { id: doc.id, ...doc.data() };
-                                    const cat = d.category || inferCategoryFromData(d);
+                                    // contentTypeID를 먼저 확인 (14, 15, 28, 38, 39는 즐길거리로 분류)
+                                    let cat = d.category;
+                                    if (!cat) {
+                                        const contentTypeId = d.contentTypeId || d.contentTypeID || d.contenttypeid;
+                                        if (contentTypeId) {
+                                            const contentTypeIdStr = String(contentTypeId);
+                                            if (['14', '15', '28', '38', '39'].includes(contentTypeIdStr)) {
+                                                cat = 'leisure';
+                                            } else {
+                                                cat = inferCategoryFromData(d);
+                                            }
+                                        } else {
+                                            cat = inferCategoryFromData(d);
+                                        }
+                                    }
                                     const fd = formatFirebaseData(d, cat);
                                     if (cat === 'culture') culture.push(fd);
                                     else if (cat === 'restaurant') restaurant.push(fd);
@@ -358,8 +395,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         resultsGrid.innerHTML = pageData.map(item => {
             const sid = idStr(item.id);
             const saved = isSaved(item.id);
+            const category = item.category || (item.type === '숙소' ? 'accommodation' : 'tour');
+            const detailId = item.detailId || item.id || '0';
             return `
-                <div class="result-card">
+                <div class="result-card" data-category="${category}" data-detail-id="${detailId}" style="cursor: pointer;">
                     <div class="card-image">
                         <img src="${item.image || ''}" alt="${(item.name || '').replace(/"/g, '&quot;')}" onerror="this.style.display='none'; this.parentElement.innerHTML='관광지 이미지';">
                         <button class="save-btn ${saved ? 'saved' : ''}" data-id="${sid.replace(/"/g, '&quot;')}" type="button">
@@ -376,8 +415,34 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
         }).join('');
 
+        // 카드 클릭 이벤트 (상세 페이지로 이동)
+        resultsGrid.querySelectorAll('.result-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                // save-btn 클릭은 무시
+                if (e.target.closest('.save-btn')) return;
+                
+                const category = card.dataset.category;
+                const detailId = card.dataset.detailId;
+                
+                // 현재 페이지와 타입을 sessionStorage에 저장
+                sessionStorage.setItem('searchResultPage', currentPage.toString());
+                sessionStorage.setItem('searchResultType', currentType);
+                sessionStorage.setItem('searchResultKeyword', searchKeyword);
+                
+                // 숙박(accommodation)은 hotel-detail.html로, 나머지는 place-detail.html로 이동
+                if (category === "accommodation") {
+                    window.location.href = `../hotel/hotel-detail.html?id=${detailId}`;
+                } else if (detailId && detailId !== "0") {
+                    window.location.href = `../place/place-detail.html?id=${detailId}`;
+                } else {
+                    alert("상세 페이지가 준비 중입니다.");
+                }
+            });
+        });
+
         resultsGrid.querySelectorAll('.save-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation(); // 카드 클릭 이벤트 방지
                 const id = btn.getAttribute('data-id');
                 if (id == null) return;
                 const idx = savedItems.findIndex(s => idStr(s) === id);
@@ -518,6 +583,46 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     await loadDataFromFirebase();
+    
+    // 저장된 페이지, 타입, 검색어 복원
+    const savedPage = sessionStorage.getItem('searchResultPage');
+    const savedType = sessionStorage.getItem('searchResultType');
+    const savedKeyword = sessionStorage.getItem('searchResultKeyword');
+    
+    if (savedPage) {
+        const pageNum = parseInt(savedPage, 10);
+        if (!isNaN(pageNum) && pageNum > 0) {
+            currentPage = pageNum;
+        }
+    }
+    
+    if (savedType && allData[savedType]) {
+        currentType = savedType;
+        // 탭 활성화
+        searchTabs.forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.innerText === currentType) {
+                tab.classList.add('active');
+            }
+        });
+    }
+    
+    // 저장된 검색어가 URL 파라미터와 다르면 무시 (새 검색인 경우)
+    if (savedKeyword && savedKeyword === searchKeyword) {
+        // 검색어가 동일하면 저장된 페이지 사용
+    } else if (savedKeyword && savedKeyword !== searchKeyword) {
+        // 검색어가 다르면 1페이지로 초기화
+        currentPage = 1;
+        sessionStorage.removeItem('searchResultPage');
+        sessionStorage.removeItem('searchResultType');
+        sessionStorage.removeItem('searchResultKeyword');
+    }
+    
     renderResults();
     updatePagination();
+    
+    // 저장된 페이지로 스크롤
+    if (savedPage && savedKeyword === searchKeyword) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 });

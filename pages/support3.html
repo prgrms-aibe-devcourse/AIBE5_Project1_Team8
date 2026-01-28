@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tripial | 고객센터</title>
+    <title>고객센터 - 최종 완성본</title>
+
     <!-- CSS -->
-    <link rel="stylesheet" href="../css/common/style.css" />
     <link rel="stylesheet" href="../css/pages/support.css" />
     <link
         rel="stylesheet"
@@ -14,38 +14,32 @@
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
     />
 </head>
+
 <body>
     <!-- HEADER -->
     <header id="header"></header>
 
     <div class="wrapper">
-        <!-- 배너 -->
-        <div class="support-banner">
-            <span class="name">고객센터</span>
-        </div>
-
-        <!-- 고객센터 정보 -->
+        <!-- PAGE TITLE -->
+        <div class="main-title-box">고객센터</div>
+        
         <section class="section-wrap">
             <span class="label">고객센터 정보</span>
-            <div class="btn-group-top">
-                <button class="btn-sub" id="goMyInquiryBtn">나의 문의 내역</button>
-                <button class="btn-primary" id="openModalBtn">1:1 문의하기</button>
-            </div>
-            <div id="supportInfo">
-                <div class="card-support-info">📞 고객센터 연락처 1588-1234</div>
-                <div class="card-support-info">상담 시간 안내 10:00~18:00</div>
+    
+             <button class="btn-absolute" id="openModalBtn">1:1 문의하기</button>
+
+            <div class="gray-box">
+                <div class="card card-info">고객센터 연락처 1588-1234</div>
+                <div class="card card-info">상담 시간 안내 10:00~18:00</div>
             </div>
         </section>
+
 
 
         <!-- FAQ -->
         <section class="section-wrap">
             <span class="label">자주 찾는 질문</span>
-            <div class="search-box-wrapper">
-                <input type="text" id="faqSearchInput" class="search-input"
-                    placeholder="궁금하신 내용을 검색해 보세요."/>
-                <button class="btn-search">검색</button>
-            </div>
+
             <div class="gray-box">
                 <!-- FAQ Tabs -->
                 <div class="tabs-row" id="faqTabs">
@@ -54,6 +48,7 @@
                     <button class="tab" data-filter="payment">예약/결제</button>
                     <button class="tab" data-filter="account">계정</button>
                 </div>
+
                 <!-- FAQ List -->
                 <div id="faqList">
                     <!-- 이용문의 -->
@@ -62,12 +57,14 @@
                             <span>Q. 서비스 이용 방법이 궁금해요.</span>
                             <span class="icon-down">▼</span>
                         </button>
+                        
                         <div class="faq-answer-box">
                             <div class="faq-answer">
                                 홈페이지 가이드를 참고하여 예약을 진행하실 수 있습니다.
                             </div>
                         </div>
                     </div>
+
                     <div class="faq-item" data-category="use">
                         <button class="card flex-between faq-trigger">
                             <span>Q. 단체 예약 문의는 어디서 하나요?</span>
@@ -79,6 +76,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- 예약/결제 -->
                     <div class="faq-item" data-category="payment">
                         <button class="card flex-between faq-trigger">
@@ -91,6 +89,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="faq-item" data-category="payment">
                         <button class="card flex-between faq-trigger">
                             <span>Q. 카드 할부 혜택이 있나요?</span>
@@ -102,6 +101,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- 계정 -->
                     <div class="faq-item" data-category="account">
                         <button class="card flex-between faq-trigger">
@@ -114,6 +114,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="faq-item" data-category="account">
                         <button class="card flex-between faq-trigger">
                             <span>Q. 회원 탈퇴는 어떻게 하나요?</span>
@@ -129,10 +130,10 @@
             </div>
         </section>
 
-
         <!-- 나의 문의 내역 -->
-        <section class="section-wrap" id="myInquirySection">
+        <section class="section-wrap">
             <span class="label">나의 문의 내역</span>
+
             <div class="gray-box">
                 <!-- Inquiry Tabs -->
                 <div class="tabs-row" id="inquiryTabs">
@@ -140,17 +141,63 @@
                     <button class="tab" data-filter="pending">처리중</button>
                     <button class="tab" data-filter="completed">답변 완료</button>
                 </div>
+
                 <!-- Inquiry List -->
                 <div id="myInquiryList">
+                    <!-- 처리중 -->
+                    <div class="inquiry-item" data-status="pending">
+                        <button class="card flex-between inquiry-trigger">
+                            <span>[예약] 체크인 시간 변경</span>
+                            <span class="status-frame">처리중</span>
+                        </button>
+                        <div class="inquiry-content-box">
+                            <div class="inquiry-detail">
+                                <p><strong>문의내용:</strong> 18시 이후 체크인 가능할까요?</p>
+                                <div class="reply-box">
+                                    <strong>답변:</strong> 확인 중에 있습니다.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="inquiry-item" data-status="pending">
+                        <button class="card flex-between inquiry-trigger">
+                            <span>[결제] 중복 결제 확인</span>
+                            <span class="status-frame">처리중</span>
+                        </button>
+                        <div class="inquiry-content-box">
+                            <div class="inquiry-detail">
+                                <p><strong>문의내용:</strong> 카드 결제가 두 번 되었습니다.</p>
+                                <div class="reply-box">
+                                    <strong>답변:</strong> 카드사 대조 작업 중입니다.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 답변 완료 -->
+                    <div class="inquiry-item" data-status="completed">
+                        <button class="card flex-between inquiry-trigger">
+                            <span>[이용] 쿠폰 적용 오류</span>
+                            <span class="status-frame completed">답변 완료</span>
+                        </button>
+                        <div class="inquiry-content-box">
+                            <div class="inquiry-detail">
+                                <p><strong>문의내용:</strong> 쿠폰 코드 입력이 안 됩니다.</p>
+                                <div class="reply-box">
+                                    <strong>답변:</strong> 해당 쿠폰 재발급 조치해 드렸습니다.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </div>
 
-
     <!-- FOOTER -->
     <footer id="footer"></footer>
+
     <!-- 문의 작성 모달 -->
     <div id="inquiryModal" class="modal-overlay">
         <div class="modal-content wireframe-style">
@@ -158,6 +205,7 @@
                 <span class="modal-tag">문의 작성</span>
                 <button class="close-modal">&times;</button>
             </div>
+
             <div class="modal-body">
                 <input
                     type="text"
@@ -165,35 +213,36 @@
                     class="round-input"
                     placeholder="문 의 제 목"
                 />
+
                 <div class="modal-row">
                     <select id="inquiryType" class="modal-sub-select">
-                        <option value="이용">이용문의</option>
-                        <option value="예약/결제">예약/결제</option>
-                        <option value="계정관리">계정관리</option>
+                        <option value="use">이용문의</option>
+                        <option value="payment">예약/결제</option>
+                        <option value="account">계정관리</option>
                     </select>
                 </div>
+
                 <textarea
                     id="inquiryContent"
                     class="round-input modal-textarea"
                     placeholder="문 의 내 용"
-                    maxlength="500"
                 ></textarea>
-                <div class="char-count">
-                    <span id="currentChars">0</span> / 500
-                </div>
+
                 <div class="image-upload-wrapper">
                     <label for="imgInput" class="img-label">📷 이미지 첨부하기</label>
                     <input type="file" id="imgInput" accept="image/*" hidden />
                     <div id="imgPreview" class="img-preview"></div>
                 </div>
             </div>
+
             <div class="modal-footer">
                 <button class="btn-save" id="saveInquiryBtn">저 장</button>
             </div>
         </div>
     </div>
+
     <!-- JS -->
     <script src="../js/common/header.js"></script>
-    <script type="module" src="../js/support/support.js"></script>
+    <script src="../js/support/support.js"></script>
 </body>
 </html>

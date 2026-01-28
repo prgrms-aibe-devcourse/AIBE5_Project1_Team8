@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="content-center">
                                 <h3>제주도 한라산</h3>
                                 <p>한국의 최고봉으로, 사계절 아름다운 풍경을 자랑하는 제주도의 상징적인 산입니다.</p>
-                                <a href="#" class="details-link">자세히</a>
+                                <a href="pages/hotel/hotel.html" class="details-link">자세히</a>
                             </div>
                         </div>
                     </div>
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="content-center">
                                 <h3>부산 해운대</h3>
                                 <p>아름다운 해변과 현대적인 도시가 어우러진 부산의 대표적인 관광 명소입니다.</p>
-                                <a href="#" class="details-link">자세히</a>
+                                <a href="pages/hotel/hotel.html" class="details-link">자세히</a>
                             </div>
                         </div>
                     </div>
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="content-center">
                                 <h3>경주 불국사</h3>
                                 <p>신라 시대의 찬란한 불교 문화를 보여주는 세계문화유산으로, 한국의 대표적인 고찰입니다.</p>
-                                <a href="#" class="details-link">자세히</a>
+                                <a href="pages/hotel/hotel.html" class="details-link">자세히</a>
                             </div>
                         </div>
                     </div>
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="content-center">
                                 <h3>설악산 국립공원</h3>
                                 <p>가을 단풍과 겨울 설경이 유명한 한국의 대표적인 산악 관광지입니다.</p>
-                                <a href="#" class="details-link">자세히</a>
+                                <a href="pages/hotel/hotel.html" class="details-link">자세히</a>
                             </div>
                         </div>
                     </div>
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="content-center">
                                 <h3>전주 한옥마을</h3>
                                 <p>전통 한옥과 한국의 전통 문화를 체험할 수 있는 아름다운 전통 마을입니다.</p>
-                                <a href="#" class="details-link">자세히</a>
+                                <a href="pages/hotel/hotel.html" class="details-link">자세히</a>
                             </div>
                         </div>
                     </div>
