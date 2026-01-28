@@ -311,6 +311,7 @@ export function initBookingPanel(root, bookingData, { onClose } = {}) {
 
     const loggedInUser = JSON.parse(localStorage.getItem('auth_user'));
     const loggedInUserId = loggedInUser.uid;
+    const loggedInUsername = loggedInUser.username;
 
     const scheduleData = {
       contact: bookingData.tel,
@@ -322,7 +323,7 @@ export function initBookingPanel(root, bookingData, { onClose } = {}) {
       name: bookingData.hotelName,
       startDate: checkIn.toISOString().split('T')[0],
       type: "hotel",       
-      userId: loggedInUserId,
+      userId: loggedInUsername,
     };
 
     const reservationData = {
