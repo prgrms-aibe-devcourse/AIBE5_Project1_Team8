@@ -10,17 +10,18 @@
     margin: 20px auto 40px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 
 
 .mypage-banner {
     width: 100%;
-    padding: 24px 0;
+    padding: 24px;
+    margin-bottom: 5px;
     border-radius: 20px;
     background: var(--beige-bg);
     border: var(--border-gray);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     color: var(--primary-text);
     text-align: center;
     font-size: 26px;
@@ -38,11 +39,13 @@
     border: var(--border-gray);
     border-radius: 15px;
     padding: 30px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .section-title {
-  font-size: 20px;
+  margin-block-start: 40px;
+  padding-left: 10px;
+  font-size: 24px;
   color: var(--navy-blue);
 }
 
@@ -72,6 +75,7 @@
   width: 130px;
   height: 130px;
   border-radius: 50%;
+  border: var(--border-gray);
   object-fit: cover;
 }
 
@@ -94,7 +98,7 @@
 
 .profile-btn {
   padding: 10px 16px;
-  border-radius: 15px;
+  border-radius: 12px;
   border: none;
   background: var(--navy-blue);
   color: #fff;
@@ -129,7 +133,7 @@
   border-radius: 12px;
   font-size: 14px;
   transition: all 0.2s ease;
-  background-color: #fff;
+  background-color: #fcfcfc;
   outline: none;
 }
 
@@ -197,7 +201,9 @@
 .reservation-img {
   width: 200px;
   height: 120px;
-  border-radius: 10px;
+  border-radius: 5px;
+  border: var(--border-gray);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   object-fit: cover;
 }
 
@@ -245,7 +251,15 @@
 }
 
 .mypage-reservation-item .reservation-detail p {
-    margin: 3px;
+    padding: 3px;
+}
+
+.reservation-detail-divider {
+  width: 1px;
+  height: 11px;
+  background-color: #ccc; 
+  margin: 0px 7px;
+  display: inline-block;
 }
 
 
@@ -387,21 +401,24 @@
 
 /* 후기 단일 아이템 (좌 / 중 / 우) */
 .mypage-review-item {
-  min-height: 180px;   /* 150~180 사이 추천 */
+  min-height: 170px;   /* 150~180 사이 추천 */
   display: flex;
   gap: 16px;
   padding: 16px;
-  background: #fff;
+  background: #fcfcfc;
   border-radius: 12px;
+  border: var(--border-gray);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   align-items: flex-start;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.05);
 }
 
 
 .review-left img {
   width: 200px;
   height: 150px;
-  border-radius: 10px;
+  border-radius: 6px;
+  border: var(--border-gray);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   object-fit: cover;
 }
 
@@ -431,9 +448,11 @@
 
 /* 별점 */
 .review-rating {
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   font-size: 14px;
   color: #f5a623;
+  border-bottom: var(--border-gray);
+  padding-bottom: 7px;
 }
 
 /* 리뷰 내용 */

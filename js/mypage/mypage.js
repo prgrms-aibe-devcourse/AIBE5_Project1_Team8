@@ -115,11 +115,11 @@ if (checkAuth()) {
                     </div>
                 </div>
                 <div class="reservation-detail">
-                    <p><strong>예약 일자</strong> ${date}</p>
-                    <p><strong>숙소 주소</strong> ${r.address}</p>
-                    <p><strong>숙소 연락처</strong> ${r.phone}</p>
-                    <p><strong>체크인</strong> ${checkIn}</p>
-                    <p><strong>체크아웃</strong> ${checkOut}</p>
+                    <p><strong>예약 일자</strong><span class="reservation-detail-divider"></span>${date}</p>
+                    <p><strong>숙소 주소</strong><span class="reservation-detail-divider"></span> ${r.address}</p>
+                    <p><strong>숙소 연락처</strong><span class="reservation-detail-divider"></span> ${r.phone}</p>
+                    <p><strong>체크인</strong><span class="reservation-detail-divider"></span> ${checkIn}</p>
+                    <p><strong>체크아웃</strong><span class="reservation-detail-divider"></span> ${checkOut}</p>
                 </div>
                 `;
                 reservationList.appendChild(li);
