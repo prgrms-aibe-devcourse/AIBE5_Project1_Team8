@@ -10,6 +10,15 @@ import { showToast } from '../common/toast.js';
 // 로그인 여부 확인
 if (checkAuth()) {
     document.addEventListener('DOMContentLoaded', async () => {
+        // 리뷰 작성 후 돌아온건지 확인하고 토스트창 출력
+        const isReviewSuccess = sessionStorage.getItem('review_success');
+        
+        if (isReviewSuccess === 'true') {
+            // 토스트 출력
+            showToast('✅ 리뷰가 성공적으로 등록되었어요!', 'success');
+            sessionStorage.removeItem('review_success');
+        }
+
         const loggedInUser = JSON.parse(localStorage.getItem('auth_user'));
         const loggedInUserId = loggedInUser.uid;
         let myReservations = [];
