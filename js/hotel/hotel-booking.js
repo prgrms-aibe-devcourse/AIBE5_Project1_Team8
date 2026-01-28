@@ -312,15 +312,22 @@ export function initBookingPanel(root, bookingData, { onClose } = {}) {
     const loggedInUser = JSON.parse(localStorage.getItem('auth_user'));
     const loggedInUserId = loggedInUser.uid;
 
+    const scheduleData = {
+      contact: bookingData.tel,
+      createdAt: new Date(), // 결제 일자
+      endDate: checkOut.toISOString().split('T')[0], 
+      hotelId: bookingData.hotelId,
+      image: bookingData.image,
+      location: bookingData.addr,
+      name: bookingData.hotelName,
+      startDate: checkIn.toISOString().split('T')[0],
+      type: "hotel",       
+      userId: loggedInUserId,
+    };
+
     const reservationData = {
       userId: loggedInUserId,
-      // 타 사용자의 예약과 ms 단위까지 일치한다면, username과 reservationNumber를 묶어서 key로 사용 가능?
       reservationNumber: "RES" + Date.now(), 
-      /* About type 
-      "upcoming": 이용 전 (예약 취소 가능) 
-      "confirmed": 예약 확정 (이용 중을 포함한 취소 불가 기간) - 이건 하지말까요?
-      "completed": 이용 완료 (리뷰 가능)
-      */
       type: "upcoming",       
       contentId: bookingData.hotelId,
       title: bookingData.hotelName,
@@ -345,6 +352,7 @@ export function initBookingPanel(root, bookingData, { onClose } = {}) {
     };
 
     await addDoc(collection(db,'reservations'), reservationData);
+    await addDoc(collection(db,'schedules'), scheduleData);
 
     alert(
       `예약이 완료되었습니다!\n\n` +
