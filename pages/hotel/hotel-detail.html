@@ -21,6 +21,7 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
             rel="stylesheet"
         />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
         <link rel="stylesheet" href="../../css/common/calendar-modal.css" />
 
         <link
@@ -228,6 +229,14 @@
                         </div>
                     </section>
 
+                    <!-- Map Section -->
+                    <section class="detail-map-section" id="detailMapSection" style="display: none">
+                        <div class="description-box">
+                            <div class="description-title">지도에서 위치 확인</div>
+                            <div class="detail-map" id="detailMap" aria-label="숙소 위치 지도"></div>
+                        </div>
+                    </section>
+
                     <!-- Review Section -->
                     <section class="review-section">
                         <div class="review-header">
@@ -257,6 +266,7 @@
 
         <!-- Page Scripts -->
         <script src="../../js/common/calendar-modal.js"></script>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
         <script type="module" src="../../js/hotel/hotel-detail.js"></script>
     </body>
 </html>

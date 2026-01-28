@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="header-inner">
     <div class="logo" onclick="location.href='/'">
       <div class="logo-image">
-        <img src="/images/logo/logo.png" alt="로고" />
+        <img src="/images/logo/Tripial-logo.png" alt="로고" />
       </div>
       <span class="logo-text">tripial</span>
     </div>

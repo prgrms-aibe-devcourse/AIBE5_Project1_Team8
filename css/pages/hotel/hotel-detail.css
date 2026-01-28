@@ -265,6 +265,23 @@
   border-color: var(--navy-blue);
 }
 
+/* ===== Map Section ===== */
+.hotel-detail-scope .detail-map-section .description-box {
+  background: var(--beige-bg);
+  border-radius: 15px;
+  border: var(--border-gray);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  padding: 30px;
+}
+
+.hotel-detail-scope .detail-map {
+  width: 100%;
+  height: 280px;
+  border-radius: 15px;
+  border: var(--border-gray);
+  overflow: hidden;
+}
+
 /* ===== Pictogram Section ===== */
 .hotel-detail-scope .pictogram-section {
   padding: 30px;

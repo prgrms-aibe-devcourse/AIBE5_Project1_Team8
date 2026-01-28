@@ -211,10 +211,6 @@ export function getBookingPanelHTML() {
                 <button type="submit" form="bookingForm" class="btn-submit" id="submitBtn">
                   결제하기
                 </button>
-
-                <button type="button" class="btn-schedule" id="scheduleBtn">
-                  일정에 담기
-                </button>
               </div>
             </div>
 
