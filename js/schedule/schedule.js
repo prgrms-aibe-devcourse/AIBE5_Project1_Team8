@@ -1,13 +1,12 @@
 import { checkAuth } from '../auth/auth-guard.js'; // 사용자 로그인 정보 가져오기
 
-// 1. localStorage에서 유저 정보 가져오기
-const loggedInUser = JSON.parse(localStorage.getItem('auth_user'));
-const loggedInUserId = loggedInUser.username; // userId
-console.log (loggedInUserId);
-
 // 가드 로직으로 로그인 여부 먼저 확인
 if (checkAuth()) {    
-
+    // 1. localStorage에서 유저 정보 가져오기
+    const loggedInUser = JSON.parse(localStorage.getItem('auth_user'));
+    const loggedInUserId = loggedInUser.username; // userId
+    console.log (loggedInUserId);
+    
     // 2. DOM이 로드된 후 닉네임 표시 및 일정 로드
     document.addEventListener('DOMContentLoaded', async () => {
         if (loggedInUser && loggedInUser.name) {
