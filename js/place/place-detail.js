@@ -1,4 +1,92 @@
-// ===== 관광지 데이터 (상세정보 포함) =====
+// ===== Firebase에서 관광지 상세 조회 =====
+async function fetchPlaceFromFirebase(placeId) {
+  const { db } = await import("../common/firebase-config.js");
+  const {
+    collection,
+    doc,
+    getDoc,
+    getDocs,
+    limit,
+    query,
+    where,
+  } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+
+  // 1) 문서 ID로 직접 조회 (가장 빠름)
+  try {
+    const ref = doc(db, "tour_items", placeId);
+    const snap = await getDoc(ref);
+    if (snap.exists()) {
+      return { id: snap.id, ...snap.data() };
+    }
+  } catch (e) {
+    console.warn("tour_items doc(id) 조회 실패:", e);
+  }
+
+  // 2) contentid로 조회 (list에서 detailId로 넘어오는 값이 contentid인 경우)
+  try {
+    const q = query(
+      collection(db, "tour_items"),
+      where("contentid", "==", placeId),
+      limit(1)
+    );
+    const qs = await getDocs(q);
+    if (!qs.empty) {
+      const d = qs.docs[0];
+      return { id: d.id, ...d.data() };
+    }
+  } catch (e) {
+    console.warn("tour_items where(contentid) 조회 실패:", e);
+  }
+
+  return null;
+}
+
+function mapTourItemDocToPlace(docData, placeId) {
+  const name = docData?.name || docData?.title || "관광지명";
+  const address = docData?.address || docData?.addr1 || "";
+  const contact = docData?.contact || docData?.tel || "";
+  const image =
+    docData?.image ||
+    docData?.firstimage ||
+    docData?.firstimage2 ||
+    "";
+  
+  const time = docData?.time || docData?.usetime || docData?.usetimeculture || "정보 없음";
+  
+  const desc =
+    docData?.desc ||
+    docData?.overview ||
+    docData?.description ||
+    "관광지 상세 설명이 준비 중입니다.";
+
+  // DB의 boolean 필드 정규화: null/undefined -> false, true/"true"/1 -> true
+  const toBool = (v) => {
+    if (v == null) return false; // null/undefined
+    if (typeof v === "boolean") return v;
+    if (typeof v === "number") return v === 1;
+    if (typeof v === "string") {
+      const s = v.trim().toLowerCase();
+      return s === "true" || s === "1" || s === "y" || s === "yes";
+    }
+    return Boolean(v);
+  };
+
+  return {
+    id: docData?.id || docData?.contentid || placeId,
+    name,
+    address,
+    contact,
+    image,
+    time,
+    desc,
+    // 픽토그램은 DB에 없을 수 있으니 안전 기본값
+    parking: toBool(docData?.parking),
+    pet: toBool(docData?.pet),
+    chkbabycarriage: toBool(docData?.chkbabycarriage),
+  };
+}
+
+// ===== 관광지 데이터 (하드코딩 - 폴백용, 주석 처리) =====
 const places = {
   // ===== 서울 =====
   1: {
@@ -572,13 +660,8 @@ const regionNames = {
 
 // URL에서 id 읽기
 const params = new URLSearchParams(window.location.search);
-const placeId = params.get("id");
-const place = places[placeId];
-
-if (!place) {
-  alert("존재하지 않는 관광지입니다.");
-  location.href = "../hotel/hotel.html";
-}
+const placeId = params.get("id") || "";
+let place = null;
 
 // DOM Elements
 const headerPlaceName = document.getElementById("headerPlaceName");
@@ -608,17 +691,22 @@ const babycarInfo = document.getElementById("babycarInfo");
 const restroomInfo = document.getElementById("restroomInfo");
 
 // 관광지 정보 렌더링
-headerPlaceName.textContent = place.name;
-placeName.textContent = place.name;
-placeImage.src = place.image;
-placeImage.alt = place.name;
-placeImage.onerror = function () {
-  this.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23e0e0e0' width='400' height='300' rx='20'/%3E%3Ctext x='50%25' y='45%25' text-anchor='middle' fill='%23999' font-family='sans-serif' font-size='16'%3E관광지 이미지%3C/text%3E%3Ctext x='50%25' y='55%25' text-anchor='middle' fill='%23999' font-family='sans-serif' font-size='14'%3E(FIRSTIMAGE)%3C/text%3E%3C/svg%3E`;
-};
-placeAddress.textContent = place.address;
-placeContact.textContent = place.contact;
-placeTime.textContent = place.time;
-placeDesc.textContent = place.desc;
+function renderPlaceInfo() {
+  headerPlaceName.textContent = place.name;
+  placeName.textContent = place.name;
+  placeImage.src = place.image;
+  placeImage.alt = place.name;
+  placeImage.onerror = function () {
+    this.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23e0e0e0' width='400' height='300' rx='20'/%3E%3Ctext x='50%25' y='45%25' text-anchor='middle' fill='%23999' font-family='sans-serif' font-size='16'%3E관광지 이미지%3C/text%3E%3Ctext x='50%25' y='55%25' text-anchor='middle' fill='%23999' font-family='sans-serif' font-size='14'%3E(FIRSTIMAGE)%3C/text%3E%3C/svg%3E`;
+  };
+  placeAddress.textContent = place.address;
+  placeContact.textContent = place.contact;
+  placeTime.textContent = place.time;
+  placeDesc.textContent = place.desc;
+  
+  // 페이지 타이틀 업데이트
+  document.title = `${place.name} 상세 조회 | TravelKorea`;
+}
 
 // 픽토그램 정보 설정
 function updatePictograms() {
@@ -628,7 +716,6 @@ function updatePictograms() {
   parkingInfo.classList.toggle("unavailable", !place.parking);
 
   // 반려동물 정보
-  // 데이터에 pet 필드가 없으면 기본값 false 처리
   const isPetAvailable = place.pet || false;
   petStatus.textContent = isPetAvailable ? "동반가능" : "불가";
   petInfo.classList.toggle("available", isPetAvailable);
@@ -644,36 +731,73 @@ function updatePictograms() {
   restroomInfo.classList.add("available");
 }
 
-updatePictograms();
-
 // 상세정보 버튼 클릭 - 픽토그램 토글
 let isPictogramVisible = false;
 
-detailBtn.addEventListener("click", () => {
-  isPictogramVisible = !isPictogramVisible;
-  pictogramSection.style.display = isPictogramVisible ? "block" : "none";
-  detailBtn.textContent = isPictogramVisible ? "상세 정보 닫기" : "상세 정보";
+if (detailBtn && pictogramSection) {
+  detailBtn.addEventListener("click", () => {
+    isPictogramVisible = !isPictogramVisible;
+    pictogramSection.style.display = isPictogramVisible ? "block" : "none";
+    detailBtn.textContent = isPictogramVisible ? "상세 정보 닫기" : "상세 정보";
 
-  if (isPictogramVisible) {
-    pictogramSection.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }
-});
+    if (isPictogramVisible) {
+      pictogramSection.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  });
+}
 
 // 일정 추가 버튼 클릭 - 캘린더 모달 열기
-addScheduleBtn.addEventListener("click", () => {
-  const placeData = {
-    type: "place",
-    originalId: parseInt(placeId),
-    image: place.image,
-    location: place.address,
-    time: place.time,
-    contact: place.contact
-  };
+if (addScheduleBtn) {
+  addScheduleBtn.addEventListener("click", () => {
+    if (!place) return;
+    const placeData = {
+      type: "place",
+      originalId: place.id,
+      image: place.image,
+      location: place.address,
+      time: place.time,
+      contact: place.contact
+    };
 
-  calendarModal.open(place.name, placeData, (scheduleData) => {
-    console.log("일정이 추가되었습니다:", scheduleData);
+    if (typeof calendarModal !== 'undefined') {
+      calendarModal.open(place.name, placeData, (scheduleData) => {
+        console.log("일정이 추가되었습니다:", scheduleData);
+      });
+    } else {
+      console.error('calendarModal이 정의되지 않았습니다.');
+    }
   });
-});
+}
 
-// 페이지 타이틀 업데이트
-document.title = `${place.name} 상세 조회 | TravelKorea`;
+// ===== 초기화 (DB에서 관광지 불러온 후 렌더) =====
+(async () => {
+  try {
+    if (!placeId) {
+      alert("관광지 ID가 없습니다.");
+      location.href = "../hotel/hotel.html";
+      return;
+    }
+
+    const docData = await fetchPlaceFromFirebase(placeId);
+    if (!docData) {
+      alert("존재하지 않는 관광지입니다.");
+      location.href = "../hotel/hotel.html";
+      return;
+    }
+
+    place = mapTourItemDocToPlace(docData, placeId);
+
+    renderPlaceInfo();
+    updatePictograms();
+
+    // 픽토그램 섹션이 안 보인다는 이슈가 많아서: 기본으로 열어둠
+    if (pictogramSection && detailBtn) {
+      isPictogramVisible = true;
+      pictogramSection.style.display = "block";
+      detailBtn.textContent = "상세 정보 닫기";
+    }
+  } catch (e) {
+    console.error("place-detail init failed:", e);
+    alert("관광지 정보를 불러오지 못했습니다. 콘솔을 확인해주세요.");
+  }
+})();
