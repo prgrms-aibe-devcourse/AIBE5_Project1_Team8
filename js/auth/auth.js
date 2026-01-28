@@ -12,6 +12,12 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { showToast } from '../common/toast.js';
 
+const isLoggedIn = localStorage.getItem('auth_isLoggedIn') === 'true';
+if (isLoggedIn) {
+    // 이미 로그인된 상태라면 메인으로 즉시 튕겨냅니다.
+    window.location.replace('/index.html');
+}
+
 // 로그인 후 돌아갈 페이지 설정
 const urlParams = new URLSearchParams(window.location.search);
 const redirectPage = urlParams.get('redirect') || '/index.html';
@@ -77,7 +83,8 @@ loginBtn.addEventListener('click', async () => {
                 name: userData.name, // 실제 이름
                 email: userData.email, // 이메일
                 phone: userData.phone || '010-0000-0000', // 전화번호 필드가 있다면 추가
-                profileImg: userData.profileImg || "/images/default_profile.png",
+                profileImg:
+                    userData.profileImg || '/images/default_profile.png',
                 loggedInAt: new Date().toISOString(),
             };
 
@@ -87,7 +94,7 @@ loginBtn.addEventListener('click', async () => {
             showToast(`${userData.name}님, 반가워요!`, 'success', 1800);
             setTimeout(() => {
                 // 인코딩된 주소를 다시 일반 주소로 변환해서 이동합니다.
-                window.location.href = decodeURIComponent(redirectPage);
+                window.location.replace(decodeURIComponent(redirectPage));
             }, 800);
         } else {
             showToast('아이디 또는 비밀번호가 일치하지 않습니다.', 'error');
