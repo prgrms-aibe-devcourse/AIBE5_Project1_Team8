@@ -157,6 +157,57 @@ function renderLeafletMap({ lat, lng, name }) {
   setTimeout(() => map.invalidateSize(), 0);
 }
 
+// 중복 예약 방지를 위해, DB에서 미리 사용자의 예약 내역 가져오기 
+// (hotel-booking에서 가져오면, 예약창 열릴때마다 DB 읽기하므로)
+async function fetchUserReservationInfo() {
+  // 1. 방어 코드: 로그인 여부 확인
+  const authUser = localStorage.getItem('auth_user');
+  if (localStorage.getItem('auth_isLoggedIn') !== 'true' || !authUser) {
+    return [];
+  }
+  try {
+    const loggedInUser = JSON.parse(authUser);
+    const loggedInUserId = loggedInUser.uid;
+    // 2. 라이브러리 로드
+    const [{ db }, { getDocs, collection, query, where }] = await Promise.all([
+      import("../common/firebase-config.js"),
+      import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js")
+    ]);
+    // 3. DB 쿼리 실행
+    const reservationsRef = collection(db, "reservations");
+    const q = query(reservationsRef, where("userId", "==", loggedInUserId));
+    const snapshot = await getDocs(q);
+
+    // 4. 데이터 가공 함수
+    const formatDateAsDate = (timestamp) => {
+      if (!timestamp) return null;
+      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      date.setHours(0, 0, 0, 0);
+      return date;
+    };
+
+    // 5. 결과 배열 생성
+    return snapshot.docs
+      .map(doc => {
+        const data = doc.data();
+        const checkIn = formatDateAsDate(data.checkIn);
+        const checkOut = formatDateAsDate(data.checkOut);
+        if (!checkIn || !checkOut || !data.title || !data.contentId) return null;
+        return { 
+          id: doc.id, 
+          checkIn, 
+          checkOut, 
+          title: data.title, 
+          contentId: data.contentId 
+        };
+      })
+      .filter(item => item !== null);
+  } catch (error) {
+    console.error("예약 내역 로드 실패:", error);
+    return []; // 에러 발생 시 안전하게 빈 배열 반환
+  }
+}
+
 // 리뷰 데이터(현재는 기존 구조 유지)
 const reviews = {};
 
@@ -301,8 +352,10 @@ if (addScheduleBtn) {
 }
 
 // 예약 버튼 클릭 - 예약 페이지로 이동
-bookingBtn.addEventListener("click", () => {
-  if (!hotel) return;
+let isFetching = false; //로딩 상태 변수
+
+bookingBtn.addEventListener("click", async () => {
+  if (isFetching || !hotel) return;
   const bookingData = {
     hotelId: hotelId,
     hotelName: hotel.name,
@@ -313,7 +366,12 @@ bookingBtn.addEventListener("click", () => {
   };
   
   // 로그인 시에만 예약 패널 열기
-  if(checkAuth()) openBookingPanel(bookingData);
+  if(checkAuth()) {
+    isFetching = true; // 로딩 시작
+    const userReservationInfo = await fetchUserReservationInfo();
+    openBookingPanel(bookingData,userReservationInfo);
+    isFetching = false; // 로딩 끝
+  }
 });
 
 // 리뷰 페이지네이션
