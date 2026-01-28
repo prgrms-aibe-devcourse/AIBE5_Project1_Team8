@@ -222,79 +222,8 @@ export function initBookingPanel(root, bookingData, { onClose } = {}) {
     });
   });
 
-  function validateForm() {
-    let isValid = true;
-
-    const checkIn = checkInInput;
-    const checkOut = checkOutInput;
-
-    if (!checkIn.value) {
-      checkIn.closest(".form-group")?.classList.add("error");
-      isValid = false;
-    } else {
-      checkIn.closest(".form-group")?.classList.remove("error");
-    }
-
-    if (!checkOut.value) {
-      checkOut.closest(".form-group")?.classList.add("error");
-      isValid = false;
-    } else {
-      checkOut.closest(".form-group")?.classList.remove("error");
-    }
-
-    if (checkIn.value && checkOut.value) {
-      const nights = getNights(checkIn.value, checkOut.value);
-      if (nights <= 0) {
-        alert("체크아웃 날짜는 체크인 날짜 이후여야 합니다.");
-        isValid = false;
-      }
-    }
-
-    const guestName = root.querySelector("#guestName");
-    const guestNameEn = root.querySelector("#guestNameEn");
-    const phone = root.querySelector("#phone");
-    const email = root.querySelector("#email");
-
-    if (!guestName?.value.trim()) {
-      guestName?.closest(".form-group")?.classList.add("error");
-      isValid = false;
-    } else {
-      guestName.closest(".form-group")?.classList.remove("error");
-    }
-
-    if (!guestNameEn?.value.trim()) {
-      guestNameEn?.closest(".form-group")?.classList.add("error");
-      isValid = false;
-    } else {
-      guestNameEn.closest(".form-group")?.classList.remove("error");
-    }
-
-    if (!phone?.value.trim()) {
-      phone?.closest(".form-group")?.classList.add("error");
-      isValid = false;
-    } else {
-      phone.closest(".form-group")?.classList.remove("error");
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email?.value.trim() || !emailRegex.test(email.value)) {
-      email?.closest(".form-group")?.classList.add("error");
-      isValid = false;
-    } else {
-      email.closest(".form-group")?.classList.remove("error");
-    }
-
-    if (!agreeTerms?.checked || !agreePrivacy?.checked) {
-      alert("필수 약관에 동의해주세요.");
-      isValid = false;
-    }
-
-    return isValid;
-  }
-
   bookingForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
 
     const checkIn = new Date(checkInInput.value);
     const checkOut = new Date(checkOutInput.value);
