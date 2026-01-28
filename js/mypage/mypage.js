@@ -1,16 +1,7 @@
-// import { reservations, reviews, userData } from './data.js';
 import { compressImage } from '../common/image-utils.js';
 import { checkAuth } from '../auth/auth-guard.js';
 import { db } from '../common/firebase-config.js';
-import {
-    doc,
-    getDoc,
-    updateDoc,
-    deleteDoc,
-    getDocs, 
-    collection, 
-    query, where,
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { doc, getDoc, updateDoc, deleteDoc, getDocs, collection, query, where,} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { showToast } from '../common/toast.js';
 
 
@@ -44,112 +35,120 @@ if (checkAuth()) {
         }
 
     
-    async function fetchData() {
-        // 1. 내 예약
-        const reservations = collection(db, "reservations");
-        const reservationsQuery = query( reservations, where("userId", "==", loggedInUserId));
-        const reservationsSnapshot = await getDocs(reservationsQuery);
-        myReservations = reservationsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        // console.log("내 예약 데이터 확인:", myReservations); // ✅ 확인용
+        async function fetchData() {
+            // 1. 내 예약
+            const reservations = collection(db, "reservations");
+            const reservationsQuery = query( reservations, where("userId", "==", loggedInUserId));
+            const reservationsSnapshot = await getDocs(reservationsQuery);
+            myReservations = reservationsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            // console.log("내 예약 데이터 확인:", myReservations); // ✅ 확인용
 
-        // 2. 내 리뷰
-        const reviews = collection(db, "review_for_mypage_test");
-        const reviewsQuery = query(reviews, where("userId", "==", loggedInUserId) );
-        const reviewsSnapshot = await getDocs(reviewsQuery);
-        myReviews = reviewsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        // console.log("내 리뷰 데이터 확인:", myReviews); // ✅ 확인용
+            // 2. 내 리뷰
+            const reviews = collection(db, "review_for_mypage_test");
+            const reviewsQuery = query(reviews, where("userId", "==", loggedInUserId) );
+            const reviewsSnapshot = await getDocs(reviewsQuery);
+            myReviews = reviewsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            // console.log("내 리뷰 데이터 확인:", myReviews); // ✅ 확인용
 
-        // 3. 렌더링
-        renderReservations();
-        renderReservationPage([
-            ...document.querySelectorAll('.mypage-reservation-item'),
-        ]);
-        renderReviews();
-    }
+            // 3. 렌더링
+            renderReservations();
+            renderReservationPage([
+                ...document.querySelectorAll('.mypage-reservation-item'),
+            ]);
+            renderReviews();
+        }
 
 
 
-    /* =====================
-        예약 리스트 렌더링
-    ===================== */
-    function renderReservations() {
-        const reservationList = document.querySelector('.mypage-reservation-list');
-        reservationList.innerHTML = '';
+        /* =====================
+            예약 리스트 렌더링
+        ===================== */
+        function renderReservations() {
+            const reservationList = document.querySelector('.mypage-reservation-list');
+            reservationList.innerHTML = '';
 
-        //YYYY-MM-DD 문자열 변환
-        const formatDate = (timestamp) => {
-            if (!timestamp) return '';
-            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-            return date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
-        };
+            //YYYY-MM-DD 문자열 변환
+            const formatDate = (timestamp) => {
+                if (!timestamp) return '';
+                const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+                return date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            };
 
-        myReservations.forEach((r) => {
-            // 완료 항목에서 후기 존재 여부 체크
-            const hasReview = myReviews.some(
-                (review) => review.contentId === r.contentId
-            );
+            myReservations.forEach((r) => {
+                // 완료 항목에서 후기 존재 여부 체크
+                const hasReview = myReviews.some(
+                    (review) => review.contentId === r.contentId
+                );
 
-            const checkIn = formatDate(r.checkIn);
-            const checkOut = formatDate(r.checkOut);
-            const date = formatDate(r.date);
+                const checkIn = formatDate(r.checkIn);
+                const checkOut = formatDate(r.checkOut);
+                const date = formatDate(r.date);
 
-            const li = document.createElement('li');
-            li.className = `mypage-reservation-item ${r.type}`;
-            li.innerHTML = `
-            <div class="reservation-top">
-                <div class="reservation-left">
-                    <img class="reservation-img" src="${r.img}" />
-                    <div class="reservation-info">
-                        <p class="reservation-title">${r.title}</p>
-                        <p class="reservation-date">${checkIn} ~ ${checkOut}</p>
+                const li = document.createElement('li');
+                li.className = `mypage-reservation-item ${r.type}`;
+                li.dataset.reservationId = r.id; // Firestore의 reservation 문서 ID 저장
+                li.innerHTML = `
+                <div class="reservation-top">
+                    <div class="reservation-left">
+                        <img class="reservation-img" src="${r.img}" />
+                        <div class="reservation-info">
+                            <p class="reservation-title">${r.title}</p>
+                            <p class="reservation-date">${checkIn} ~ ${checkOut}</p>
+                        </div>
+                    </div>
+                    <div class="reservation-right">
+                        ${r.type === 'upcoming' ? `<div class="d-day"></div>` : ''}
+                        <div class="reservation-actions">
+                            ${
+                                r.type === 'completed' && !hasReview
+                                    ? `<button class="reservation-btn review-btn"
+                                        onclick="location.href='./review.html?contentId=${r.contentId}'">
+                                        후기 작성
+                                    </button>`
+                                    : r.type === 'upcoming'
+                                        ? `<button class="reservation-btn cancel-btn">예약 취소</button>`
+                                        : ''
+                            }
+
+                            <button class="reservation-btn detail-btn">상세보기</button>
+                        </div>
                     </div>
                 </div>
-                <div class="reservation-right">
-                    ${r.type === 'upcoming' ? `<div class="d-day"></div>` : ''}
-                    <div class="reservation-actions">
-                        ${r.type === 'completed' && !hasReview
-                        ? `<button class="reservation-btn review-btn" onclick="location.href='./review.html?contentId=${r.contentId}'">후기 작성</button>`
-                        : ''
-                    }
-                        <button class="reservation-btn detail-btn">상세보기</button>
-                    </div>
+                <div class="reservation-detail">
+                    <p><strong>예약 일자</strong> ${date}</p>
+                    <p><strong>숙소 주소</strong> ${r.address}</p>
+                    <p><strong>숙소 연락처</strong> ${r.phone}</p>
+                    <p><strong>체크인</strong> ${checkIn}</p>
+                    <p><strong>체크아웃</strong> ${checkOut}</p>
                 </div>
-            </div>
-            <div class="reservation-detail">
-                <p><strong>예약 일자</strong> ${date}</p>
-                <p><strong>숙소 주소</strong> ${r.address}</p>
-                <p><strong>숙소 연락처</strong> ${r.phone}</p>
-                <p><strong>체크인</strong> ${checkIn}</p>
-                <p><strong>체크아웃</strong> ${checkOut}</p>
-            </div>
-            `;
-            reservationList.appendChild(li);
-        });
-
-        // D-Day 계산
-        document.querySelectorAll('.mypage-reservation-item.upcoming').forEach((item) => {
-            const checkInText = item.querySelector('.reservation-date').textContent.split('~')[0].trim();
-            const checkInDate = new Date(checkInText);
-            const today = new Date();
-            const diff = Math.ceil((checkInDate - today) / (1000 * 60 * 60 * 24));
-            item.querySelector('.d-day').textContent = `D-${diff}`;
-        });
-
-        // 상세보기 버튼
-        reservationList.querySelectorAll('.detail-btn').forEach((btn) => {
-            btn.addEventListener('click', () => {
-                const item = btn.closest('.mypage-reservation-item');
-                item.classList.toggle('open');
-                btn.textContent = item.classList.contains('open') ? '접기' : '상세보기';
+                `;
+                reservationList.appendChild(li);
             });
-        });
-    }
+
+            // D-Day 계산
+            document.querySelectorAll('.mypage-reservation-item.upcoming').forEach((item) => {
+                const checkInText = item.querySelector('.reservation-date').textContent.split('~')[0].trim();
+                const checkInDate = new Date(checkInText);
+                const today = new Date();
+                const diff = Math.ceil((checkInDate - today) / (1000 * 60 * 60 * 24));
+                item.querySelector('.d-day').textContent = `D-${diff}`;
+            });
+
+            // 상세보기 버튼
+            reservationList.querySelectorAll('.detail-btn').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const item = btn.closest('.mypage-reservation-item');
+                    item.classList.toggle('open');
+                    btn.textContent = item.classList.contains('open') ? '접기' : '상세보기';
+                });
+            });
+        }
 
         fetchData(); 
 
-    /* =====================
-        예약 탭 필터 + 페이지네이션
-    ===================== */
+        /* =====================
+            예약 탭 필터 + 페이지네이션
+        ===================== */
         const tabs = document.querySelectorAll('.reservation-tab');
         const container = document.querySelector('.reservation-pagination');
         const perPage = 4;
@@ -159,7 +158,7 @@ if (checkAuth()) {
         function renderReservationPage(items) {
             const totalPage = Math.ceil(items.length / perPage);
             if (currentPage > totalPage) currentPage = totalPage || 1;
-
+ 
             // 모든 항목 숨기기
             document
                 .querySelectorAll('.mypage-reservation-item')
@@ -427,8 +426,8 @@ if (checkAuth()) {
         });
 
         /* =====================
-    프로필 수정 및 Firestore 저장
-===================== */
+            프로필 수정 및 Firestore 저장
+        ===================== */
         profileBtn.addEventListener('click', async () => {
             if (!editing) {
                 // [수정 모드 진입]
@@ -488,9 +487,10 @@ if (checkAuth()) {
             }
         });
         uploadBtn.style.display = 'none';
+
         /* =====================
-        모달 공통
-    ===================== */
+            모달 공통
+        ===================== */
         function modalControl(openBtn, modal, confirmCb) {
             openBtn.addEventListener('click', () =>
                 modal.classList.remove('hidden'),
@@ -504,8 +504,8 @@ if (checkAuth()) {
         }
 
         /* =====================
-        비밀번호 수정 모달
-    ===================== */
+            비밀번호 수정 모달
+        ===================== */
 
         // 비밀번호 변경 확인 모달
         const passwordModal = document.getElementById('passwordModal');
@@ -515,31 +515,31 @@ if (checkAuth()) {
         const passwordSuccessModal = document.createElement('div');
         passwordSuccessModal.className = 'modal hidden';
         passwordSuccessModal.innerHTML = `
-    <div class="modal-content">
-        <p class="modal-title">비밀번호가 성공적으로 변경되었습니다.</p>
-        <div class="modal-actions">
-        <button class="confirm">확인</button>
+        <div class="modal-content">
+            <p class="modal-title">비밀번호가 성공적으로 변경되었습니다.</p>
+            <div class="modal-actions">
+            <button class="confirm">확인</button>
+            </div>
         </div>
-    </div>
-    `;
+        `;
         document.body.appendChild(passwordSuccessModal);
 
         // 변경 실패 모달
         const passwordFailModal = document.createElement('div');
         passwordFailModal.className = 'modal hidden';
         passwordFailModal.innerHTML = `
-    <div class="modal-content">
-        <p class="modal-title">비밀번호가 일치하지 않아 변경할 수 없습니다.</p>
-        <div class="modal-actions">
-        <button class="confirm">확인</button>
+        <div class="modal-content">
+            <p class="modal-title">비밀번호가 일치하지 않아 변경할 수 없습니다.</p>
+            <div class="modal-actions">
+            <button class="confirm">확인</button>
+            </div>
         </div>
-    </div>
-    `;
+        `;
         document.body.appendChild(passwordFailModal);
 
         /* =====================
-    비밀번호 수정 로직 (Firestore 연동)
-===================== */
+            비밀번호 수정 로직 (Firestore 연동)
+        ===================== */
         async function handlePasswordChange() {
             const currentPass = passwordInputs[0].value; // 현재 비밀번호
             const newPass = passwordInputs[1].value; // 새로운 비밀번호
@@ -605,8 +605,8 @@ if (checkAuth()) {
             passwordFailModal.classList.add('hidden');
 
         /* =====================
-    계정 탈퇴 기능 (Firestore 연동)
-===================== */
+            계정 탈퇴 기능 (Firestore 연동)
+        ===================== */
         modalControl(
             document.querySelector('.profile-btn.danger'), // 탈퇴 버튼
             document.getElementById('withdrawModal'), // 탈퇴 확인 모달
@@ -635,5 +635,48 @@ if (checkAuth()) {
                 }
             },
         );
+
+
+
+        /* =====================
+            예약 취소
+        ===================== */
+        const cancelModal = document.getElementById('cancelModal');
+        const cancelYesBtn = document.getElementById('cancelYesBtn');
+        const cancelNoBtn = document.getElementById('cancelNoBtn');
+
+        let selectedReservation = null;
+
+        // 예약 취소 버튼 클릭
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.cancel-btn');
+            if (!btn) return;
+
+            selectedReservation = btn.closest('li'); // or reservation id
+            cancelModal.classList.remove('hidden');
+        });
+
+        // 취소 안 함
+        cancelNoBtn.addEventListener('click', () => {
+            cancelModal.classList.add('hidden');
+            selectedReservation = null;
+        });
+
+        // 취소 확정
+        cancelYesBtn.addEventListener('click', async() => {
+            cancelModal.classList.add('hidden');
+
+            if (!selectedReservation) return;
+            
+            // 🔥 여기서 Firestore 예약 취소 / 삭제 처리
+            const reservationId = selectedReservation.dataset.reservationId; // 파이어베이스 문서 아이디
+            await deleteDoc(doc(db, 'reservations', reservationId));
+            
+            selectedReservation.remove(); // UI 즉시 반영
+            showToast('예약이 성공적으로 취소되었습니다.', 'success');
+            setTimeout(() => { location.reload();}, 800); // 새로고침
+            
+        });
+
     });
 }
