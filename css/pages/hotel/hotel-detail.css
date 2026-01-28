@@ -122,6 +122,10 @@
   color: var(--primary-text);
 }
 
+#headerHotelName {
+  font-weight: 500;
+}
+
 /* ===== Container ===== */
 .hotel-detail-scope .container {
   max-width: 900px;
@@ -132,12 +136,17 @@
   gap: 24px;
 }
 
-/* ===== Hotel Detail Card ===== */
-.hotel-detail-scope .hotel-detail-card {
+/* ===== Hotel Detail wrapper ===== */
+.hotel-detail-wrapper {
   background: var(--beige-bg);
   border-radius: 15px;
   border: var(--border-gray);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== Hotel Detail Card ===== */
+.hotel-detail-scope .hotel-detail-card {
+
   padding: 30px;
   display: flex;
   gap: 2rem;
@@ -148,6 +157,7 @@
   flex: 0 0 320px;
   height: 280px;
   background: var(--bg-item);
+  border: var(--border-gray);
   border-radius: 15px;
   overflow: hidden;
   display: flex;
@@ -217,13 +227,13 @@
 }
 
 .hotel-detail-scope .btn-booking {
-  padding: 0.6rem 1.2rem;
-  background: var(--beige-bg);
-  border: 1px solid var(--border-color);
+  padding: 12px 30px;
+  background: var(--navy-blue);
+  border: var(--border-gray);
   border-radius: 12px;
   font-size: 0.85rem;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--alt-white);
   cursor: pointer;
   transition: var(--transition);
   white-space: nowrap;
@@ -231,7 +241,7 @@
 
 .hotel-detail-scope .btn-booking:hover {
   background: var(--navy-blue);
-  color: white;
+  color: var(--alt-white);
   border-color: var(--navy-blue);
 }
 
@@ -243,7 +253,7 @@
   border-radius: 12px;
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--primary-text);
   cursor: pointer;
   transition: var(--transition);
   align-self: flex-start;
@@ -251,18 +261,16 @@
 
 .hotel-detail-scope .btn-detail:hover {
   background: var(--navy-blue);
-  color: white;
+  color: var(--alt-white);
   border-color: var(--navy-blue);
 }
 
 /* ===== Pictogram Section ===== */
 .hotel-detail-scope .pictogram-section {
-  background: var(--beige-bg);
-  border-radius: 15px;
-  border: var(--border-gray);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   padding: 30px;
-  animation: slideDown 0.3s ease;
+  animation: slideDown 0.35s ease;
+  /* border-top: var(--border-gray); */
+  border-top: 1px dashed lightgray;
 }
 
 @keyframes slideDown {
