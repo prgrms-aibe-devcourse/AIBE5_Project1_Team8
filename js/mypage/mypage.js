@@ -12,6 +12,7 @@ if (checkAuth()) {
     document.addEventListener('DOMContentLoaded', async () => {
         const loggedInUser = JSON.parse(localStorage.getItem('auth_user'));
         const loggedInUserId = loggedInUser.uid;
+        const loggedInId = loggedInUser.username;
         let myReservations = [];
         let myReviews = [];
 
@@ -663,20 +664,67 @@ if (checkAuth()) {
         });
 
         // 취소 확정
-        cancelYesBtn.addEventListener('click', async() => {
-            cancelModal.classList.add('hidden');
+        // cancelYesBtn.addEventListener('click', async() => {
+        //     cancelModal.classList.add('hidden');
 
+        //     if (!selectedReservation) return;
+            
+        //     // 🔥 여기서 Firestore 예약 취소 / 삭제 처리
+        //     const reservationId = selectedReservation.dataset.reservationId; // 파이어베이스 문서 아이디
+        //     await deleteDoc(doc(db, 'reservations', reservationId));
+            
+        //     selectedReservation.remove(); // UI 즉시 반영
+        //     showToast('예약이 성공적으로 취소되었습니다.', 'success');
+        //     setTimeout(() => { location.reload();}, 800); // 새로고침
+            
+        // });
+
+        cancelYesBtn.addEventListener('click', async () => {
+            cancelModal.classList.add('hidden');
             if (!selectedReservation) return;
-            
-            // 🔥 여기서 Firestore 예약 취소 / 삭제 처리
-            const reservationId = selectedReservation.dataset.reservationId; // 파이어베이스 문서 아이디
-            await deleteDoc(doc(db, 'reservations', reservationId));
-            
-            selectedReservation.remove(); // UI 즉시 반영
-            showToast('예약이 성공적으로 취소되었습니다.', 'success');
-            setTimeout(() => { location.reload();}, 800); // 새로고침
-            
+
+            const reservationId = selectedReservation.dataset.reservationId;
+
+            // 🔥 예약 데이터
+            const reservation = myReservations.find(
+                (r) => r.id === reservationId
+            );
+
+            try {
+                // 1. 예약 삭제
+                await deleteDoc(doc(db, 'reservations', reservationId));
+
+                // 2. 일정 삭제 (schedules)
+                const schedulesRef = collection(db, 'schedules');
+                const schedulesQuery = query(
+                    schedulesRef,
+                    where('userId', '==', loggedInId),
+                    where('hotelId', '==', String(reservation.contentId))
+                );
+                
+                const schedulesSnapshot = await getDocs(schedulesQuery);
+                // console.log( '일정 개수:', schedulesSnapshot.size, schedulesSnapshot.docs.map(d => d.data()));
+
+                for (const scheduleDoc of schedulesSnapshot.docs) {
+                    await deleteDoc(scheduleDoc.ref);
+                }
+
+                // 3. UI 반영
+                selectedReservation.remove();
+                showToast('예약 및 일정이 성공적으로 취소되었습니다.', 'success');
+
+                setTimeout(() => {
+                    location.reload();
+                }, 800);
+
+            } catch (error) {
+                console.error('예약/일정 삭제 실패:', error);
+                showToast('삭제 중 오류가 발생했습니다.', 'error');
+            }
+
+            selectedReservation = null;
         });
+
 
     });
 }
