@@ -181,6 +181,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const reviewData = {
                 userId: loggedInUser.uid,
+                userName: loggedInUser.name || '익명 사용자',
                 contentId: contentId,
                 title:
                     reservationData?.title ||

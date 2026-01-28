@@ -38,29 +38,36 @@ async function loadDataFromFirebase() {
       console.log('데이터 배열 초기화 완료');
     }
     
-    // 1. accommodations 컬렉션에서 숙박 데이터 가져오기 (64개씩)
+    // 1. accommodations 컬렉션에서 숙박 데이터 가져오기
     if (hasMoreAccommodations) {
       try {
         let accommodationsQuery;
+        const accommodationsRef = collection(db, 'accommodations');
         
-        // orderBy 없이 단순 limit 쿼리 사용 (인덱스 문제 방지)
+        // ⭐ 정렬 기준을 변수로 고정 (첫 로드와 페이지네이션에서 동일하게 사용)
+        const sorting = [
+            orderBy('priority', 'desc'),
+            orderBy('__name__')
+        ];
+
         if (lastAccommodationDoc) {
-          // 페이지네이션: 마지막 문서 이후부터
+          // 페이지네이션
           accommodationsQuery = query(
-            collection(db, 'accommodations'),
-            orderBy('__name__'),
+            accommodationsRef,
+            ...sorting,
             startAfter(lastAccommodationDoc),
             limit(BATCH_SIZE)
           );
         } else {
-          // 첫 로드: orderBy 없이 limit만 사용 (더 안정적)
+          // ✅ [중요] 첫 로드 시에도 반드시 동일한 정렬(sorting)을 넣어줘야 합니다!
           accommodationsQuery = query(
-            collection(db, 'accommodations'),
+            accommodationsRef,
+            ...sorting,
             limit(BATCH_SIZE)
           );
         }
-        
-        console.log('accommodations 쿼리 실행 중...');
+
+        console.log('accommodations 쿼리 실행 중 (정렬 포함)...');
         const accommodationsSnapshot = await getDocs(accommodationsQuery);
         console.log(`accommodations 스냅샷: ${accommodationsSnapshot.size}개 문서`);
         

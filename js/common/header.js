@@ -180,7 +180,22 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
   `;
     header.classList.add('header');
+    const resetStorageAndGoHome = (e) => {
+        // 관광지 리스트에서 저장했던 페이지와 카테고리 정보 삭제
+        sessionStorage.removeItem('hotelListPage');
+        sessionStorage.removeItem('hotelListCategory');
 
+        // 홈으로 이동 (기본 이동을 방해하지 않기 위해 location.href 사용)
+        location.href = '/index.html';
+    };
+    // 로고 클릭 이벤트 연결
+    const logo = header.querySelector('.logo');
+    if (logo) logo.addEventListener('click', resetStorageAndGoHome);
+
+    // '홈' 메뉴 클릭 이벤트 연결
+    const homeLink = header.querySelector('.nav-home');
+    if (homeLink) homeLink.addEventListener('click', resetStorageAndGoHome);
+    
     // 3. 로그인 상태 확인 (localStorage 활용)
     const authArea = header.querySelector('.auth');
     const isLoggedIn = localStorage.getItem('auth_isLoggedIn') === 'true';
