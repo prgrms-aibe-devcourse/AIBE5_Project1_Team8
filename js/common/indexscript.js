@@ -40,6 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'fog', name: 'Mystic Fog', korName: '미스틱 포그', code: '#B0C4DE', places: [{ name: '춘천 소양강 스카이워크', desc: '물안개가 피어오르는 몽환적인 호수 풍경.' }, { name: '양평 두물머리', desc: '새벽녘 강가 안개와 느티나무의 신비로움.' }, { name: '옥천 용암사', desc: '산봉우리들이 구름 바다 위로 떠 있는 운해 명소.' }, { name: '청송 주산지', desc: '물안개 속 왕버들 나무가 영화 같은 장면을 연출.' }, { name: '화순 세량지', desc: '벚꽃 필 무렵 물안개와 반영이 아름다운 곳.' }] }
     ];
 
+    const themeSection = document.querySelector('.color-theme-section');
+
     const circles = document.querySelectorAll('.interactive-circle');
     const mainCard = document.getElementById('mainCard');
     const exploreBtn = document.getElementById('exploreBtn');
@@ -132,7 +134,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const bgColor = currentThemeData.code;
         const contrastColor = getContrastColor(bgColor);
-
+        if (themeSection) {
+            themeSection.style.backgroundColor = bgColor;
+        }
         mainCard.style.height = '640px';
         mainCard.style.backgroundColor = bgColor;
         mainCard.classList.add('active');

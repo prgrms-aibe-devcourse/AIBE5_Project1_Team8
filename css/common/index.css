@@ -137,9 +137,15 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-top: 30px;
-    padding-bottom: 60px;
+    padding-top: 40px;
+    padding-bottom: 50px;
     border-top: var(--border-gray);
+    border-bottom: var(--border-gray);
+    transition: background-color 1.2s ease; 
+}
+
+.color-theme-section {
+    background-color: transparent; /* 또는 기본 배경색 */
 }
 
 /* 새로 추가된 UI의 최상위 컨테이너 (이름 변경 .card -> .interactive-card) */
@@ -260,12 +266,12 @@ main {
     /* 기존 bottom 속성 초기화 */
 
     padding: 12px 25px;
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(10px);
 
     /* 사이트 공통 스타일 적용 */
     border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 30px;
+    border-radius: 5px;
     /* 완전 둥근 형태 */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 
@@ -365,6 +371,12 @@ main {
     opacity: 1;
     transform: translateY(0);
     /* 제자리로 이동 */
+}
+
+.interactive-card.active {
+    background-color: rgba(255, 255, 255, 0.2) !important; 
+    backdrop-filter: blur(20px); /* 뒤쪽 섹션 색상이 은은하게 비침 */
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .result-title {
