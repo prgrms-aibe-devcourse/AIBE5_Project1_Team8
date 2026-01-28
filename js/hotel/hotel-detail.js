@@ -1,163 +1,12 @@
 import { openBookingPanel } from "./hotel-booking.js";
 import { checkAuth } from '../auth/auth-guard.js';
 
-// Firebase 설정 및 초기화
-const { db } = await import("../common/firebase-config.js");
-const {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  limit,
-  query,
-  where,
-  orderBy
-} = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
-
-  // 1) 문서 ID로 직접 조회 (가장 빠름)
-  try {
-    const ref = doc(db, "accommodations", hotelId);
-    const snap = await getDoc(ref);
-    if (snap.exists()) {
-      return { id: snap.id, ...snap.data() };
-    }
-  } catch (e) {
-    console.warn("accommodations doc(id) 조회 실패:", e);
-  }
-
-  // 2) contentid로 조회 (list에서 detailId로 넘어오는 값이 contentid인 경우)
-  try {
-    const q = query(
-      collection(db, "accommodations"),
-      where("contentid", "==", hotelId),
-      limit(1)
-    );
-    const qs = await getDocs(q);
-    if (!qs.empty) {
-      const d = qs.docs[0];
-      return { id: d.id, ...d.data() };
-    }
-  } catch (e) {
-    console.warn("accommodations where(contentid) 조회 실패:", e);
-  }
-
-  return null;
-}
-
-function mapAccommodationDocToHotel(docData, hotelId) {
-  const name = docData?.name || docData?.title || "숙소명";
-  const address = docData?.address || docData?.addr1 || "";
-  const contact = docData?.contact || docData?.tel || "";
-  const image =
-    docData?.image ||
-    docData?.firstimage ||
-    docData?.firstimage2 ||
-    "";
-
-  // 좌표(Leaflet): KTO 기준 mapx=경도, mapy=위도
-  const latRaw =
-    docData?.lat ??
-    docData?.latitude ??
-    docData?.mapy ??
-    docData?.gpsy ??
-    null;
-  const lngRaw =
-    docData?.lng ??
-    docData?.longitude ??
-    docData?.mapx ??
-    docData?.gpsx ??
-    null;
-  const lat = latRaw != null ? Number(latRaw) : null;
-  const lng = lngRaw != null ? Number(lngRaw) : null;
-
-  // 가격 필드가 다양할 수 있어서 여러 후보를 시도
-  const basePriceRaw =
-    docData?.basePrice ?? docData?.price ?? docData?.roomPrice ?? docData?.minPrice;
-  const basePrice =
-    typeof basePriceRaw === "number"
-      ? basePriceRaw
-      : parseInt(String(basePriceRaw ?? "").replace(/[^\d]/g, ""), 10) || 0;
-
-  const idInMapAccToHotel = docData?.id || docData?.contentid || hotelId;
-  //hotelId 기반 랜덤시드 만들기 (Knuth 상수 사용, 자동 unsigned 정수 변환) (호텔 하나에는 계속 같은 값이 나오게)
-  const randomSeed = (idInMapAccToHotel * 2654435761) >>> 0; 
-  let randomPrice = ((randomSeed % 18) + 8) * 10000; //80000~250000 사이 만 단위로 변환
-  // 다양한 예외 처리 (보정도 다양하게)
-  if (typeof randomPrice !== "number") randomPrice = 80000;
-  else if (!Number.isFinite(randomPrice)) randomPrice = 120000;  // NaN, +Infinity, -Infinity
-  else if (randomPrice < 80000 || randomPrice > 250000) randomPrice = 160000;
-
-  const priceText =
-    docData?.priceText ||
-    (basePrice ? `${basePrice.toLocaleString()}원~` : `${randomPrice.toLocaleString()}원~`);
-
-  const desc =
-    docData?.desc ||
-    docData?.overview ||
-    docData?.description ||
-    "숙소 상세 설명이 준비 중입니다.";
-
-  // DB의 boolean 필드 정규화: null/undefined -> false, true/"true"/1 -> true
-  const toBool = (v) => {
-    if (v == null) return false; // null/undefined
-    if (typeof v === "boolean") return v;
-    if (typeof v === "number") return v === 1;
-    if (typeof v === "string") {
-      const s = v.trim().toLowerCase();
-      return s === "true" || s === "1" || s === "y" || s === "yes";
-    }
-    return Boolean(v);
-  };
-
-  return {
-    id: idInMapAccToHotel,
-    name,
-    address,
-    contact,
-    image,
-    lat: Number.isFinite(lat) ? lat : null,
-    lng: Number.isFinite(lng) ? lng : null,
-    price: priceText,
-    basePrice: basePrice || randomPrice,
-    desc,
-    // 픽토그램은 DB에 없을 수 있으니 안전 기본값
-    parking: toBool(docData?.parking),
-    pet: toBool(docData?.pet),
-    wifi: toBool(docData?.wifi),
-    noSmoking: toBool(docData?.noSmoking),
-    breakfast: toBool(docData?.breakfast),
-  };
-}
-
-function renderLeafletMap({ lat, lng, name }) {
-  const section = document.getElementById("detailMapSection");
-  const mapEl = document.getElementById("detailMap");
-  if (!section || !mapEl) return;
-
-  if (!Number.isFinite(lat) || !Number.isFinite(lng) || typeof window.L === "undefined") {
-    section.style.display = "none";
-    return;
-  }
-
-  section.style.display = "block";
-
-  if (mapEl._leaflet_id) {
-    try {
-      mapEl._leaflet_id = null;
-      mapEl.innerHTML = "";
-    } catch (_) {}
-  }
-
-  const map = window.L.map(mapEl, { scrollWheelZoom: false }).setView([lat, lng], 14);
-  window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "&copy; OpenStreetMap contributors",
-  }).addTo(map);
-  window.L.marker([lat, lng]).addTo(map).bindPopup(name || "위치").openPopup();
-  setTimeout(() => map.invalidateSize(), 0);
-}
-
-// 리뷰 데이터(현재는 기존 구조 유지)
-const reviews = {};
+// ===== 전역 상태 관리 =====
+let hotel = null;
+let hotelReviews = [];
+let currentPage = 1;
+const REVIEWS_PER_PAGE = 3;
+let totalPages = 1;
 
 // URL에서 호텔 ID 가져오기
 const params = new URLSearchParams(window.location.search);
@@ -189,6 +38,7 @@ const pagination = document.getElementById("pagination");
 
 // ===== [1] 유틸리티 및 데이터 매핑 함수 =====
 
+// 별점 렌더링 (근찬님 커스텀 컬러 버전)
 function renderStars(rating) {
   let stars = "";
   for (let i = 1; i <= 5; i++) {
@@ -199,21 +49,26 @@ function renderStars(rating) {
   return stars;
 }
 
+// 팀원의 지도 좌표 매핑 + 기존 매핑 로직 통합
 function mapAccommodationDocToHotel(docData, hotelId) {
   const name = docData?.name || docData?.title || "숙소명";
   const address = docData?.address || docData?.addr1 || "";
   const contact = docData?.contact || docData?.tel || "";
   const image = docData?.image || docData?.firstimage || docData?.firstimage2 || "";
 
-  const basePriceRaw = docData?.basePrice ?? docData?.price ?? docData?.roomPrice ?? docData?.minPrice;
-  const basePrice = typeof basePriceRaw === "number"
-    ? basePriceRaw
-    : parseInt(String(basePriceRaw ?? "").replace(/[^\d]/g, ""), 10) || 0;
+  // [팀원 추가] 좌표(Leaflet): KTO 기준 mapx=경도, mapy=위도
+  const latRaw = docData?.lat ?? docData?.latitude ?? docData?.mapy ?? docData?.gpsy ?? null;
+  const lngRaw = docData?.lng ?? docData?.longitude ?? docData?.mapx ?? docData?.gpsx ?? null;
+  const lat = latRaw != null ? Number(latRaw) : null;
+  const lng = lngRaw != null ? Number(lngRaw) : null;
 
+  // 가격 처리 (Knuth 상수 기반 랜덤 시드 포함)
+  const basePriceRaw = docData?.basePrice ?? docData?.price ?? docData?.roomPrice ?? docData?.minPrice;
+  const basePrice = typeof basePriceRaw === "number" ? basePriceRaw : parseInt(String(basePriceRaw ?? "").replace(/[^\d]/g, ""), 10) || 0;
   const idInMapAccToHotel = docData?.id || docData?.contentid || hotelId;
   const randomSeed = (idInMapAccToHotel * 2654435761) >>> 0; 
-  let randomPrice = ((randomSeed % 18) + 8) * 10000; 
-
+  let randomPrice = ((randomSeed % 18) + 8) * 10000;
+  
   const priceText = docData?.priceText || (basePrice ? `${basePrice.toLocaleString()}원~` : `${randomPrice.toLocaleString()}원~`);
   const desc = docData?.desc || docData?.overview || docData?.description || "숙소 상세 설명이 준비 중입니다.";
 
@@ -227,6 +82,8 @@ function mapAccommodationDocToHotel(docData, hotelId) {
   return {
     id: idInMapAccToHotel,
     name, address, contact, image,
+    lat: Number.isFinite(lat) ? lat : null,
+    lng: Number.isFinite(lng) ? lng : null,
     price: priceText,
     basePrice: basePrice || randomPrice,
     desc,
@@ -241,6 +98,9 @@ function mapAccommodationDocToHotel(docData, hotelId) {
 // ===== [2] 데이터 통신 함수 (Firebase) =====
 
 async function fetchHotelFromFirebase(hotelId) {
+  const { db } = await import("../common/firebase-config.js");
+  const { collection, doc, getDoc, getDocs, limit, query, where } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+
   try {
     const ref = doc(db, "accommodations", hotelId);
     const snap = await getDoc(ref);
@@ -256,8 +116,11 @@ async function fetchHotelFromFirebase(hotelId) {
   return null;
 }
 
+// 실시간 리뷰 + 유저 실명 연동 로직
 async function fetchReviewsFromFirebase(contentId) {
   if (!contentId || isNaN(Number(contentId))) return [];
+  const { db } = await import("../common/firebase-config.js");
+  const { collection, query, where, getDocs, orderBy, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
 
   try {
     const q = query(
@@ -307,8 +170,32 @@ function renderHotelInfo() {
   hotelDesc.textContent = hotel.desc;
   if(modalHotelName) modalHotelName.textContent = hotel.name;
 
-  // 지도 렌더링 (좌표 없으면 섹션 숨김)
+  // [팀원 추가] 지도 렌더링 호출
   renderLeafletMap({ lat: hotel.lat, lng: hotel.lng, name: hotel.name });
+}
+
+// [팀원 추가] Leaflet 지도 렌더링 함수
+function renderLeafletMap({ lat, lng, name }) {
+  const section = document.getElementById("detailMapSection");
+  const mapEl = document.getElementById("detailMap");
+  if (!section || !mapEl) return;
+
+  if (!Number.isFinite(lat) || !Number.isFinite(lng) || typeof window.L === "undefined") {
+    section.style.display = "none";
+    return;
+  }
+
+  section.style.display = "block";
+  if (mapEl._leaflet_id) {
+    try { mapEl._leaflet_id = null; mapEl.innerHTML = ""; } catch (_) {}
+  }
+
+  const map = window.L.map(mapEl, { scrollWheelZoom: false }).setView([lat, lng], 14);
+  window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; OpenStreetMap contributors",
+  }).addTo(map);
+  window.L.marker([lat, lng]).addTo(map).bindPopup(name || "위치").openPopup();
+  setTimeout(() => map.invalidateSize(), 0);
 }
 
 function updatePictograms() {
@@ -318,7 +205,6 @@ function updatePictograms() {
     elem.classList.toggle("unavailable", !isAvailable);
     statusElem.textContent = isAvailable ? posText : negText;
   };
-
   update(parkingInfo, document.getElementById("parkingStatus"), hotel.parking, "가능", "불가");
   update(petInfo, document.getElementById("petStatus"), hotel.pet, "동반가능", "불가");
   update(wifiInfo, document.getElementById("wifiStatus"), hotel.wifi, "무료", "없음");
@@ -326,20 +212,16 @@ function updatePictograms() {
   update(breakfastInfo, document.getElementById("breakfastStatus"), hotel.breakfast, "제공", "미제공");
 }
 
-/**
- * [수정] 좌측 사진, 우측 컨텐츠 레이아웃 반영
- */
+// [근찬님 7전8기 디자인] 후기 렌더링 (좌측 사진, 우측 내용)
 function renderReviews() {
   reviewCount.textContent = `${hotelReviews.length}개의 후기`;
-
   const startIndex = (currentPage - 1) * REVIEWS_PER_PAGE;
   const pageReviews = hotelReviews.slice(startIndex, startIndex + REVIEWS_PER_PAGE);
 
   reviewList.innerHTML = pageReviews.map(review => {
     const hasImages = review.images && review.images.length > 0;
-    
     return `
-    <div class="review-card" style="margin-bottom: 25px; padding-bottom: 20px;">
+    <div class="review-card" style="margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #eee;">
       <div class="review-user" style="display: flex; align-items: center; margin-bottom: 12px;">
         <div class="review-avatar" style="margin-right: 12px; font-size: 24px;">👤</div>
         <div class="review-user-info" style="flex: 1;">
@@ -351,7 +233,6 @@ function renderReviews() {
         <div class="review-rating">${renderStars(review.rating)}</div>
       </div>
 
-      
       <div class="review-body" style="display: flex; gap: 20px; align-items: flex-start;">
         ${hasImages ? `
           <div class="review-left" style="flex: 0 0 120px;">
@@ -362,22 +243,17 @@ function renderReviews() {
             </div>
           </div>
         ` : ""}
-        
         <div class="review-right" style="flex: 1;">
           <div class="review-content" style="line-height: 1.6; color: #444; white-space: pre-wrap;">${review.content}</div>
         </div>
       </div>
     </div>
   `}).join("");
-
   renderPagination();
 }
 
 function renderPagination() {
-  if (totalPages <= 1) {
-    pagination.innerHTML = "";
-    return;
-  }
+  if (totalPages <= 1) { pagination.innerHTML = ""; return; }
   let html = `<button class="page-btn" ${currentPage === 1 ? "disabled" : ""} onclick="goToPage(${currentPage - 1})">&lt;</button>`;
   for (let i = 1; i <= totalPages; i++) {
     html += `<button class="page-btn ${i === currentPage ? "active" : ""}" onclick="goToPage(${i})">${i}</button>`;
@@ -401,6 +277,17 @@ if (detailBtn && pictogramSection) {
     isPictogramVisible = !isPictogramVisible;
     pictogramSection.style.display = isPictogramVisible ? "block" : "none";
     detailBtn.textContent = isPictogramVisible ? "상세 정보 닫기" : "상세 정보";
+  });
+}
+
+const addScheduleBtn = document.getElementById("addScheduleBtn");
+if (addScheduleBtn) {
+  addScheduleBtn.addEventListener("click", () => {
+    if (!hotel) return;
+    calendarModal.open(hotel.name, {
+      type: "hotel", hotelId: hotelId, image: hotel.image,
+      location: hotel.address, contact: hotel.contact, price: hotel.price
+    }, (data) => console.log("일정 추가 완료:", data));
   });
 }
 
@@ -428,11 +315,9 @@ bookingBtn.addEventListener("click", () => {
       detailBtn.textContent = "상세 정보 닫기";
     }
 
+    // 실시간 리뷰 로드
     hotelReviews = await fetchReviewsFromFirebase(hotel.id); 
     totalPages = Math.ceil(hotelReviews.length / REVIEWS_PER_PAGE) || 1;
     renderReviews();
-
-  } catch (e) {
-    console.error("초기화 실패:", e);
-  }
+  } catch (e) { console.error("초기화 실패:", e); }
 })();
