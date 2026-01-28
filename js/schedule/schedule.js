@@ -1,9 +1,12 @@
 import { checkAuth } from '../auth/auth-guard.js'; // 사용자 로그인 정보 가져오기
 
+// 1. localStorage에서 유저 정보 가져오기
+const loggedInUser = JSON.parse(localStorage.getItem('auth_user'));
+const loggedInUserId = loggedInUser.username; // userId
+console.log (loggedInUserId);
+
 // 가드 로직으로 로그인 여부 먼저 확인
-if (checkAuth()) {
-    // 1. localStorage에서 유저 정보 가져오기
-    const loggedInUser = JSON.parse(localStorage.getItem('auth_user'));
+if (checkAuth()) {    
 
     // 2. DOM이 로드된 후 닉네임 표시 및 일정 로드
     document.addEventListener('DOMContentLoaded', async () => {
@@ -51,7 +54,7 @@ if (checkAuth()) {
 
             // 사용자별 일정 가져오기
             const schedulesRef = collection(db, 'schedules');
-            const q = query(schedulesRef, where('userId', '==', userId));
+            const q = query( schedulesRef, where('userId', '==', loggedInUserId) );
             const querySnapshot = await getDocs(q);
 
             // 일정 데이터 초기화
@@ -83,7 +86,7 @@ if (checkAuth()) {
                     schedules[dateStr].push(scheduleItem);
                 }
             });
-
+ 
             console.log('Firebase에서 일정 로드 완료:', schedules);
             window.schedules = schedules; // 전역 참조 업데이트
             renderCalendar();
@@ -160,20 +163,22 @@ if (checkAuth()) {
             const li = document.createElement('li');
             li.className = 'schedule-item';
 
-            const label = item.type === 'stay' ? '🏨 숙박' : '📍 관광';
+            const label = item.type === 'hotel' ? '🏨 숙박' : '📍 관광';
 
             li.innerHTML = `
-          <span class="schedule-type ${item.type}">${label}</span>
-          <span class="schedule-title">${item.title}</span>
-        `;
+                <span class="schedule-type ${item.type}">${label}</span>
+                <span class="schedule-title">${item.title}</span>
+            `;
 
-            // 일정 삭제 버튼 이벤트 (모든 타입에 대해 삭제 가능)
-            const delBtn = document.createElement('button');
-            delBtn.textContent = '삭제';
-            delBtn.className = 'delete-btn';
-            delBtn.onclick = () => openDeleteModal(selectedDate, index, item.id); // 일정 제거 모달창 열기 (Firebase 문서 ID 전달)
+            if (item.type !== 'hotel') {
+                const delBtn = document.createElement('button');
+                delBtn.textContent = '삭제';
+                delBtn.className = 'delete-btn';
+                delBtn.onclick = () =>
+                    openDeleteModal(selectedDate, index, item.id);
 
-            li.appendChild(delBtn);
+                li.appendChild(delBtn);
+            }
 
             scheduleList.appendChild(li);
         });
