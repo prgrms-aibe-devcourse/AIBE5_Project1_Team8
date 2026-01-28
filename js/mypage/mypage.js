@@ -657,6 +657,15 @@ if (checkAuth()) {
 
         let selectedReservation = null;
 
+        // 예약 Timestamp → YYYY-MM-DD 변환 함수
+        function toYYYYMMDD(timestamp) {
+            const date = timestamp.toDate();
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
         // 예약 취소 버튼 클릭
         document.addEventListener('click', (e) => {
             const btn = e.target.closest('.cancel-btn');
@@ -672,29 +681,13 @@ if (checkAuth()) {
             selectedReservation = null;
         });
 
-        // 취소 확정
-        // cancelYesBtn.addEventListener('click', async() => {
-        //     cancelModal.classList.add('hidden');
-
-        //     if (!selectedReservation) return;
-            
-        //     // 🔥 여기서 Firestore 예약 취소 / 삭제 처리
-        //     const reservationId = selectedReservation.dataset.reservationId; // 파이어베이스 문서 아이디
-        //     await deleteDoc(doc(db, 'reservations', reservationId));
-            
-        //     selectedReservation.remove(); // UI 즉시 반영
-        //     showToast('예약이 성공적으로 취소되었습니다.', 'success');
-        //     setTimeout(() => { location.reload();}, 800); // 새로고침
-            
-        // });
-
         cancelYesBtn.addEventListener('click', async () => {
             cancelModal.classList.add('hidden');
             if (!selectedReservation) return;
 
             const reservationId = selectedReservation.dataset.reservationId;
 
-            // 🔥 예약 데이터
+            // 예약 데이터
             const reservation = myReservations.find(
                 (r) => r.id === reservationId
             );
@@ -704,15 +697,22 @@ if (checkAuth()) {
                 await deleteDoc(doc(db, 'reservations', reservationId));
 
                 // 2. 일정 삭제 (schedules)
+            
+                const reservationStart = toYYYYMMDD(reservation.checkIn);
+                const reservationEnd = toYYYYMMDD(reservation.checkOut);
+
                 const schedulesRef = collection(db, 'schedules');
                 const schedulesQuery = query(
-                    schedulesRef,
-                    where('userId', '==', loggedInId),
-                    where('hotelId', '==', String(reservation.contentId))
+                schedulesRef,
+                where('userId', '==', loggedInId),
+                where('hotelId', '==', String(reservation.contentId)),
+                where('startDate', '==', reservationStart),
+                where('endDate', '==', reservationEnd),
                 );
+
                 
                 const schedulesSnapshot = await getDocs(schedulesQuery);
-                // console.log( '일정 개수:', schedulesSnapshot.size, schedulesSnapshot.docs.map(d => d.data()));
+                console.log( '일정 개수:', schedulesSnapshot.size, schedulesSnapshot.docs.map(d => d.data()));
 
                 for (const scheduleDoc of schedulesSnapshot.docs) {
                     await deleteDoc(scheduleDoc.ref);
