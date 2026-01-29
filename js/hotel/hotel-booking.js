@@ -125,6 +125,7 @@ export function initBookingPanel(root, bookingData, userReservationInfo, { onClo
   const agreePrivacy = root.querySelector("#agreePrivacy");
 
   const hasIntersection = (oldRes, newRes) => {
+    //console.log(oldRes.checkIn,oldRes.checkOut,newRes.checkIn,newRes.checkOut); //확인용
     if(oldRes.checkOut <= newRes.checkIn || newRes.checkOut <= oldRes.checkIn) return false;
     return true;
   };
@@ -225,7 +226,10 @@ export function initBookingPanel(root, bookingData, userReservationInfo, { onClo
 
     const checkIn = new Date(checkInInput.value);
     const checkOut = new Date(checkOutInput.value);
-    const newReservation = {checkIn, checkOut};
+    const newReservation = {
+      checkIn: new Date(new Date(checkInInput.value).setHours(0, 0, 0, 0)),
+      checkOut: new Date(new Date(checkOutInput.value).setHours(0, 0, 0, 0)),
+    };
     const roomType = roomTypeSelect.value;
     const nights = getNights(checkIn, checkOut);
     
