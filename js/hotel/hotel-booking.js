@@ -241,17 +241,37 @@ export function initBookingPanel(root, bookingData, userReservationInfo, { onClo
     const loggedInUserId = loggedInUser.uid;
     const loggedInUsername = loggedInUser.username;
 
-    const overlappingRes = userReservationInfo.find((oldRes) => {
+    const overlappingRes = userReservationInfo.filter((oldRes) => {
       return hasIntersection(oldRes, newReservation);
     });
 
-    if (overlappingRes) {
-      const start = overlappingRes.checkIn.toLocaleDateString('ko-KR');
-      const end = overlappingRes.checkOut.toLocaleDateString('ko-KR');
-      alert(`해당 기간에 이미 [${overlappingRes.title}] 예약이 있습니다.\n` +
-            `체크인: ${start}\n` +
-            `체크아웃: ${end}`);
-      return; // 예약 중단
+    if (overlappingRes.length > 0) {
+      // 추가: 체크인 날짜가 빠른 순서대로 정렬 (오름차순)
+      overlappingRes.sort((a, b) => {
+        // 시간 정보를 00:00:00으로 맞춘 복사본 생성
+        const dateA = new Date(a.checkIn).setHours(0, 0, 0, 0);
+        const dateB = new Date(b.checkIn).setHours(0, 0, 0, 0);
+        return dateA - dateB; // 숫자(밀리초)끼리의 뺄셈
+      });
+      const count = overlappingRes.length; // 겹치는 예약 개수
+      const firstRes = overlappingRes[0];  // 가장 먼저 발견된 예약 정보
+
+      const start = firstRes.checkIn.toLocaleDateString('ko-KR');
+      const end = firstRes.checkOut.toLocaleDateString('ko-KR');
+
+      // 3. 개수에 따라 문구 분기 (삼항 연산자)
+      const message = count > 1 
+        ? `[${firstRes.title}] 외 ${count - 1}건의 일정이 겹칩니다.`
+        : `[${firstRes.title}] 예약과 일정이 겹칩니다.`;
+
+      // 4. confirm으로 진행 여부 묻기
+      const proceed = confirm(
+        `${message}\n` +
+        `첫 번째 중복 일정: ${start} ~ ${end}\n\n` +
+        `그래도 예약을 진행하시겠습니까?`
+      );
+    
+      if (!proceed) return; // 취소를 누르면 함수 종료
     }
 
     const scheduleData = {
@@ -293,8 +313,10 @@ export function initBookingPanel(root, bookingData, userReservationInfo, { onClo
       res_reserverRequest: root.querySelector("#reserverRequest")?.value || "",
     };
 
+    try {
     await addDoc(collection(db,'reservations'), reservationData);
     await addDoc(collection(db,'schedules'), scheduleData);
+    } catch (e) { console.warn("db 업데이트 실패:", e); }
 
     alert(
       `예약이 완료되었습니다!\n\n` +
