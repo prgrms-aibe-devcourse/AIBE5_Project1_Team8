@@ -442,20 +442,17 @@ if (checkAuth()) {
         profileBtn.addEventListener('click', async () => {
             if (!editing) {
                 // [수정 모드 진입]
-                const currentName =
-                    profileInfo.querySelector('.profile-name').textContent;
-                const currentEmail =
-                    profileInfo.querySelector('.profile-email').textContent;
-                const currentPhone =
-                    profileInfo.querySelector('.profile-phone').textContent;
+                const currentName = profileInfo.querySelector('.profile-name').textContent;
+                const currentEmail = profileInfo.querySelector('.profile-email').textContent;
+                const currentPhone = profileInfo.querySelector('.profile-phone').textContent;
 
                 profileInfo.innerHTML = `
-            <input class="edit-input" value="${currentName}" />
-            <input class="edit-input" value="${currentEmail}" />
-            <input class="edit-input" value="${currentPhone}" />
-        `;
+                    <input class="edit-input" value="${currentName}" />
+                    <input class="edit-input" value="${currentEmail}" />
+                    <input class="edit-input" value="${currentPhone}" />
+                `;
                 profileBtn.textContent = '저장';
-                editing = true;
+                editing = true; // 수정 여부
                 uploadBtn.style.display = 'block';
             } else {
                 // [저장 버튼 클릭 시]
@@ -466,6 +463,27 @@ if (checkAuth()) {
                     phone: inputs[2].value.trim(),
                     profileImg: profileImg.src, // 압축된 Base64 데이터
                 };
+
+                // 기존 데이터와 비교
+                const isChanged =
+                    updatedData.name !== loggedInUser.name ||
+                    updatedData.email !== loggedInUser.email ||
+                    updatedData.phone !== loggedInUser.phone ||
+                    updatedData.profileImg !== loggedInUser.profileImg;
+
+                if (!isChanged) { // 수정 필드 없을 경우
+                    showToast('변경 사항이 없습니다.', 'info');
+                    profileBtn.textContent = '프로필 수정';
+                    profileInfo.innerHTML = `
+                        <p class="profile-name">${loggedInUser.name}</p>
+                        <p class="profile-email">${loggedInUser.email}</p>
+                        <p class="profile-phone">${loggedInUser.phone}</p>
+                    `;
+                    editing = false;
+                    uploadBtn.style.display = 'none';
+                    return; // Firestore 호출 X
+                }
+
 
                 try {
                     const userRef = doc(db, 'users', loggedInUser.uid);
