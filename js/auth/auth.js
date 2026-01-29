@@ -173,13 +173,35 @@ registerBtn.addEventListener('click', async () => {
 const closeBtn = document.getElementById("closeBtn");
 
 if (closeBtn) {
-  closeBtn.addEventListener("click", () => {
-    // 1. 이전 페이지가 있다면 뒤로 가기
-    if (document.referrer) {
-      window.history.back();
-    } else {
-      // 2. 뒤로 갈 곳이 없다면(주소창에 직접 입력 등) 메인으로 이동
-      window.location.href = "/index.html";
-    }
-  });
+    closeBtn.addEventListener("click", () => {
+        // 1. 이전 페이지가 있다면 뒤로 가기
+        if (document.referrer) {
+            window.history.back();
+        } else {
+            // 2. 뒤로 갈 곳이 없다면(주소창에 직접 입력 등) 메인으로 이동
+            window.location.href = "/index.html";
+        }
+    });
 }
+
+function attachEnterKeyHandler(wrapperSelector, btnSelector) {
+    const wrapper = document.querySelector(wrapperSelector);
+    if (!wrapper) return;
+
+    const button = wrapper.querySelector(btnSelector);
+    if (!button) return;
+
+    const inputs = wrapper.querySelectorAll('input:not([type="checkbox"]):not([type="radio"])');
+
+    inputs.forEach((input) => {
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                button.click();
+            }
+        });
+    });
+}
+
+attachEnterKeyHandler('.auth-login', '.primary-btn');
+attachEnterKeyHandler('.auth-register', '.primary-btn');

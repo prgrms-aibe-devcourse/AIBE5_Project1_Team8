@@ -6,13 +6,18 @@ body {
         BlinkMacSystemFont,
         system-ui,
         sans-serif;
+    background: var(--beige-bg);
+    margin: 0;
 }
 
 .auth-wrapper {
     position: relative;
     height: 100vh;
     display: flex;
-    background: var(--beige-bg);
+    max-width: 1920px;
+    min-width: 320px;
+    margin: 0 auto;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.05);
 }
 
 /* 로그인 창 닫기 버튼 */
@@ -25,7 +30,8 @@ body {
     font-size: 24px;
     color: #777;
     cursor: pointer;
-    z-index: 100; /* 다른 요소보다 위에 오도록 설정 */
+    z-index: 100;
+    /* 다른 요소보다 위에 오도록 설정 */
     padding: 10px;
     transition: color 0.2s, transform 0.2s;
 }
@@ -66,11 +72,13 @@ body {
 /* 오른쪽 박스 */
 .auth-box {
     width: 360px;
-    display: none; /* 기본 숨김 */
+    display: none;
+    /* 기본 숨김 */
 }
 
 .auth-box.is-active {
-    display: block; /* 활성만 표시 */
+    display: block;
+    /* 활성만 표시 */
 }
 
 .auth-title {
@@ -80,7 +88,7 @@ body {
     font-weight: 500;
     color: var(--alt-black);
     letter-spacing: 4px;
-    
+
 }
 
 .auth-form {
