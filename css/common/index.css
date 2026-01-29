@@ -14,6 +14,12 @@ main {
     padding: 0px;
 }
 
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 #mainTitle {
     color: #666;
 }
@@ -163,14 +169,21 @@ main {
 
 /* --- [NEW] Interactive Color Theme Section Styles --- */
 .color-theme-section {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-top: 40px;
-    padding-bottom: 50px;
-    border-top: var(--border-gray);
-    border-bottom: var(--border-gray);
-    transition: background-color 1.2s ease; 
+    padding: 60px 0px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+    transition: background-color 1.2s ease;
 }
 
 .color-theme-section {
@@ -195,7 +208,9 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    transition: height 1.2s cubic-bezier(0.25, 1, 0.5, 1), background-color 1.2s ease;
+    transition:
+        height 1.2s cubic-bezier(0.25, 1, 0.5, 1),
+        background-color 1.2s ease;
     overflow: hidden;
 }
 
@@ -229,7 +244,7 @@ main {
     bottom: 40px;
     left: 50px;
     z-index: 10;
-    background-color: #2F4157;
+    background-color: #2f4157;
     color: #ffffff;
     padding: 10px 24px;
     font-size: 14px;
@@ -266,8 +281,16 @@ main {
     height: 80px;
     border-radius: 50%;
     transition: background-color 1.5s ease;
-    background-image: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 60%, rgba(0, 0, 0, 0.05) 100%);
-    box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.1), inset 5px 5px 10px rgba(255, 255, 255, 0.3), 0 10px 20px rgba(0, 0, 0, 0.15);
+    background-image: radial-gradient(
+        circle at 30% 30%,
+        rgba(255, 255, 255, 0.6) 0%,
+        rgba(255, 255, 255, 0.1) 60%,
+        rgba(0, 0, 0, 0.05) 100%
+    );
+    box-shadow:
+        inset -5px -5px 10px rgba(0, 0, 0, 0.1),
+        inset 5px 5px 10px rgba(255, 255, 255, 0.3),
+        0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
 .result-container {
@@ -402,12 +425,20 @@ main {
     /* 제자리로 이동 */
 }
 
-.interactive-card.active {
+/* .interactive-card.active {
     background-color: rgba(255, 255, 255, 0.2) !important; 
-    backdrop-filter: blur(20px); /* 뒤쪽 섹션 색상이 은은하게 비침 */
+    backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.2);
-}
+} */
+.interactive-card.active {
+    /* 외곽 카드는 좀 더 투명하게 해서 안쪽 소박스가 돋보이게 함 */
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
 
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
 .result-title {
     font-size: 20px;
     font-weight: 800;
@@ -434,7 +465,9 @@ main {
     opacity: 0.6;
     cursor: pointer;
     padding: 10px;
-    transition: opacity 0.3s, transform 0.2s;
+    transition:
+        opacity 0.3s,
+        transform 0.2s;
     z-index: 20;
     flex-shrink: 0;
 }
@@ -444,18 +477,38 @@ main {
     transform: scale(1.1);
 }
 
+
 .small-box {
     display: flex;
     flex-direction: column;
     width: 580px;
     height: 420px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 16px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px); /* 사파리 대응 */
+    backface-visibility: visible !important;
+    -webkit-backface-visibility: visible !important;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+
+    /* 깊이감을 주는 부드러운 그림자 */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.3);
     flex-shrink: 0;
+
+    /* 3D 효과를 위한 속성 */
+    transform-style: preserve-3d;
+    transform-origin: center center; /* 회전축을 정확히 중앙으로 고정 */
+    will-change: transform, box-shadow;
+    transition: none;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+
+    /* 은은한 광택 레이어 추가 */
+    background-image: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0) 100%
+    );
 }
 
 .content-wrapper {
@@ -481,6 +534,7 @@ main {
     font-weight: bold;
     font-size: 1.2rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transform: translateZ(20px);
 }
 
 .text-content {
@@ -493,6 +547,9 @@ main {
     text-align: left;
     color: inherit;
     box-sizing: border-box;
+    /* 유리 질감 위에서 글자가 더 잘 보이도록 그림자 살짝 추가 */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transform: translateZ(40px);
 }
 
 .text-content h3 {
@@ -609,10 +666,10 @@ main {
         padding: 20px;
     }
 
-    .small-box {
+    /* .small-box {
         width: 100%;
         height: auto;
-    }
+    } */
 
     .slider-wrapper {
         flex-direction: column;
@@ -632,7 +689,6 @@ main {
     gap: 30px;
     position: relative;
     margin: 0 auto;
-
 }
 
 #map {
@@ -645,7 +701,6 @@ main {
     height: auto;
     min-height: 100%;
     border: var(--border-gray);
-
 }
 
 /* 2. Info Card Area */
@@ -662,7 +717,7 @@ main {
 
 /* Text Styles */
 .location-title {
-    color: #4F4F4F;
+    color: #4f4f4f;
     font-size: 22px;
     font-weight: 700;
     letter-spacing: -0.5px;
@@ -710,7 +765,7 @@ main {
     bottom: -25px;
     right: 40px;
     z-index: 10;
-    background-color: #2F4157;
+    background-color: #2f4157;
     color: white;
     border: none;
     padding: 15px 40px;
@@ -719,7 +774,9 @@ main {
     font-weight: 600;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(47, 65, 87, 0.4);
-    transition: opacity 0.3s, transform 0.2s;
+    transition:
+        opacity 0.3s,
+        transform 0.2s;
 }
 
 .add-btn:hover {
@@ -733,7 +790,7 @@ main {
     bottom: 20px;
     left: 20px;
     z-index: 1000;
-    background-color: #2F4157;
+    background-color: #2f4157;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -743,7 +800,9 @@ main {
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     display: none;
-    transition: opacity 0.3s, transform 0.2s;
+    transition:
+        opacity 0.3s,
+        transform 0.2s;
 }
 
 #reset-map-btn:hover {
