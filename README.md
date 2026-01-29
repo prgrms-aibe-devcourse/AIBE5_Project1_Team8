@@ -61,7 +61,39 @@ Tripial(트립피얼)은 “여행”의 “Trip”과 “사소한”의 “Tri
 * **회원 관리**
     * 회원가입, 로그인, 마이페이지(정보 수정/탈퇴) 기능 제공
 
-## 5. 팀원 구성 (Team Members)
+## 5. 실행 방법
+1. 데이터베이스 관련 기능을 사용하시려면 Firebase DB API키를 발급받아 `js/common/firebase-config-sample.js` 내에서 붙여 넣으셔야 합니다. 
+    ```
+    const firebaseConfig = {
+        apiKey: '',
+        authDomain: '',
+        projectId: '',
+        storageBucket: '',
+        messagingSenderId: '',
+        appId: '',
+    };
+    ```
+    위 내용에 본인의 API 정보를 붙여 넣으신 후, 파일 이름을 `firebase-config.js`로 변경하면 데이터베이스 호출이 실행됩니다.
+
+2. AI 채팅 기능을 활성화하시려면 Google Gemini API키와 한국관광공사 OpenAPI 키를 발급받아 `functions/main.py` 내에서 붙여 넣으셔야 합니다. 
+    ```
+    GOOGLE_API_KEY = ""
+    KTO_SERVICE_KEY = ""
+    ```
+    위 내용에 본인의 API 정보를 붙여 넣으신 후, 웹페이지 서버를 실행하시면 AI 기반 챗봇이 활성화됩니다.
+
+3. AI 채팅 기능 대화 내역을 세션 내 저장하시려면 Firebase DB API키를 `js/common/chatbot.js` 내에서 붙혀 넣으셔야 합니다.
+
+4. 서버를 실행하려면 프로젝트 폴더 내에서 Firebase Hosting 서비스를 실행하셔야 합니다.
+    ```
+    firebase init
+    ```
+    ```
+    firebase deploy --only hosting
+    ```
+    Hosting 서비스 실행 후, 제공되는 웹페이지 링크를 사용하여 웹사이트를 실행하실 수 있으십니다.
+
+## 6. 팀원 구성 (Team Members)
 
 | 이름 | 역할 | 담당 업무 | GitHub |
 | :---: | :---: | :--- | :---: |
