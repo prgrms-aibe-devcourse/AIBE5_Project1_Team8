@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="logo-image">
         <img src="/images/logo/Tripial-logo.png" alt="로고" />
       </div>
-      <span class="logo-text">tripial</span>
+      <span class="logo-text">Tripial</span>
     </div>
 
       <!-- 메뉴 -->

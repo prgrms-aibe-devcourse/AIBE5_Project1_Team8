@@ -81,11 +81,8 @@ body {
   align-items: center;
   gap: 1.5rem;
   position: relative;
-  transition: var(--transition);
+  transition: box-shadow 500ms ease, transform 500ms ease;
   animation: fadeIn 0.5s ease backwards;
-}
-
-.spot-card {
   cursor: pointer;
 }
 
@@ -97,7 +94,7 @@ body {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;

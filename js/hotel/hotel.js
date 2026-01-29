@@ -772,22 +772,6 @@ spotList.addEventListener("click", (e) => {
   }
 });
 
-// ===== URL 파라미터 처리 =====
-const params = new URLSearchParams(window.location.search);
-const categoryParam = params.get("type");
-if (categoryParam && allData[categoryParam]) {
-  currentCategory = categoryParam;
-  searchTabs.forEach(tab => {
-    tab.classList.remove("active");
-    if (tab.innerText === categoryParam) {
-      tab.classList.add("active");
-    }
-  });
-  // URL 파라미터로 카테고리가 변경되면 저장된 페이지 정보 초기화
-  sessionStorage.removeItem('hotelListPage');
-  sessionStorage.removeItem('hotelListCategory');
-}
-
 // ===== 검색 이벤트 처리 (searchbar.js에서 발생) =====
 document.addEventListener('hotelSearch', (e) => {
   const { keyword, type } = e.detail;
@@ -814,9 +798,34 @@ document.addEventListener('hotelSearch', (e) => {
   // Firebase에서 모든 데이터 로드 (tour_items와 accommodations)
   await loadDataFromFirebase();
   
-  // URL 파라미터가 없을 때만 저장된 페이지와 카테고리 복원
+  // URL 파라미터 처리 (데이터 로드 후)
+  const params = new URLSearchParams(window.location.search);
   const categoryParam = params.get("type");
-  if (!categoryParam) {
+  const keywordParam = params.get("keyword");
+  const keywordInput = document.getElementById("keyword");
+  
+  if (categoryParam && allData[categoryParam]) {
+    // URL 파라미터로 카테고리 설정
+    currentCategory = categoryParam;
+    currentPage = 1;
+    currentKeyword = keywordParam ? keywordParam.trim() : "";
+    
+    // 탭 활성화
+    searchTabs.forEach(tab => {
+      tab.classList.remove("active");
+      if (tab.innerText === categoryParam) {
+        tab.classList.add("active");
+      }
+    });
+    
+    // 검색창: URL에 keyword가 있으면 넣고, 없으면 비움
+    if (keywordInput) keywordInput.value = currentKeyword;
+    
+    // URL 파라미터로 카테고리가 변경되면 저장된 페이지 정보 초기화
+    sessionStorage.removeItem('hotelListPage');
+    sessionStorage.removeItem('hotelListCategory');
+  } else {
+    // URL 파라미터가 없을 때만 저장된 페이지와 카테고리 복원
     const savedPage = sessionStorage.getItem('hotelListPage');
     const savedCategory = sessionStorage.getItem('hotelListCategory');
     
@@ -838,14 +847,25 @@ document.addEventListener('hotelSearch', (e) => {
       });
     }
   }
+
+  // URL에 keyword가 있으면 적용 (type 유무와 관계없이)
+  if (keywordParam && keywordParam.trim()) {
+    currentKeyword = keywordParam.trim();
+    if (keywordInput) keywordInput.value = currentKeyword;
+  }
   
   // 초기 렌더링
   setTimeout(() => {
     renderSpots();
-    // 저장된 페이지로 스크롤
-    const savedPage = sessionStorage.getItem('hotelListPage');
-    if (savedPage && !categoryParam) {
+    // URL 파라미터가 있으면 검색 결과 영역으로 스크롤
+    if (categoryParam || keywordParam) {
       window.scrollTo({ top: 300, behavior: "smooth" });
+    } else {
+      // 저장된 페이지로 스크롤
+      const savedPage = sessionStorage.getItem('hotelListPage');
+      if (savedPage) {
+        window.scrollTo({ top: 300, behavior: "smooth" });
+      }
     }
   }, 300);
 })();

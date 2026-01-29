@@ -34,39 +34,47 @@
 
         .search-bar {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 0;
-            padding: 0;
+            padding: 6px 8px 6px 20px;
             position: relative;
+            height: 60px;
+            border: var(--border-gray);
+            border-radius: 30px;
+            background-color: var(--beige-bg);
+            box-sizing: border-box;
         }
 
         .search-bar input {
             flex: 1;
-            height: 60px;
-            padding: 12px 18px;
-            padding-right: 120px;
+            height: 100%;
+            min-height: 0;
+            padding: 0 16px 0 0;
             font-size: 16px;
-            border: var(--border-gray);
-            border-radius: 30px;
-            background-color: var(--beige-bg);
+            border: none;
+            background: transparent;
             outline: none;
+        }
+
+        .search-bar input::placeholder {
+            color: var(--primary-text);
+            opacity: 0.6;
         }
 
         .btn-search {
             background-color: var(--navy-blue);
             color: #fff;
             border: none;
-            padding: 12px 40px;
-            border-radius: 30px;
+            padding: 0 32px;
+            border-radius: 24px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             white-space: nowrap;
-            position: absolute;
-            right: 30px;
-            top: 30%;
-            transform: translateY(50%);
-            z-index: 1;
+            flex-shrink: 0;
+            height: 48px;
+            line-height: 48px;
+            box-sizing: border-box;
         }
     `;
 
@@ -90,11 +98,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function isHotelPage() {
         return window.location.pathname.includes('hotel.html');
     }
+
+    // index(메인) 페이지인지 확인 (루트 또는 index.html)
+    function isIndexPage() {
+        const path = window.location.pathname;
+        return path === '/' || path.endsWith('index.html') || (!path.includes('/pages/') && !path.includes('search-result'));
+    }
     
-    // 현재 페이지 위치에 따라 search-result.html 경로 계산
+    // 현재 페이지 위치에 따라 검색 결과 이동 경로 계산
     function getSearchResultPath() {
         const currentPath = window.location.pathname;
         
+        // index(메인) 페이지에서는 hotel.html로 이동
+        if (isIndexPage()) {
+            return 'pages/hotel/hotel.html';
+        }
         // 이미 search-result.html에 있는 경우
         if (currentPath.includes('search-result.html')) {
             return 'search-result.html';
@@ -107,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentPath.includes('/pages/')) {
             return 'search-result.html';
         }
-        // 루트(index.html)에 있는 경우
         return 'pages/search-result.html';
     }
     
@@ -144,12 +161,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             const searchResultPath = getSearchResultPath();
+            const params = new URLSearchParams();
+            params.set('type', selectedType);
+            if (keyword) params.set('keyword', keyword);
+
+            // index 페이지에서는 hotel.html로 이동 (keyword 없으면 type만 전달)
+            if (isIndexPage()) {
+                window.location.href = `${searchResultPath}?${params.toString()}`;
+                return;
+            }
             
-            // 검색어와 타입을 함께 전달
+            // 그 외 페이지는 기존 search-result.html로
             if (keyword) {
                 window.location.href = `${searchResultPath}?keyword=${encodeURIComponent(keyword)}&type=${encodeURIComponent(selectedType)}`;
             } else {
-                // 검색어가 없으면 기본 검색 결과 페이지로 이동
                 window.location.href = `${searchResultPath}?keyword=관광지&type=${encodeURIComponent(selectedType)}`;
             }
         });
