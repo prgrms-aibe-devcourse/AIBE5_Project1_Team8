@@ -1,4 +1,4 @@
-# Tripial - 트리피얼
+# Tripial - 트립피얼
 
 **By: AIBE5_Project1_Team8**
 
