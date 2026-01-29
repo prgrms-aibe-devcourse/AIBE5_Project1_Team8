@@ -103,29 +103,78 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showPlace(index, withFade = false) {
-        if (!currentThemeData) return;
+        if (!currentThemeData || isTransitioning) return;
+        
+        isTransitioning = true;
         const place = currentThemeData.places[index];
-
         const imagePath = `images/color/${currentThemeData.id}_${index + 1}.jpg`;
 
+        // 1. [심플 페이드] 전환 효과
         if (withFade) {
             contentWrapper.style.opacity = '0';
-            isTransitioning = true;
+            
             setTimeout(() => {
                 placeName.innerText = place.name;
                 placeDesc.innerText = place.desc;
                 imagePlaceholder.style.backgroundImage = `url('${imagePath}')`;
-                imagePlaceholder.innerText = ""; // 텍스트 숨김
+                imagePlaceholder.innerText = "";
 
+                // 다시 서서히 나타나게 함
                 contentWrapper.style.opacity = '1';
                 isTransitioning = false;
-            }, 300);
+            }, 300); // 0.3초 동안 투명해졌을 때 교체
         } else {
+            // 페이드 효과 없을 경우 즉시 교체
             placeName.innerText = place.name;
             placeDesc.innerText = place.desc;
             imagePlaceholder.style.backgroundImage = `url('${imagePath}')`;
             imagePlaceholder.innerText = "";
+            isTransitioning = false;
         }
+    }
+
+    const box = document.querySelector('.small-box');
+
+    if (box) {
+        let ticking = false; // 프레임 최적화용 변수
+
+        box.addEventListener('mousemove', (e) => {
+            // [수정] 전환 애니메이션 중에는 작동 방지
+            if (isTransitioning) return;
+
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const rect = box.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const xPos = (x - rect.width / 2) / (rect.width / 2);
+                    const yPos = (y - rect.height / 2) / (rect.height / 2);
+
+                    // 기울기 감도는 10 정도가 가장 적당합니다
+                    const rotateX = (yPos * -10).toFixed(2);
+                    const rotateY = (xPos * 10).toFixed(2);
+                    
+                    const shadowX = (xPos * -20).toFixed(2);
+                    const shadowY = (yPos * -20).toFixed(2);
+
+                    // [핵심] 마우스 이동 중에는 transition을 꺼야 버벅임이 사라집니다.
+                    box.style.transition = 'none'; 
+                    box.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
+                    box.style.boxShadow = `${shadowX}px ${shadowY}px 40px rgba(0, 0, 0, 0.3)`;
+                    
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        box.addEventListener('mouseleave', () => {
+            // [핵심] 나갈 때는 다시 부드럽게 돌아오도록 transition 부여
+            box.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.5s ease';
+            box.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            box.style.boxShadow = `0 15px 35px rgba(0, 0, 0, 0.2)`;
+        });
     }
 
     function updateThemeDisplay(withFade = false) {
